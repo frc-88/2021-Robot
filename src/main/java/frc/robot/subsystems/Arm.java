@@ -120,7 +120,7 @@ public class Arm extends SubsystemBase {
   
   public void zeroArm() {
     armOffsetTicks = 0;
-    armOffsetTicks = convertArmDegreesToEncoderTicks(getAngleFromAbsolute()) - m_rotator.getSelectedSensorPosition();
+    armOffsetTicks = convertArmDegreesToEncoderTicks(getAngleFromAbsolute()) - (int) m_rotator.getSelectedSensorPosition();
     m_rotator.configForwardSoftLimitEnable(true);
     m_rotator.configForwardSoftLimitThreshold(convertArmDegreesToEncoderTicks(Constants.ARM_HIGH_LIMIT));
     m_rotator.configReverseSoftLimitEnable(true);
@@ -165,7 +165,7 @@ public class Arm extends SubsystemBase {
   }
 
   public double getCurrentArmPosition() {
-    return convertEncoderTicksToArmDegrees(m_rotator.getSelectedSensorPosition());
+    return convertEncoderTicksToArmDegrees((int)m_rotator.getSelectedSensorPosition());
   }
 
   public boolean isOnTarget() {
@@ -226,12 +226,12 @@ public class Arm extends SubsystemBase {
     zeroArmIfOff();
     handleForwardLimitSwitch();
 
-    SmartDashboard.putNumber("Arm Position", convertEncoderTicksToArmDegrees(m_rotator.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("Arm Position", convertEncoderTicksToArmDegrees((int)m_rotator.getSelectedSensorPosition()));
     SmartDashboard.putNumber("Arm Abs Position", getAngleFromAbsolute());
     SmartDashboard.putNumber("Arm current offset", armOffsetTicks);
-    SmartDashboard.putNumber("Arm Velocity", convertEncoderVelocityToArmVelocity(m_rotator.getSelectedSensorVelocity()));
-    SmartDashboard.putNumber("Expected Arm Position", convertEncoderTicksToArmDegrees(m_rotator.getActiveTrajectoryPosition()));
-    SmartDashboard.putNumber("Expected Arm Velocity", convertEncoderVelocityToArmVelocity(m_rotator.getActiveTrajectoryVelocity()));
+    SmartDashboard.putNumber("Arm Velocity", convertEncoderVelocityToArmVelocity((int)m_rotator.getSelectedSensorVelocity()));
+    SmartDashboard.putNumber("Expected Arm Position", convertEncoderTicksToArmDegrees((int)m_rotator.getActiveTrajectoryPosition()));
+    SmartDashboard.putNumber("Expected Arm Velocity", convertEncoderVelocityToArmVelocity((int)m_rotator.getActiveTrajectoryVelocity()));
 
     SmartDashboard.putNumber("Arm Current Use", m_rotator.getSupplyCurrent());
     SmartDashboard.putNumber("Arm Abs Encoder Pos", m_armEncoder.getAbsolutePosition() / Constants.ENCODER_TO_ARM_RATIO);

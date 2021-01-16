@@ -65,11 +65,11 @@ public class Climber extends SubsystemBase{
     }
 
     public int getLeftMotorPosition() {
-        return m_climber_motor_left.getSelectedSensorPosition();
+        return (int) m_climber_motor_left.getSelectedSensorPosition();
     }
 
     public int getRightMotorPosition() {
-        return m_climber_motor_right.getSelectedSensorPosition();
+        return (int) m_climber_motor_right.getSelectedSensorPosition();
     }
 
     public void engageRatchets() {

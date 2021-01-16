@@ -115,7 +115,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean flywheelOnTarget() {
-    return Math.abs(lastSpeed - convertEncoderVelocityToFlywheelVelocity(m_flywheelMaster.getSelectedSensorVelocity())) <= Constants.SHOOTER_FLYWHEEL_TOLERANCE;
+    return Math.abs(lastSpeed - convertEncoderVelocityToFlywheelVelocity((int)m_flywheelMaster.getSelectedSensorVelocity())) <= Constants.SHOOTER_FLYWHEEL_TOLERANCE;
   }
 
   public void setFlywheelBasic(double percentOutput) {
@@ -133,7 +133,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     m_loopCounter += 1;
-    SmartDashboard.putNumber("Flywheel velocity", convertEncoderVelocityToFlywheelVelocity(m_flywheelMaster.getSelectedSensorVelocity()));
+    SmartDashboard.putNumber("Flywheel velocity", convertEncoderVelocityToFlywheelVelocity((int)m_flywheelMaster.getSelectedSensorVelocity()));
     if(m_loopCounter % 3. == 0) {
       System.out.println(lastSpeed);
       System.out.println(convertEncoderVelocityToFlywheelVelocity((int)m_flywheelMaster.getClosedLoopTarget()));
