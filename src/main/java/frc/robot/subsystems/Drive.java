@@ -342,8 +342,8 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Max Drive Speed", m_maxSpeed);
     SmartDashboard.putBoolean("LimelightHeadingOnTarget", isOnLimelightTarget);
 
-    // odometry data
-    m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), getLeftPosition(), getRightPosition());
+    // update and display odometry data
+    m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), Units.inchesToMeters(getLeftPosition()), Units.inchesToMeters(getRightPosition()));
     SmartDashboard.putNumber("Pose X", m_pose.getX());
     SmartDashboard.putNumber("Pose Y", m_pose.getY());
     SmartDashboard.putNumber("Pose X", m_pose.getRotation().getDegrees());
