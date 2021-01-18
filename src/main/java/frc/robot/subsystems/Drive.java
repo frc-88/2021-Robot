@@ -11,9 +11,14 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.driveutil.DriveConfiguration;
@@ -43,7 +48,11 @@ public class Drive extends SubsystemBase {
   private double m_leftCommandedSpeed = 0;
   private double m_rightCommandedSpeed = 0;
   private double m_maxSpeed = Constants.MAX_SPEED_HIGH;
-  
+
+  private DifferentialDriveKinematics m_kinematics;
+  private DifferentialDriveOdometry m_odometry;
+  private Pose2d m_pose;
+ 
   private PIDPreferenceConstants velPIDConstants;
   private PIDPreferenceConstants headingPIDConstants;
   private DoublePreferenceConstant downshiftSpeed;
@@ -109,6 +118,14 @@ public class Drive extends SubsystemBase {
     shiftToLow();
 
     SmartDashboard.putBoolean("Zero Drive", false);
+
+    // Creating my kinematics object
+    m_kinematics = new DifferentialDriveKinematics(Units.feetToMeters(Constants.WHEEL_BASE_WIDTH));
+    // Creating my odometry object
+    // our starting pose is 1 meters along the long end of the field and in the
+    // center of the field along the short end, facing forward.
+    m_pose = new Pose2d(1.0, 7.5, new Rotation2d());
+    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), m_pose);
   }
 
   public void basicDrive(double leftSpeed, double rightSpeed) {
@@ -310,7 +327,7 @@ public class Drive extends SubsystemBase {
       m_rightEncoder.setPosition(0);
       SmartDashboard.putBoolean("Zero Drive", false);
     }
-
+    
     SmartDashboard.putNumber("L Drive Current", m_leftDrive.getTotalCurrent());
     SmartDashboard.putNumber("R Drive Current", m_rightDrive.getTotalCurrent());
     SmartDashboard.putNumber("L Drive Speed", m_leftDrive.getScaledSensorVelocity());
@@ -324,6 +341,12 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putBoolean("In High Gear?", isInHighGear());
     SmartDashboard.putNumber("Max Drive Speed", m_maxSpeed);
     SmartDashboard.putBoolean("LimelightHeadingOnTarget", isOnLimelightTarget);
+
+    // odometry data
+    m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), getLeftPosition(), getRightPosition());
+    SmartDashboard.putNumber("Pose X", m_pose.getX());
+    SmartDashboard.putNumber("Pose Y", m_pose.getY());
+    SmartDashboard.putNumber("Pose X", m_pose.getRotation().getDegrees());
 
     if (DriverStation.getInstance().isEnabled()) {
       this.setBrakeMode();
