@@ -16,6 +16,7 @@ import frc.robot.subsystems.Drive;
 public class FollowTrajectory extends CommandBase {
   /** Creates a new FollowTrajectory. */
   private Drive m_drive;
+  private Trajectory m_trajectory;
   private RamseteController m_controller = new RamseteController();
   private Timer m_timer = new Timer();
   private double m_duration;
@@ -28,7 +29,8 @@ public class FollowTrajectory extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_duration = m_drive.trajectory.getTotalTimeSeconds();
+    m_trajectory = m_drive.trajectories.testTrajectory;
+    m_duration = m_trajectory.getTotalTimeSeconds();
     m_timer.reset();
     m_timer.start();
   }
@@ -38,7 +40,7 @@ public class FollowTrajectory extends CommandBase {
   public void execute() {
     // calculate what we need to do to be where we need to be 20ms from now.
     double now = m_timer.get();
-    Trajectory.State goal = m_drive.trajectory.sample(now + 0.020);
+    Trajectory.State goal = m_trajectory.sample(now + 0.020);
     ChassisSpeeds adjustedSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
     
     DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(adjustedSpeeds);

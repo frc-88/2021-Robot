@@ -7,15 +7,11 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -23,7 +19,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -33,6 +28,7 @@ import frc.robot.Constants;
 import frc.robot.driveutil.DriveConfiguration;
 import frc.robot.driveutil.TJDriveModule;
 import frc.robot.subsystems.Sensors;
+import frc.robot.util.GameChangerTrajectories;
 import frc.robot.util.SyncPIDController;
 import frc.robot.util.WrappingPIDController;
 import frc.robot.util.preferenceconstants.DoublePreferenceConstant;
@@ -61,7 +57,7 @@ public class Drive extends SubsystemBase {
   private DifferentialDriveKinematics m_kinematics;
   private DifferentialDriveOdometry m_odometry;
   private Pose2d m_pose;
-  public Trajectory trajectory;
+  public GameChangerTrajectories trajectories;
 
   private PIDPreferenceConstants velPIDConstants;
   private PIDPreferenceConstants headingPIDConstants;
@@ -300,15 +296,7 @@ public class Drive extends SubsystemBase {
   }
 
   private void generateTrajectories() {
-    // begining and ending poses
-    Pose2d start = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(7.5), new Rotation2d());
-    Pose2d end = new Pose2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5),  new Rotation2d());
-
-    // set up waypoints for path
-    var waypoints = new ArrayList<Translation2d>();
-    waypoints.add(new Translation2d(Units.feetToMeters(7.0), Units.feetToMeters(3.0)));
-    waypoints.add(new Translation2d(Units.feetToMeters(14.0), Units.feetToMeters(14.0)));
-
+    
     // define constraints for trajectory generation
     TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
     config.setKinematics(m_kinematics);
@@ -316,8 +304,8 @@ public class Drive extends SubsystemBase {
     config.setEndVelocity(0.0);
     config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(12.0)));
 
-    // generate trajectory
-    trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, config);
+    // generate trajectories
+    trajectories = new GameChangerTrajectories(config);
   }
 
 
