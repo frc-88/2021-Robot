@@ -7,16 +7,22 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -119,12 +125,23 @@ public class Drive extends SubsystemBase {
 
     SmartDashboard.putBoolean("Zero Drive", false);
 
+    // Generate trajectories
+    Pose2d start = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(7.5), new Rotation2d());
+    Pose2d end = new Pose2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5),  new Rotation2d());
+
+    var waypoints = new ArrayList<Translation2d>();
+    waypoints.add(new Translation2d(Units.feetToMeters(10.0), Units.feetToMeters(3.0)));
+    waypoints.add(new Translation2d(Units.feetToMeters(10.0), Units.feetToMeters(14.0)));
+
+    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, config);
+
     // Creating my kinematics object
     m_kinematics = new DifferentialDriveKinematics(Units.feetToMeters(Constants.WHEEL_BASE_WIDTH));
     // Creating my odometry object
     // our starting pose is 1 meters along the long end of the field and in the
     // center of the field along the short end, facing forward.
-    m_pose = new Pose2d(1.0, 7.5, new Rotation2d());
+    m_pose = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(7.5), new Rotation2d());
     m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), m_pose);
   }
 
