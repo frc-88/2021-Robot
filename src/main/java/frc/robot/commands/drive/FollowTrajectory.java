@@ -45,7 +45,7 @@ public class FollowTrajectory extends CommandBase {
     double leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
     double rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
 
-    m_drive.basicDrive(leftSpeed, rightSpeed);
+    m_drive.basicDriveLimited(leftSpeed, rightSpeed);
   }
 
   // Called once the command ends or is interrupted.
