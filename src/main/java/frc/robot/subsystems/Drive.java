@@ -23,8 +23,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.driveutil.DriveConfiguration;
@@ -290,6 +292,14 @@ public class Drive extends SubsystemBase {
 
   public boolean isOnLimelightTarget() {
     return this.isOnLimelightTarget;
+  }
+
+  public Pose2d getCurrentPose() {
+    return m_pose;
+  }
+
+  public ChassisSpeeds getCurrentChassisSpeeds() {
+    return m_kinematics.toChassisSpeeds(new DifferentialDriveWheelSpeeds(Units.feetToMeters(getLeftSpeed()), Units.feetToMeters(getRightSpeed())));
   }
 
   // Negative inertia! The idea is that the robot has some inertia
