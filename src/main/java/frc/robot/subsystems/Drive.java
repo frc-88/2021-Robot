@@ -374,6 +374,10 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Pose X", m_pose.getX());
     SmartDashboard.putNumber("Pose Y", m_pose.getY());
     SmartDashboard.putNumber("Pose X", m_pose.getRotation().getDegrees());
+    ChassisSpeeds speeds = getCurrentChassisSpeeds();
+    SmartDashboard.putNumber("Linear Velocity X", Units.metersToFeet(speeds.vxMetersPerSecond));
+    SmartDashboard.putNumber("Linear Velocity Y", Units.metersToFeet(speeds.vyMetersPerSecond));
+    SmartDashboard.putNumber("Linear Velocity X", Units.metersToFeet(speeds.omegaRadiansPerSecond));
 
     if (DriverStation.getInstance().isEnabled()) {
       this.setBrakeMode();
