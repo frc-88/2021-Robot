@@ -60,7 +60,8 @@ public class Drive extends SubsystemBase {
   private DifferentialDriveKinematics m_kinematics;
   private DifferentialDriveOdometry m_odometry;
   private Pose2d m_pose;
- 
+  public Trajectory trajectory;
+
   private PIDPreferenceConstants velPIDConstants;
   private PIDPreferenceConstants headingPIDConstants;
   private DoublePreferenceConstant downshiftSpeed;
@@ -127,16 +128,7 @@ public class Drive extends SubsystemBase {
 
     SmartDashboard.putBoolean("Zero Drive", false);
 
-    // Generate trajectories
-    Pose2d start = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(7.5), new Rotation2d());
-    Pose2d end = new Pose2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5),  new Rotation2d());
-
-    var waypoints = new ArrayList<Translation2d>();
-    waypoints.add(new Translation2d(Units.feetToMeters(10.0), Units.feetToMeters(3.0)));
-    waypoints.add(new Translation2d(Units.feetToMeters(10.0), Units.feetToMeters(14.0)));
-
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, config);
+    generateTrajectories();
 
     // Creating my kinematics object
     m_kinematics = new DifferentialDriveKinematics(Units.feetToMeters(Constants.WHEEL_BASE_WIDTH));
@@ -301,6 +293,25 @@ public class Drive extends SubsystemBase {
   public ChassisSpeeds getCurrentChassisSpeeds() {
     return m_kinematics.toChassisSpeeds(new DifferentialDriveWheelSpeeds(Units.feetToMeters(getLeftSpeed()), Units.feetToMeters(getRightSpeed())));
   }
+
+  private void generateTrajectories() {
+    // begining and ending poses
+    Pose2d start = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(7.5), new Rotation2d());
+    Pose2d end = new Pose2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5),  new Rotation2d());
+
+    // set up waypoints for path
+    var waypoints = new ArrayList<Translation2d>();
+    waypoints.add(new Translation2d(Units.feetToMeters(7.0), Units.feetToMeters(3.0)));
+    waypoints.add(new Translation2d(Units.feetToMeters(14.0), Units.feetToMeters(14.0)));
+
+    // define constraints for trajectory generation
+    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
+    // TODO - define constraints
+
+    // generate trajectory
+    trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, config);
+  }
+
 
   // Negative inertia! The idea is that the robot has some inertia
   // which theoretically is based on previously commanded values. Returns an
