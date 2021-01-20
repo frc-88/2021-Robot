@@ -294,6 +294,10 @@ public class Drive extends SubsystemBase {
     return m_kinematics.toChassisSpeeds(new DifferentialDriveWheelSpeeds(Units.feetToMeters(getLeftSpeed()), Units.feetToMeters(getRightSpeed())));
   }
 
+  public DifferentialDriveWheelSpeeds wheelSpeedsFromChassisSpeeds(ChassisSpeeds speeds) {
+    return m_kinematics.toWheelSpeeds(speeds);
+  }
+
   private void generateTrajectories() {
     // begining and ending poses
     Pose2d start = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(7.5), new Rotation2d());
