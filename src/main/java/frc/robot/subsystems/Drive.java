@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -310,7 +311,10 @@ public class Drive extends SubsystemBase {
 
     // define constraints for trajectory generation
     TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
-    // TODO - define constraints
+    config.setKinematics(m_kinematics);
+    config.setStartVelocity(0.0);
+    config.setEndVelocity(0.0);
+    config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(12.0)));
 
     // generate trajectory
     trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, config);
