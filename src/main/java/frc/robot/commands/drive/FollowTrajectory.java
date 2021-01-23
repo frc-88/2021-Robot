@@ -22,15 +22,15 @@ public class FollowTrajectory extends CommandBase {
   private Timer m_timer = new Timer();
   private double m_duration;
 
-  public FollowTrajectory(final Drive drive) {
+  public FollowTrajectory(final Drive drive, Trajectory trajectory) {
     m_drive = drive;
+    m_trajectory = trajectory;
     addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_trajectory = m_drive.trajectories.test2Trajectory;
     m_duration = m_trajectory.getTotalTimeSeconds();
     m_timer.reset();
     m_timer.start();
@@ -63,6 +63,6 @@ public class FollowTrajectory extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timer.get() > m_duration;
+    return m_timer.get() > m_duration * 2.0;
   }
 }

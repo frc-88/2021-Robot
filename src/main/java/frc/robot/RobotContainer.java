@@ -592,7 +592,9 @@ public class RobotContainer {
     SmartDashboard.putData("CalculateDriveEfficiency", new CalculateDriveEfficiency(m_drive));
     SmartDashboard.putNumber("TurnTestHeading", 0);
     SmartDashboard.putData("TestTurnToHeading", new InstantCommand(() -> (new TurnToHeading(m_drive, m_sensors, SmartDashboard.getNumber("TurnTestHeading", 0))).schedule()));
-    SmartDashboard.putData("FollowTestTrajectory", new FollowTrajectory(m_drive));
+    SmartDashboard.putData("FollowTestTrajectory", new FollowTrajectory(m_drive, m_drive.trajectories.testTrajectory));
+    SmartDashboard.putData("FollowSCurveTrajectory", new FollowTrajectory(m_drive, m_drive.trajectories.test2Trajectory));
+    SmartDashboard.putData("FollowLoopTrajectory", new FollowTrajectory(m_drive, m_drive.trajectories.testLoopTrajectory));
     SmartDashboard.putData("Zero Yaw", new ZeroYaw(m_sensors));
 
     // Intake testing
