@@ -125,14 +125,15 @@ public class Drive extends SubsystemBase {
 
     SmartDashboard.putBoolean("Zero Drive", false);
 
-    generateTrajectories();
-
     // Creating my kinematics object
     m_kinematics = new DifferentialDriveKinematics(Units.feetToMeters(Constants.WHEEL_BASE_WIDTH));
+
+    generateTrajectories();
+
     // Creating my odometry object
     // our starting pose is 1 meters along the long end of the field and in the
     // center of the field along the short end, facing forward.
-    m_pose = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(7.5), new Rotation2d());
+    m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
     m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), m_pose);
   }
 
@@ -298,11 +299,12 @@ public class Drive extends SubsystemBase {
   private void generateTrajectories() {
     
     // define constraints for trajectory generation
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
+    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(8.0), Units.feetToMeters(8.0));
     config.setKinematics(m_kinematics);
     config.setStartVelocity(0.0);
     config.setEndVelocity(0.0);
-    config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(12.0)));
+
+    config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(8.0)));
 
     // generate trajectories
     trajectories = new GameChangerTrajectories(config);
@@ -357,8 +359,12 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     if (SmartDashboard.getBoolean("Zero Drive", false)) {
+      m_sensors.navx.zeroYaw();
       m_leftEncoder.setPosition(0);
       m_rightEncoder.setPosition(0);
+
+      m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
+
       SmartDashboard.putBoolean("Zero Drive", false);
     }
     
@@ -377,14 +383,14 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putBoolean("LimelightHeadingOnTarget", isOnLimelightTarget);
 
     // update and display odometry data
-    m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), Units.inchesToMeters(getLeftPosition()), Units.inchesToMeters(getRightPosition()));
-    SmartDashboard.putNumber("Pose X", m_pose.getX());
-    SmartDashboard.putNumber("Pose Y", m_pose.getY());
-    SmartDashboard.putNumber("Pose X", m_pose.getRotation().getDegrees());
+    m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
+    SmartDashboard.putNumber("Pose X", Units.metersToFeet(m_pose.getX()));
+    SmartDashboard.putNumber("Pose Y", Units.metersToFeet(m_pose.getY()));
+    SmartDashboard.putNumber("Pose Rotation", m_pose.getRotation().getDegrees());
     ChassisSpeeds speeds = getCurrentChassisSpeeds();
     SmartDashboard.putNumber("Linear Velocity X", Units.metersToFeet(speeds.vxMetersPerSecond));
     SmartDashboard.putNumber("Linear Velocity Y", Units.metersToFeet(speeds.vyMetersPerSecond));
-    SmartDashboard.putNumber("Linear Velocity X", Units.metersToFeet(speeds.omegaRadiansPerSecond));
+    SmartDashboard.putNumber("Angular Velocity", Units.metersToFeet(speeds.omegaRadiansPerSecond));
 
     if (DriverStation.getInstance().isEnabled()) {
       this.setBrakeMode();

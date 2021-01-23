@@ -29,12 +29,12 @@ public class GameChangerTrajectories {
 
     private Trajectory generateTestTrajectory() {
         // begining and ending poses
-        Pose2d start = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(7.5), new Rotation2d());
-        Pose2d end = new Pose2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5),  new Rotation2d());
+        Pose2d start = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
+        Pose2d end = new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(0.0),  new Rotation2d());
 
         // set up waypoints for path
         var waypoints = new ArrayList<Translation2d>();
-        waypoints.add(new Translation2d(Units.feetToMeters(9.5), Units.feetToMeters(2.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(7.5), Units.feetToMeters(3.0)));
         
         // generate trajectory
         return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
