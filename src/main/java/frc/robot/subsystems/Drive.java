@@ -364,8 +364,10 @@ public class Drive extends SubsystemBase {
       m_rightEncoder.setPosition(0);
 
       m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
-
+      m_odometry.resetPosition(m_pose, new Rotation2d());
       SmartDashboard.putBoolean("Zero Drive", false);
+    } else {
+      m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
     }
     
     SmartDashboard.putNumber("L Drive Current", m_leftDrive.getTotalCurrent());
@@ -382,8 +384,6 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Max Drive Speed", m_maxSpeed);
     SmartDashboard.putBoolean("LimelightHeadingOnTarget", isOnLimelightTarget);
 
-    // update and display odometry data
-    m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
     SmartDashboard.putNumber("Pose X", Units.metersToFeet(m_pose.getX()));
     SmartDashboard.putNumber("Pose Y", Units.metersToFeet(m_pose.getY()));
     SmartDashboard.putNumber("Pose Rotation", m_pose.getRotation().getDegrees());
