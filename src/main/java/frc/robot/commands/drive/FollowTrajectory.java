@@ -30,7 +30,7 @@ public class FollowTrajectory extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_trajectory = m_drive.trajectories.testTrajectory;
+    m_trajectory = m_drive.trajectories.test2Trajectory;
     m_duration = m_trajectory.getTotalTimeSeconds();
     m_timer.reset();
     m_timer.start();

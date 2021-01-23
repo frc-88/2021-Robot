@@ -66,6 +66,7 @@ import frc.robot.commands.shooter.ShooterRunFromLimelight;
 import frc.robot.commands.shooter.ShooterStop;
 import frc.robot.commands.sensors.LimelightToggle;
 import frc.robot.commands.sensors.WaitForBallsShot;
+import frc.robot.commands.sensors.ZeroYaw;
 import frc.robot.driveutil.DriveUtils;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
@@ -592,6 +593,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("TurnTestHeading", 0);
     SmartDashboard.putData("TestTurnToHeading", new InstantCommand(() -> (new TurnToHeading(m_drive, m_sensors, SmartDashboard.getNumber("TurnTestHeading", 0))).schedule()));
     SmartDashboard.putData("FollowTestTrajectory", new FollowTrajectory(m_drive));
+    SmartDashboard.putData("Zero Yaw", new ZeroYaw(m_sensors));
 
     // Intake testing
     SmartDashboard.putData("Deploy Intake", new DeployIntake(m_intake));
