@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -46,6 +47,9 @@ public class FollowTrajectory extends CommandBase {
     DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(adjustedSpeeds);
     double leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
     double rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
+
+    SmartDashboard.putNumber("Trajectory left speed", leftSpeed);
+    SmartDashboard.putNumber("Trajectory right speed", rightSpeed);
 
     m_drive.basicDriveLimited(leftSpeed, rightSpeed);
   }
