@@ -46,6 +46,7 @@ import frc.robot.commands.climber.ZeroClimber;
 import frc.robot.commands.drive.ArcadeDrive;
 import frc.robot.commands.drive.BasicAutoDrive;
 import frc.robot.commands.drive.CalculateDriveEfficiency;
+import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.drive.TestDriveStaticFriction;
 import frc.robot.commands.drive.TurnToHeading;
@@ -590,6 +591,7 @@ public class RobotContainer {
     SmartDashboard.putData("CalculateDriveEfficiency", new CalculateDriveEfficiency(m_drive));
     SmartDashboard.putNumber("TurnTestHeading", 0);
     SmartDashboard.putData("TestTurnToHeading", new InstantCommand(() -> (new TurnToHeading(m_drive, m_sensors, SmartDashboard.getNumber("TurnTestHeading", 0))).schedule()));
+    SmartDashboard.putData("FollowTestTrajectory", new FollowTrajectory(m_drive));
 
     // Intake testing
     SmartDashboard.putData("Deploy Intake", new DeployIntake(m_intake));
