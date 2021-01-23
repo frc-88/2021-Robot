@@ -12,6 +12,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -305,6 +306,7 @@ public class Drive extends SubsystemBase {
     config.setEndVelocity(0.0);
 
     config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(8.0)));
+    config.addConstraint(new CentripetalAccelerationConstraint(2.0));
 
     // generate trajectories
     trajectories = new GameChangerTrajectories(config);
