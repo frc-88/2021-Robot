@@ -46,6 +46,7 @@ import frc.robot.commands.climber.ZeroClimber;
 import frc.robot.commands.drive.ArcadeDrive;
 import frc.robot.commands.drive.BasicAutoDrive;
 import frc.robot.commands.drive.CalculateDriveEfficiency;
+import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.drive.TestDriveStaticFriction;
 import frc.robot.commands.drive.TurnToHeading;
@@ -65,6 +66,7 @@ import frc.robot.commands.shooter.ShooterRunFromLimelight;
 import frc.robot.commands.shooter.ShooterStop;
 import frc.robot.commands.sensors.LimelightToggle;
 import frc.robot.commands.sensors.WaitForBallsShot;
+import frc.robot.commands.sensors.ZeroYaw;
 import frc.robot.driveutil.DriveUtils;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
@@ -590,6 +592,10 @@ public class RobotContainer {
     SmartDashboard.putData("CalculateDriveEfficiency", new CalculateDriveEfficiency(m_drive));
     SmartDashboard.putNumber("TurnTestHeading", 0);
     SmartDashboard.putData("TestTurnToHeading", new InstantCommand(() -> (new TurnToHeading(m_drive, m_sensors, SmartDashboard.getNumber("TurnTestHeading", 0))).schedule()));
+    SmartDashboard.putData("FollowTestTrajectory", new FollowTrajectory(m_drive, m_drive.trajectories.testTrajectory));
+    SmartDashboard.putData("FollowSCurveTrajectory", new FollowTrajectory(m_drive, m_drive.trajectories.test2Trajectory));
+    SmartDashboard.putData("FollowLoopTrajectory", new FollowTrajectory(m_drive, m_drive.trajectories.testLoopTrajectory));
+    SmartDashboard.putData("Zero Yaw", new ZeroYaw(m_sensors));
 
     // Intake testing
     SmartDashboard.putData("Deploy Intake", new DeployIntake(m_intake));

@@ -11,14 +11,25 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.driveutil.DriveConfiguration;
 import frc.robot.driveutil.TJDriveModule;
 import frc.robot.subsystems.Sensors;
+import frc.robot.util.GameChangerTrajectories;
 import frc.robot.util.SyncPIDController;
 import frc.robot.util.WrappingPIDController;
 import frc.robot.util.preferenceconstants.DoublePreferenceConstant;
@@ -43,7 +54,12 @@ public class Drive extends SubsystemBase {
   private double m_leftCommandedSpeed = 0;
   private double m_rightCommandedSpeed = 0;
   private double m_maxSpeed = Constants.MAX_SPEED_HIGH;
-  
+
+  private DifferentialDriveKinematics m_kinematics;
+  private DifferentialDriveOdometry m_odometry;
+  private Pose2d m_pose;
+  public GameChangerTrajectories trajectories;
+
   private PIDPreferenceConstants velPIDConstants;
   private PIDPreferenceConstants headingPIDConstants;
   private DoublePreferenceConstant downshiftSpeed;
@@ -109,6 +125,17 @@ public class Drive extends SubsystemBase {
     shiftToLow();
 
     SmartDashboard.putBoolean("Zero Drive", false);
+
+    // Creating my kinematics object
+    m_kinematics = new DifferentialDriveKinematics(Units.feetToMeters(Constants.WHEEL_BASE_WIDTH));
+
+    generateTrajectories();
+
+    // Creating my odometry object
+    // our starting pose is 1 meters along the long end of the field and in the
+    // center of the field along the short end, facing forward.
+    m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
+    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), m_pose);
   }
 
   public void basicDrive(double leftSpeed, double rightSpeed) {
@@ -258,6 +285,34 @@ public class Drive extends SubsystemBase {
     return this.isOnLimelightTarget;
   }
 
+  public Pose2d getCurrentPose() {
+    return m_pose;
+  }
+
+  public ChassisSpeeds getCurrentChassisSpeeds() {
+    return m_kinematics.toChassisSpeeds(new DifferentialDriveWheelSpeeds(Units.feetToMeters(getLeftSpeed()), Units.feetToMeters(getRightSpeed())));
+  }
+
+  public DifferentialDriveWheelSpeeds wheelSpeedsFromChassisSpeeds(ChassisSpeeds speeds) {
+    return m_kinematics.toWheelSpeeds(speeds);
+  }
+
+  private void generateTrajectories() {
+    
+    // define constraints for trajectory generation
+    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(8.0), Units.feetToMeters(8.0));
+    config.setKinematics(m_kinematics);
+    config.setStartVelocity(0.0);
+    config.setEndVelocity(0.0);
+
+    config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(8.0)));
+    config.addConstraint(new CentripetalAccelerationConstraint(2.0));
+
+    // generate trajectories
+    trajectories = new GameChangerTrajectories(config);
+  }
+
+
   // Negative inertia! The idea is that the robot has some inertia
   // which theoretically is based on previously commanded values. Returns an
   // updated turn value
@@ -306,11 +361,17 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     if (SmartDashboard.getBoolean("Zero Drive", false)) {
+      m_sensors.navx.zeroYaw();
       m_leftEncoder.setPosition(0);
       m_rightEncoder.setPosition(0);
-      SmartDashboard.putBoolean("Zero Drive", false);
-    }
 
+      m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
+      m_odometry.resetPosition(m_pose, new Rotation2d());
+      SmartDashboard.putBoolean("Zero Drive", false);
+    } else {
+      m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
+    }
+    
     SmartDashboard.putNumber("L Drive Current", m_leftDrive.getTotalCurrent());
     SmartDashboard.putNumber("R Drive Current", m_rightDrive.getTotalCurrent());
     SmartDashboard.putNumber("L Drive Speed", m_leftDrive.getScaledSensorVelocity());
@@ -324,6 +385,14 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putBoolean("In High Gear?", isInHighGear());
     SmartDashboard.putNumber("Max Drive Speed", m_maxSpeed);
     SmartDashboard.putBoolean("LimelightHeadingOnTarget", isOnLimelightTarget);
+
+    SmartDashboard.putNumber("Pose X", Units.metersToFeet(m_pose.getX()));
+    SmartDashboard.putNumber("Pose Y", Units.metersToFeet(m_pose.getY()));
+    SmartDashboard.putNumber("Pose Rotation", m_pose.getRotation().getDegrees());
+    ChassisSpeeds speeds = getCurrentChassisSpeeds();
+    SmartDashboard.putNumber("Linear Velocity X", Units.metersToFeet(speeds.vxMetersPerSecond));
+    SmartDashboard.putNumber("Linear Velocity Y", Units.metersToFeet(speeds.vyMetersPerSecond));
+    SmartDashboard.putNumber("Angular Velocity", Units.metersToFeet(speeds.omegaRadiansPerSecond));
 
     if (DriverStation.getInstance().isEnabled()) {
       this.setBrakeMode();
