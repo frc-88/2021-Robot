@@ -135,7 +135,7 @@ public class Drive extends SubsystemBase {
     // our starting pose is 1 meters along the long end of the field and in the
     // center of the field along the short end, facing forward.
     m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
-    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), m_pose);
+    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-m_sensors.getYaw()), m_pose);
   }
 
   public void basicDrive(double leftSpeed, double rightSpeed) {
@@ -195,7 +195,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void turnToHeading(double heading) {
-    double turnRate = m_headingPID.calculateOutput(m_sensors.navx.getYaw(), heading);
+    double turnRate = m_headingPID.calculateOutput(m_sensors.getYaw(), heading);
     basicDrive(turnRate, -turnRate);
   }
 
@@ -361,7 +361,7 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     if (SmartDashboard.getBoolean("Zero Drive", false)) {
-      m_sensors.navx.zeroYaw();
+      m_sensors.zeroYaw();
       m_leftEncoder.setPosition(0);
       m_rightEncoder.setPosition(0);
 
@@ -369,7 +369,7 @@ public class Drive extends SubsystemBase {
       m_odometry.resetPosition(m_pose, new Rotation2d());
       SmartDashboard.putBoolean("Zero Drive", false);
     } else {
-      m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
+      m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
     }
     
     SmartDashboard.putNumber("L Drive Current", m_leftDrive.getTotalCurrent());

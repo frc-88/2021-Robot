@@ -21,6 +21,6 @@ public class ZeroYaw extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    sensors.navx.zeroYaw();
+    sensors.zeroYaw();
   }
 }

@@ -42,7 +42,7 @@ import frc.robot.util.Limelight;
  */
 
 public class Sensors extends SubsystemBase {
-  public final NavX navx;
+  private final NavX m_navx;
   
   private final Limelight limelight;
   private BooleanSupplier ledOverride;
@@ -56,6 +56,7 @@ public class Sensors extends SubsystemBase {
   private final DoublePreferenceConstant m_limelightHeight = new DoublePreferenceConstant("Limelight Height", 19.5);
   private final DoublePreferenceConstant m_limelightAngle = new DoublePreferenceConstant("Limelight Angle", 20.0);
   private final DoublePreferenceConstant m_limelightOffset = new DoublePreferenceConstant("Limelight Offset", 8.0);
+  private double m_yawOffset = 0.0;
 
   private DigitalInput shooterBallSensor;
 
@@ -65,8 +66,7 @@ public class Sensors extends SubsystemBase {
   public Sensors(BooleanSupplier ledOverride) {
     this.ledOverride = ledOverride;
 
-    navx = new NavX();
-    navx.zeroYaw();
+    m_navx = new NavX();
 
     limelight = new Limelight();
     limelight.camVision();
@@ -142,6 +142,18 @@ public class Sensors extends SubsystemBase {
     }).start();
   }
 
+  public void zeroYaw() {
+    m_yawOffset = m_navx.getYaw();
+  }
+
+  public double getYaw() {
+    return m_navx.getYaw() - m_yawOffset;
+  }
+
+  public double getYawRate() {
+    return m_navx.getYawRate();
+  } 
+
   public void ledOn() {
     limelight.ledOn();
   }
@@ -207,10 +219,10 @@ public class Sensors extends SubsystemBase {
   @Override
   public void periodic() {
     // NavX data
-    SmartDashboard.putNumber("NavX Yaw", navx.getYaw());
-    SmartDashboard.putNumber("NavX Yaw Rate", navx.getYawRate());
-    SmartDashboard.putNumber("NavX Pitch", navx.getPitch());
-    SmartDashboard.putNumber("NavX Roll", navx.getRoll());
+    SmartDashboard.putNumber("NavX Yaw", getYaw());
+    SmartDashboard.putNumber("NavX Yaw Rate", getYawRate());
+    SmartDashboard.putNumber("NavX Pitch", m_navx.getPitch());
+    SmartDashboard.putNumber("NavX Roll", m_navx.getRoll());
 
     // Limelight data
     SmartDashboard.putBoolean("Limelight connected?", limelight.isConnected());
