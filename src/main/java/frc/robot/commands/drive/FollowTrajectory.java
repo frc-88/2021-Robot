@@ -16,19 +16,22 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Sensors;
 
 public class FollowTrajectory extends CommandBase {
-  /** Creates a new FollowTrajectory. */
   private Drive m_drive;
   private Sensors m_sensors;
   private Trajectory m_trajectory;
-  private RamseteController m_controller = new RamseteController();
-  private Timer m_timer = new Timer();
   private double m_duration;
+
   private int m_state;
+  private Timer m_timer = new Timer();
+  // TODO maybe allow for tuning of RamseteController parameters
+  private RamseteController m_controller = new RamseteController();
 
   public FollowTrajectory(final Drive drive, final Sensors sensors, Trajectory trajectory) {
     m_drive = drive;
     m_sensors = sensors;
     m_trajectory = trajectory;
+    m_duration = m_trajectory.getTotalTimeSeconds();
+
     addRequirements(m_drive);
     addRequirements(m_sensors);
   }
@@ -36,7 +39,6 @@ public class FollowTrajectory extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_duration = m_trajectory.getTotalTimeSeconds();
     m_state = 0;
   }
 
@@ -48,24 +50,29 @@ public class FollowTrajectory extends CommandBase {
         m_drive.zeroDrive();
         m_state++;
         break;
-      case 1: // Check to make sure all is zero
-        if ((Math.abs(m_drive.getLeftPosition()) < 0.2) &&
-             (Math.abs(m_drive.getRightPosition()) < 0.2) &&
-             (Math.abs(m_sensors.getYaw()) < 2.0)) {
-              m_state++;
-             }
+      case 1: // Check to make sure things are near zero
+        if ((Math.abs(m_drive.getLeftPosition()) < 0.2) && (Math.abs(m_drive.getRightPosition()) < 0.2)
+            && (Math.abs(m_sensors.getYaw()) < 2.0)) {
+          m_state++;
+        }
         break;
-      case 2: // reset the timer and go!
+      case 2: // Reset the odometry
+        m_drive.resetOdometry();
+        m_state++;
+        break;
+      case 3: // reset the timer and go!
         m_timer.reset();
         m_timer.start();
         m_state++;
         // fall through right away to case 3
-      case 3: // follow the trajectory, our final state
+      case 4: // follow the trajectory, our final state
         // calculate what we need to do to be where we need to be 20ms from now.
+        // TODO is that offset needed? Should I just calculate based on where I should
+        // be now?
         double now = m_timer.get();
         Trajectory.State goal = m_trajectory.sample(now + 0.020);
         ChassisSpeeds adjustedSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
-        
+
         DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(adjustedSpeeds);
         double leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
         double rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
@@ -78,10 +85,6 @@ public class FollowTrajectory extends CommandBase {
       default:
         break;
     }
-
-
-
-
 
   }
 
