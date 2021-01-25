@@ -69,11 +69,12 @@ public class FollowTrajectory extends CommandBase {
         // calculate what we need to do to be where we need to be 20ms from now.
         // TODO is that offset needed? Should I just calculate based on where I should
         // be now?
+        m_drive.updateOdometry();
         double now = m_timer.get();
         Trajectory.State goal = m_trajectory.sample(now + 0.020);
-        ChassisSpeeds adjustedSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
+        ChassisSpeeds targetSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
 
-        DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(adjustedSpeeds);
+        DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
         double leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
         double rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
 

@@ -368,15 +368,16 @@ public class Drive extends SubsystemBase {
     m_odometry.resetPosition(m_pose, new Rotation2d());
   }
 
+  public void updateOdometry() {
+    m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
+  }
+
   @Override
   public void periodic() {
     if (SmartDashboard.getBoolean("Zero Drive", false)) {
       zeroDrive();
       resetOdometry();
       SmartDashboard.putBoolean("Zero Drive", false);
-    } else {
-      // update odometry
-      m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
     }
     
     SmartDashboard.putNumber("L Drive Current", m_leftDrive.getTotalCurrent());
