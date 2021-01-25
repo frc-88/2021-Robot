@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.driveutil.DriveConfiguration;
 import frc.robot.driveutil.TJDriveModule;
-import frc.robot.subsystems.Sensors;
 import frc.robot.util.GameChangerTrajectories;
 import frc.robot.util.SyncPIDController;
 import frc.robot.util.WrappingPIDController;
@@ -358,17 +357,25 @@ public class Drive extends SubsystemBase {
       return updatedTurn;
   }
 
+  public void zeroDrive() {
+    m_sensors.zeroYaw();
+    m_leftEncoder.setPosition(0);
+    m_rightEncoder.setPosition(0);
+  }
+
+  public void resetOdometry() {
+    m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
+    m_odometry.resetPosition(m_pose, new Rotation2d());
+  }
+
   @Override
   public void periodic() {
     if (SmartDashboard.getBoolean("Zero Drive", false)) {
-      m_sensors.zeroYaw();
-      m_leftEncoder.setPosition(0);
-      m_rightEncoder.setPosition(0);
-
-      m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
-      m_odometry.resetPosition(m_pose, new Rotation2d());
+      zeroDrive();
+      resetOdometry();
       SmartDashboard.putBoolean("Zero Drive", false);
     } else {
+      // update odometry
       m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
     }
     
