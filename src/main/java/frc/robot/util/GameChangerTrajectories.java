@@ -44,8 +44,35 @@ public class GameChangerTrajectories {
     }
 
     private Trajectory generateSlalomTrajectory() {
-        // TODO
-        return null;
+        // begining pose, at the end of the start zone, next to the right side
+        Pose2d start = new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(0.0), new Rotation2d());
+
+        // set up waypoints for path
+        var waypoints = new ArrayList<Translation2d>();
+        // drive by D4
+        waypoints.add(new Translation2d(Units.feetToMeters(9.5), Units.feetToMeters(5.0)));
+        // mid point on left side, near D6
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(6.5)));
+        // drive by D8
+        waypoints.add(new Translation2d(Units.feetToMeters(20.5), Units.feetToMeters(5.0)));
+        // loop around D10
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(0.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(29.5), Units.feetToMeters(5.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(10.0)));
+        // drive by D8 again
+        waypoints.add(new Translation2d(Units.feetToMeters(20.5), Units.feetToMeters(5.0)));
+        // mid point or right side, near D6
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(3.5)));
+        // drive by D4
+        waypoints.add(new Translation2d(Units.feetToMeters(9.5), Units.feetToMeters(5.0)));
+        // race to the finish! Near B2
+        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(9.5)));
+
+        // ending pose, well past finish line, all the way into the finish zone
+        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(9.0),  new Rotation2d(Units.degreesToRadians(180)));
+
+        // generate trajectory
+        return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
     }
 
     private Trajectory generateBarrelRunTrajectory() {
