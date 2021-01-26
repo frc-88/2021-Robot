@@ -592,10 +592,15 @@ public class RobotContainer {
     SmartDashboard.putData("CalculateDriveEfficiency", new CalculateDriveEfficiency(m_drive));
     SmartDashboard.putNumber("TurnTestHeading", 0);
     SmartDashboard.putData("TestTurnToHeading", new InstantCommand(() -> (new TurnToHeading(m_drive, m_sensors, SmartDashboard.getNumber("TurnTestHeading", 0))).schedule()));
-    SmartDashboard.putData("FollowTestTrajectory", new FollowTrajectory(m_drive, m_drive.trajectories.testTrajectory));
-    SmartDashboard.putData("FollowSCurveTrajectory", new FollowTrajectory(m_drive, m_drive.trajectories.test2Trajectory));
-    SmartDashboard.putData("FollowLoopTrajectory", new FollowTrajectory(m_drive, m_drive.trajectories.testLoopTrajectory));
     SmartDashboard.putData("Zero Yaw", new ZeroYaw(m_sensors));
+
+    // Trajectory following testing    
+    SmartDashboard.putData("FollowTest1", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.test1));
+    SmartDashboard.putData("FollowTest2", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.test2));
+    SmartDashboard.putData("FollowLoop", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.testLoop));
+    SmartDashboard.putData("FollowBarrelRun", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun));
+    SmartDashboard.putData("FollowSlalom", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom));
+    SmartDashboard.putData("FollowBounce", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce));
 
     // Intake testing
     SmartDashboard.putData("Deploy Intake", new DeployIntake(m_intake));

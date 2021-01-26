@@ -17,18 +17,40 @@ import edu.wpi.first.wpilibj.util.Units;
 /** Add your docs here. */
 public class GameChangerTrajectories {
        
-    public Trajectory testTrajectory;
-    public Trajectory test2Trajectory;
-    public Trajectory testLoopTrajectory;
+    public Trajectory barrelRun;
+    public Trajectory slalom;
+    public Trajectory bounce;
+    public Trajectory test1;
+    public Trajectory test2;
+    public Trajectory testLoop;
 
     private TrajectoryConfig m_config;
 
     public GameChangerTrajectories(TrajectoryConfig config) {
         m_config = config;
 
-        testTrajectory = generateTestTrajectory();
-        test2Trajectory = generateTest2Trajectory();
-        testLoopTrajectory = generateTestLoopTrajectory();
+        barrelRun = generateBarrelRunTrajectory();
+        slalom = generateSlalomTrajectory();
+        bounce = generateBounceTrajectory();
+
+        test1 = generateTestTrajectory();
+        test2 = generateTest2Trajectory();
+        testLoop = generateTestLoopTrajectory();
+    }
+
+    private Trajectory generateBounceTrajectory() {
+        // TODO
+        return null;
+    }
+
+    private Trajectory generateSlalomTrajectory() {
+        // TODO
+        return null;
+    }
+
+    private Trajectory generateBarrelRunTrajectory() {
+        // TODO
+        return null;
     }
 
     private Trajectory generateTestTrajectory() {
