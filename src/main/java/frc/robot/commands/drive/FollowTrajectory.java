@@ -6,6 +6,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,8 +57,8 @@ public class FollowTrajectory extends CommandBase {
           m_state++;
         }
         break;
-      case 2: // Reset the odometry
-        m_drive.resetOdometry();
+      case 2: // Reset the odometry to the starting pose of the Trajectory
+        m_drive.resetOdometry(m_trajectory.getInitialPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
         m_state++;
         break;
       case 3: // reset the timer and go!

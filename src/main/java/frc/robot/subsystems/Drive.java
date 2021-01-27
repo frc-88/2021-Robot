@@ -364,8 +364,11 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetOdometry() {
-    m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
-    m_odometry.resetPosition(m_pose, new Rotation2d());
+    resetOdometry(new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d()), new Rotation2d());
+  }
+
+  public void resetOdometry(Pose2d startPose, Rotation2d startGyro) {
+    m_odometry.resetPosition(startPose, startGyro);
   }
 
   public void updateOdometry() {
