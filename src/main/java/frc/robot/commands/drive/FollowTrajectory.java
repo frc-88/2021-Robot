@@ -65,7 +65,7 @@ public class FollowTrajectory extends CommandBase {
         m_timer.reset();
         m_timer.start();
         m_state++;
-        // fall through right away to case 3
+        // fall through right away to case 4
       case 4: // follow the trajectory, our final state
         // calculate what we need to do to be where we need to be 20ms from now.
         // TODO is that offset needed? Should I just calculate based on where I should
