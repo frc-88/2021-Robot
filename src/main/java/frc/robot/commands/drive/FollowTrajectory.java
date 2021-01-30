@@ -83,7 +83,11 @@ public class FollowTrajectory extends CommandBase {
         SmartDashboard.putNumber("Trajectory left speed", leftSpeed);
         SmartDashboard.putNumber("Trajectory right speed", rightSpeed);
 
-        m_drive.basicDriveLimited(leftSpeed, rightSpeed);
+        if (m_timer.get() > m_duration) {
+          m_drive.basicDriveLimited(0.0, 0.0);
+        } else {
+          m_drive.basicDriveLimited(leftSpeed, rightSpeed);
+        }
 
         break;
       default:
