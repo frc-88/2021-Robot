@@ -299,12 +299,12 @@ public class Drive extends SubsystemBase {
   private void generateTrajectories() {
     
     // define constraints for trajectory generation
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(14.0), Units.feetToMeters(8.0));
+    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(16.0), Units.feetToMeters(8.0));
     config.setKinematics(m_kinematics);
     config.setStartVelocity(0.0);
     config.setEndVelocity(0.0);
 
-    config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(14.0)));
+    config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(16.0)));
     config.addConstraint(new CentripetalAccelerationConstraint(2.5));
 
     // generate trajectories

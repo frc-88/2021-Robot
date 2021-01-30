@@ -101,7 +101,7 @@ public class GameChangerTrajectories {
         waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5)));
 
         // ending pose, well past finish line, all the way into the finish zone
-        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.5),  Rotation2d.fromDegrees(180));
+        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.5),  Rotation2d.fromDegrees(179));
 
         // generate trajectory
         return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
