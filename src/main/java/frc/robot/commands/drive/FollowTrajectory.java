@@ -41,6 +41,7 @@ public class FollowTrajectory extends CommandBase {
   @Override
   public void initialize() {
     m_state = 0;
+    m_timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,7 +63,6 @@ public class FollowTrajectory extends CommandBase {
         m_state++;
         break;
       case 3: // reset the timer and go!
-        m_timer.reset();
         m_timer.start();
         m_state++;
         // fall through right away to case 4
