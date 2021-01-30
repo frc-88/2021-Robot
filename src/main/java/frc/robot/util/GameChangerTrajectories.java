@@ -82,21 +82,22 @@ public class GameChangerTrajectories {
         // set up waypoints for path
         var waypoints = new ArrayList<Translation2d>();
         // around the first barrel
-        waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(5.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(2.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(10.0), Units.feetToMeters(5.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(13.5), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(16.0), Units.feetToMeters(5.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(2.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(11.0), Units.feetToMeters(5.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(7.5)));
         // around the second barrel
-        waypoints.add(new Translation2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(22.5), Units.feetToMeters(10.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(20.0), Units.feetToMeters(12.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(17.5), Units.feetToMeters(10.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(21.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(23.5), Units.feetToMeters(10.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(20.0), Units.feetToMeters(13.3)));
+        waypoints.add(new Translation2d(Units.feetToMeters(16.5), Units.feetToMeters(10.0)));
         // around the third barrel
         waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(2.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(27.5), Units.feetToMeters(5.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(29.0), Units.feetToMeters(5.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(7.5)));
         // race to the finish!
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(8.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5)));
 
         // ending pose, well past finish line, all the way into the finish zone

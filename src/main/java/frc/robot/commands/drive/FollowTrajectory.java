@@ -64,6 +64,7 @@ public class FollowTrajectory extends CommandBase {
         break;
       case 3: // reset the timer and go!
         m_timer.start();
+        m_drive.shiftToHigh();
         m_state++;
         // fall through right away to case 4
       case 4: // follow the trajectory, our final state
@@ -84,12 +85,6 @@ public class FollowTrajectory extends CommandBase {
 
         m_drive.basicDriveLimited(leftSpeed, rightSpeed);
 
-        if (m_drive.autoshift((leftSpeed + rightSpeed) / 2)) {
-          m_drive.shiftToHigh();
-        } else {
-          m_drive.shiftToLow();
-        }
-
         break;
       default:
         break;
@@ -106,6 +101,6 @@ public class FollowTrajectory extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timer.get() > m_duration * 2.0;
+    return m_timer.get() > m_duration + 1.0;
   }
 }
