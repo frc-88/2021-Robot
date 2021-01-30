@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.driveutil.DriveConfiguration;
 import frc.robot.driveutil.TJDriveModule;
-import frc.robot.subsystems.Sensors;
 import frc.robot.util.GameChangerTrajectories;
 import frc.robot.util.SyncPIDController;
 import frc.robot.util.WrappingPIDController;
@@ -135,7 +134,7 @@ public class Drive extends SubsystemBase {
     // our starting pose is 1 meters along the long end of the field and in the
     // center of the field along the short end, facing forward.
     m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
-    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), m_pose);
+    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-m_sensors.getYaw()), m_pose);
   }
 
   public void basicDrive(double leftSpeed, double rightSpeed) {
@@ -195,7 +194,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void turnToHeading(double heading) {
-    double turnRate = m_headingPID.calculateOutput(m_sensors.navx.getYaw(), heading);
+    double turnRate = m_headingPID.calculateOutput(m_sensors.getYaw(), heading);
     basicDrive(turnRate, -turnRate);
   }
 
@@ -300,13 +299,13 @@ public class Drive extends SubsystemBase {
   private void generateTrajectories() {
     
     // define constraints for trajectory generation
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(8.0), Units.feetToMeters(8.0));
+    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(16.0), Units.feetToMeters(8.0));
     config.setKinematics(m_kinematics);
     config.setStartVelocity(0.0);
     config.setEndVelocity(0.0);
 
-    config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(8.0)));
-    config.addConstraint(new CentripetalAccelerationConstraint(2.0));
+    config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(16.0)));
+    config.addConstraint(new CentripetalAccelerationConstraint(2.5));
 
     // generate trajectories
     trajectories = new GameChangerTrajectories(config);
@@ -358,18 +357,30 @@ public class Drive extends SubsystemBase {
       return updatedTurn;
   }
 
+  public void zeroDrive() {
+    m_sensors.zeroYaw();
+    m_leftEncoder.setPosition(0);
+    m_rightEncoder.setPosition(0);
+  }
+
+  public void resetOdometry() {
+    resetOdometry(new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d()), new Rotation2d());
+  }
+
+  public void resetOdometry(Pose2d startPose, Rotation2d startGyro) {
+    m_odometry.resetPosition(startPose, startGyro);
+  }
+
+  public void updateOdometry() {
+    m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
+  }
+
   @Override
   public void periodic() {
     if (SmartDashboard.getBoolean("Zero Drive", false)) {
-      m_sensors.navx.zeroYaw();
-      m_leftEncoder.setPosition(0);
-      m_rightEncoder.setPosition(0);
-
-      m_pose = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
-      m_odometry.resetPosition(m_pose, new Rotation2d());
+      zeroDrive();
+      resetOdometry();
       SmartDashboard.putBoolean("Zero Drive", false);
-    } else {
-      m_pose = m_odometry.update(Rotation2d.fromDegrees(-m_sensors.navx.getYaw()), Units.feetToMeters(getLeftPosition()), Units.feetToMeters(getRightPosition()));
     }
     
     SmartDashboard.putNumber("L Drive Current", m_leftDrive.getTotalCurrent());

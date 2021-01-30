@@ -17,18 +17,94 @@ import edu.wpi.first.wpilibj.util.Units;
 /** Add your docs here. */
 public class GameChangerTrajectories {
        
-    public Trajectory testTrajectory;
-    public Trajectory test2Trajectory;
-    public Trajectory testLoopTrajectory;
+    public Trajectory barrelRun;
+    public Trajectory slalom;
+    public Trajectory bounce;
+    public Trajectory test1;
+    public Trajectory test2;
+    public Trajectory testLoop;
 
     private TrajectoryConfig m_config;
 
     public GameChangerTrajectories(TrajectoryConfig config) {
         m_config = config;
 
-        testTrajectory = generateTestTrajectory();
-        test2Trajectory = generateTest2Trajectory();
-        testLoopTrajectory = generateTestLoopTrajectory();
+        barrelRun = generateBarrelRunTrajectory();
+        slalom = generateSlalomTrajectory();
+        bounce = generateBounceTrajectory();
+
+        test1 = generateTestTrajectory();
+        test2 = generateTest2Trajectory();
+        testLoop = generateTestLoopTrajectory();
+    }
+
+    private Trajectory generateBounceTrajectory() {
+        // TODO
+        return null;
+    }
+
+    private Trajectory generateSlalomTrajectory() {
+        // begining pose, at the end of the start zone, next to the right side
+        Pose2d start = new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(0.0), new Rotation2d());
+
+        // set up waypoints for path
+        var waypoints = new ArrayList<Translation2d>();
+        // drive by D4
+        waypoints.add(new Translation2d(Units.feetToMeters(9.5), Units.feetToMeters(5.0)));
+        // mid point on left side, near D6
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(6.5)));
+        // drive by D8
+        waypoints.add(new Translation2d(Units.feetToMeters(20.5), Units.feetToMeters(5.0)));
+        // loop around D10
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(0.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(29.5), Units.feetToMeters(5.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(10.0)));
+        // drive by D8 again
+        waypoints.add(new Translation2d(Units.feetToMeters(20.5), Units.feetToMeters(5.0)));
+        // mid point or right side, near D6
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(3.5)));
+        // drive by D4
+        waypoints.add(new Translation2d(Units.feetToMeters(9.5), Units.feetToMeters(5.0)));
+        // race to the finish! Near B2
+        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(9.5)));
+
+        // ending pose, well past finish line, all the way into the finish zone
+        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(9.0),  Rotation2d.fromDegrees(180));
+
+        // generate trajectory
+        return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
+    }
+
+    private Trajectory generateBarrelRunTrajectory() {
+        // begining pose, on the center line, up against the start line
+        Pose2d start = new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5), new Rotation2d());
+
+        // set up waypoints for path
+        var waypoints = new ArrayList<Translation2d>();
+        // around the first barrel
+        waypoints.add(new Translation2d(Units.feetToMeters(13.5), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(16.0), Units.feetToMeters(5.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(2.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(11.0), Units.feetToMeters(5.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(7.5)));
+        // around the second barrel
+        waypoints.add(new Translation2d(Units.feetToMeters(21.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(23.5), Units.feetToMeters(10.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(20.0), Units.feetToMeters(13.3)));
+        waypoints.add(new Translation2d(Units.feetToMeters(16.5), Units.feetToMeters(10.0)));
+        // around the third barrel
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(2.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(29.0), Units.feetToMeters(5.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(7.5)));
+        // race to the finish!
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(8.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5)));
+
+        // ending pose, well past finish line, all the way into the finish zone
+        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.7),  Rotation2d.fromDegrees(179));
+
+        // generate trajectory
+        return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
     }
 
     private Trajectory generateTestTrajectory() {

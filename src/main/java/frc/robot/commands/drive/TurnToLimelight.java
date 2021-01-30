@@ -43,7 +43,7 @@ public class TurnToLimelight extends CommandBase {
     ticksOnTarget = 0;
     drive.setOnLimelightTarget(false);
     firstRun = true;
-    currentHeadingTarget = sensors.navx.getYaw();
+    currentHeadingTarget = sensors.getYaw();
     drive.shiftToLow();
   }
 
@@ -70,7 +70,7 @@ public class TurnToLimelight extends CommandBase {
         return;
       }
       firstRun = false;
-      currentHeadingTarget = sensors.navx.getYaw() - sensors.getShooterAngle();
+      currentHeadingTarget = sensors.getYaw() - sensors.getShooterAngle();
       ticksOnTarget = 0;
       drive.resetHeadingPID();
 
@@ -92,10 +92,10 @@ public class TurnToLimelight extends CommandBase {
   }
 
   private boolean isOnNavxTarget() {
-    System.out.println(sensors.navx.getYaw() - currentHeadingTarget);
-    if (Math.abs(sensors.navx.getYaw() - currentHeadingTarget) <= TOLERANCE && sensors.navx.getYawRate() < TOLERANCE_SPEED) {
+    System.out.println(sensors.getYaw() - currentHeadingTarget);
+    if (Math.abs(sensors.getYaw() - currentHeadingTarget) <= TOLERANCE && sensors.getYawRate() < TOLERANCE_SPEED) {
       ticksOnTarget++;
-    } else if (Math.abs(sensors.navx.getYaw() - currentHeadingTarget) > TOLERANCE) {
+    } else if (Math.abs(sensors.getYaw() - currentHeadingTarget) > TOLERANCE) {
       ticksOnTarget = 0;
     }
     return ticksOnTarget >= TOLERANCE_TICKS;
