@@ -64,7 +64,7 @@ public class TrajectoryVisualizer extends JPanel {
          Pose2d pose = state.poseMeters;
          maxVelocity = Math.max(maxVelocity, state.velocityMetersPerSecond);
          maxAcceleration = Math.max(maxAcceleration, state.accelerationMetersPerSecondSq);
-         
+
          int x1 = (int) (Units.metersToFeet(pose.getX()) * xScale + BORDER_GAP);
          int y1 = (int) ((15 - Units.metersToFeet(pose.getY())) * yScale + BORDER_GAP);
 
