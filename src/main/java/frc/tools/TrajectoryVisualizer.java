@@ -33,8 +33,8 @@ public class TrajectoryVisualizer extends JPanel {
    private static final int GRAPH_POINT_WIDTH = 12;
    private static final int Y_HATCH_CNT = 16;
    private static final int X_HATCH_CNT = 31;
-   private static final double WHEEL_BASE_WIDTH = Units.feetToMeters((25. + 5. / 16.) / 12.);
-   private static final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(WHEEL_BASE_WIDTH);
+   private static final double WHEEL_BASE_WIDTH = (25. + 5. / 16.) / 12.;
+   private static final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(Units.feetToMeters(WHEEL_BASE_WIDTH));
 
    private List<State> states;
    private double duration;
@@ -159,6 +159,7 @@ public class TrajectoryVisualizer extends JPanel {
       config.addConstraint(new CentripetalAccelerationConstraint(2.5));
 
       GameChangerTrajectories trajectories = new GameChangerTrajectories(config);
+
       Trajectory traj = trajectories.barrelRun;
       List<State> states = new ArrayList<State>();
 
