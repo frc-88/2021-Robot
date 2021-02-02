@@ -24,7 +24,6 @@ import frc.robot.util.GameChangerTrajectories;
 
 @SuppressWarnings("serial")
 public class TrajectoryVisualizer extends JPanel {
-   private static final int MAX_SCORE = 16;
    private static final int PREF_W = 800;
    private static final int PREF_H = 650;
    private static final int BORDER_GAP = 30;
@@ -34,14 +33,14 @@ public class TrajectoryVisualizer extends JPanel {
    private static final int GRAPH_POINT_WIDTH = 12;
    private static final int Y_HATCH_CNT = 16;
    private static final int X_HATCH_CNT = 31;
+   private static final double WHEEL_BASE_WIDTH = Units.feetToMeters((25. + 5. / 16.) / 12.);
+   private static final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(WHEEL_BASE_WIDTH);
 
-   private static final double WHEEL_BASE_WIDTH = (25. + 5. / 16.) / 12.; // feet
-
-   private List<State> scores;
+   private List<State> states;
    private double duration;
 
    public TrajectoryVisualizer(List<State> states, double duration) {
-      this.scores = states;
+      this.states = states;
       this.duration = duration;
    }
 
@@ -53,23 +52,32 @@ public class TrajectoryVisualizer extends JPanel {
 
       double maxVelocity = 0;
       double maxAcceleration = 0;
-
       double xScale = ((double) getWidth() - 2 * BORDER_GAP) / 30;
       double yScale = ((double) getHeight() - 2 * BORDER_GAP) / 15;
 
-      List<Point> graphPoints = new ArrayList<Point>();
-      for (int i = 0; i < scores.size(); i++) {
-         // int x1 = (int) (i * xScale + BORDER_GAP);
-         // int y1 = (int) ((MAX_SCORE - Units.metersToFeet(scores.get(i))) * yScale +
-         // BORDER_GAP);
-         State state = scores.get(i);
+      List<Point> track = new ArrayList<Point>();
+      List<Point> trackLeft = new ArrayList<Point>();
+      List<Point> trackRight = new ArrayList<Point>();
+
+      for (int i = 0; i < states.size(); i++) {
+         State state = states.get(i);
          Pose2d pose = state.poseMeters;
          maxVelocity = Math.max(maxVelocity, state.velocityMetersPerSecond);
          maxAcceleration = Math.max(maxAcceleration, state.accelerationMetersPerSecondSq);
-
+         
          int x1 = (int) (Units.metersToFeet(pose.getX()) * xScale + BORDER_GAP);
          int y1 = (int) ((15 - Units.metersToFeet(pose.getY())) * yScale + BORDER_GAP);
-         graphPoints.add(new Point(x1, y1));
+
+         double rotation = pose.getRotation().getRadians();
+         int xL = (int) (x1 - (WHEEL_BASE_WIDTH / 2 * Math.sin(rotation)) * xScale);
+         int yL = (int) (y1 - (WHEEL_BASE_WIDTH / 2 * Math.cos(rotation)) * yScale);
+
+         int xR = (int) (x1 + (WHEEL_BASE_WIDTH / 2 * Math.sin(rotation)) * xScale);
+         int yR = (int) (y1 + (WHEEL_BASE_WIDTH / 2 * Math.cos(rotation)) * yScale);
+
+         track.add(new Point(x1, y1));
+         trackLeft.add(new Point(xL, yL));
+         trackRight.add(new Point(xR, yR));
       }
 
       drawAxes(g2);
@@ -78,26 +86,36 @@ public class TrajectoryVisualizer extends JPanel {
       g2.drawString("Max Velocity: " + Units.metersToFeet(maxVelocity), 100, 150);
       g2.drawString("Max Acceleration: " + Units.metersToFeet(maxAcceleration), 100, 200);
 
-      Stroke oldStroke = g2.getStroke();
       g2.setColor(GRAPH_COLOR);
+      drawTrack(g2, track, true);
+      g2.setColor(Color.blue);
+      drawTrack(g2, trackLeft, false);
+      g2.setColor(Color.red);
+      drawTrack(g2, trackRight, false);
+   }
+
+   private void drawTrack(Graphics2D g2, List<Point> track, boolean drawPoints) {
+      Stroke oldStroke = g2.getStroke();
       g2.setStroke(GRAPH_STROKE);
-      for (int i = 0; i < graphPoints.size() - 1; i++) {
-         int x1 = graphPoints.get(i).x;
-         int y1 = graphPoints.get(i).y;
-         int x2 = graphPoints.get(i + 1).x;
-         int y2 = graphPoints.get(i + 1).y;
+      for (int i = 0; i < track.size() - 1; i++) {
+         int x1 = track.get(i).x;
+         int y1 = track.get(i).y;
+         int x2 = track.get(i + 1).x;
+         int y2 = track.get(i + 1).y;
          g2.drawLine(x1, y1, x2, y2);
       }
-
       g2.setStroke(oldStroke);
-      g2.setColor(GRAPH_POINT_COLOR);
-      for (int i = 0; i < graphPoints.size(); i++) {
-         int x = graphPoints.get(i).x - GRAPH_POINT_WIDTH / 2;
-         int y = graphPoints.get(i).y - GRAPH_POINT_WIDTH / 2;
-         ;
-         int ovalW = GRAPH_POINT_WIDTH;
-         int ovalH = GRAPH_POINT_WIDTH;
-         g2.fillOval(x, y, ovalW, ovalH);
+
+      if (drawPoints) {
+         g2.setColor(GRAPH_POINT_COLOR);
+         for (int i = 0; i < track.size(); i++) {
+            int x = track.get(i).x - GRAPH_POINT_WIDTH / 2;
+            int y = track.get(i).y - GRAPH_POINT_WIDTH / 2;
+            ;
+            int ovalW = GRAPH_POINT_WIDTH;
+            int ovalH = GRAPH_POINT_WIDTH;
+            g2.fillOval(x, y, ovalW, ovalH);
+         }
       }
    }
 
@@ -131,16 +149,13 @@ public class TrajectoryVisualizer extends JPanel {
    }
 
    private static void createAndShowGui() {
-      // Creating my kinematics object
-      DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Units.feetToMeters(WHEEL_BASE_WIDTH));
-
       // define constraints for trajectory generation
       TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(16.0), Units.feetToMeters(8.0));
-      config.setKinematics(kinematics);
+      config.setKinematics(m_kinematics);
       config.setStartVelocity(0.0);
       config.setEndVelocity(0.0);
 
-      config.addConstraint(new DifferentialDriveKinematicsConstraint(kinematics, Units.feetToMeters(16.0)));
+      config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(16.0)));
       config.addConstraint(new CentripetalAccelerationConstraint(2.5));
 
       GameChangerTrajectories trajectories = new GameChangerTrajectories(config);
