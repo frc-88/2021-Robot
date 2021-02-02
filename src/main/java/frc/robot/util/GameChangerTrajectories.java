@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.util.Units;
+import frc.robot.Constants;
 
 /** Add your docs here. */
 public class GameChangerTrajectories {
@@ -46,35 +47,29 @@ public class GameChangerTrajectories {
     }
 
     private Trajectory generateSlalomTrajectory() {
-        // begining pose, at the end of the start zone, next to the right side
-        Pose2d start = new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(0.0), new Rotation2d());
-
         // set up waypoints for path
-        var waypoints = new ArrayList<Translation2d>();
-        // drive by D4
-        waypoints.add(new Translation2d(Units.feetToMeters(9.5), Units.feetToMeters(5.0)));
-        // mid point on left side, near D6
-        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(6.5)));
-        // drive by D8
-        waypoints.add(new Translation2d(Units.feetToMeters(20.5), Units.feetToMeters(5.0)));
-        // loop around D10
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(0.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(29.5), Units.feetToMeters(5.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(10.0)));
-        // drive by D8 again
-        waypoints.add(new Translation2d(Units.feetToMeters(20.5), Units.feetToMeters(5.0)));
-        // mid point or right side, near D6
-        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(3.5)));
-        // drive by D4
-        waypoints.add(new Translation2d(Units.feetToMeters(9.5), Units.feetToMeters(5.0)));
-        // race to the finish! Near B2
-        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(9.5)));
-
-        // ending pose, well past finish line, all the way into the finish zone
-        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(9.0),  Rotation2d.fromDegrees(180));
+        var waypoints = new ArrayList<Pose2d>();
+        // begining pose, at the end of the start zone, next to the right side
+        waypoints.add(new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), new Rotation2d()));
+        // first slalom
+        waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        // midway left
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(8.5), Rotation2d.fromDegrees(0.0)));
+        // second slalom
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-90.0)));
+        // loop
+        waypoints.add(new Pose2d(Units.feetToMeters(28.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        // second slalom
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-90.0)));
+        // midway right
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(1.5), Rotation2d.fromDegrees(180.0)));
+        // first slalom
+        waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        // race to the finish!
+        waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.5),  Rotation2d.fromDegrees(180.0)));
 
         // generate trajectory
-        return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
+        return TrajectoryGenerator.generateTrajectory(waypoints, m_config);
     }
 
     private Trajectory generateBarrelRunTrajectory() {
