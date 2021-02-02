@@ -21,7 +21,7 @@ public class GameChangerTrajectories {
     public Trajectory barrelRun;
     public Trajectory barrelRun2;
     public Trajectory slalom;
-    public Trajectory bounce;
+    public Trajectory bounce1, bounce2, bounce3, bounce4;
     public Trajectory test1;
     public Trajectory test2;
     public Trajectory testLoop;
@@ -34,16 +34,76 @@ public class GameChangerTrajectories {
         barrelRun = generateBarrelRunTrajectory();
         barrelRun2 = generateBarrelRun2Trajectory();
         slalom = generateSlalomTrajectory();
-        bounce = generateBounceTrajectory();
+        bounce1 = generateBounce1Trajectory();
+        bounce2 = generateBounce2Trajectory();
+        bounce3 = generateBounce3Trajectory();
+        bounce4 = generateBounce4Trajectory();
 
         test1 = generateTestTrajectory();
         test2 = generateTest2Trajectory();
         testLoop = generateTestLoopTrajectory();
     }
 
-    private Trajectory generateBounceTrajectory() {
-        // TODO
-        return null;
+    private Trajectory generateBounce1Trajectory() {
+        // set up waypoints for path
+        var waypoints = new ArrayList<Pose2d>();
+        // begining pose, on the center line, up against the start line
+        waypoints.add(new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5), new Rotation2d()));
+        // first star
+        waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
+
+        // generate trajectory
+        return TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+    }
+
+    private Trajectory generateBounce2Trajectory() {
+        // set up waypoints for path
+        var waypoints = new ArrayList<Pose2d>();
+        // start at first star
+        waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
+        // bounce
+        waypoints.add(new Pose2d(Units.feetToMeters(8.5), Units.feetToMeters(7.5), Rotation2d.fromDegrees(135.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(12.5), Units.feetToMeters(2.5), Rotation2d.fromDegrees(180.0)));
+        // end at second star
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(12.5), Rotation2d.fromDegrees(-90.0)));
+        
+        // generate trajectory
+        m_config.setReversed(true);
+        Trajectory result = TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+        m_config.setReversed(false);
+        
+        return result;
+    }
+
+    private Trajectory generateBounce3Trajectory() {
+        // set up waypoints for path
+        var waypoints = new ArrayList<Pose2d>();
+        // start at second star
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(12.5), Rotation2d.fromDegrees(-90.0)));
+        // bounce
+        waypoints.add(new Pose2d(Units.feetToMeters(18.5), Units.feetToMeters(2.5), Rotation2d.fromDegrees(0.0)));
+        // end at third star
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
+
+        // generate trajectory
+        return TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+    }
+
+    private Trajectory generateBounce4Trajectory() {
+        // set up waypoints for path
+        var waypoints = new ArrayList<Pose2d>();
+        // start at first star
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
+        // to the finish line
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(10), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(7.5), Rotation2d.fromDegrees(180.0)));
+        
+        // generate trajectory
+        m_config.setReversed(true);
+        Trajectory result = TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+        m_config.setReversed(false);
+        
+        return result;
     }
 
     private Trajectory generateSlalomTrajectory() {
