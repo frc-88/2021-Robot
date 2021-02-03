@@ -112,7 +112,7 @@ public class TrajectoryVisualizer extends JPanel {
             double acceleration = Units.metersToFeet(states.get(i).accelerationMetersPerSecondSq);
             double velocity = Units.metersToFeet(states.get(i).velocityMetersPerSecond);
             
-            if (Math.abs(acceleration)<(0.1*TRAJ_CONFIG_MAX_ACCEL)) {
+            if (Math.abs(acceleration)<(0.25*TRAJ_CONFIG_MAX_ACCEL)) {
                g2.setColor(Color.orange);
             } else if (acceleration > 0) {
                g2.setColor(Color.green);
