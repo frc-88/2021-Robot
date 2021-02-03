@@ -35,6 +35,7 @@ public class TrajectoryVisualizer extends JPanel {
    private static final double WHEEL_BASE_WIDTH = (25. + 5. / 16.) / 12.;
    private static final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(Units.feetToMeters(WHEEL_BASE_WIDTH));
    private static final double TRAJ_CONFIG_MAX_ACCEL = 8.0;
+   private static final double TRAJ_CONFIG_MAX_VEL = 16.0;
 
    private List<State> states;
    private double duration;
@@ -109,6 +110,7 @@ public class TrajectoryVisualizer extends JPanel {
       if (drawPoints) {
          for (int i = 0; i < track.size(); i++) {
             double acceleration = Units.metersToFeet(states.get(i).accelerationMetersPerSecondSq);
+            double velocity = Units.metersToFeet(states.get(i).velocityMetersPerSecond);
             
             if (Math.abs(acceleration)<(0.1*TRAJ_CONFIG_MAX_ACCEL)) {
                g2.setColor(Color.orange);
@@ -118,7 +120,7 @@ public class TrajectoryVisualizer extends JPanel {
                g2.setColor(Color.red);
             }
 
-            int pointW = GRAPH_POINT_WIDTH * (int) (3 * Math.abs(acceleration) / TRAJ_CONFIG_MAX_ACCEL + 1) ;
+            int pointW = GRAPH_POINT_WIDTH * (int) (5 * Math.abs(velocity) / TRAJ_CONFIG_MAX_VEL + 1) ;
 
             int x = track.get(i).x - pointW / 2;
             int y = track.get(i).y - pointW / 2;
@@ -161,12 +163,12 @@ public class TrajectoryVisualizer extends JPanel {
 
    private static void createAndShowGui() {
       // define constraints for trajectory generation
-      TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(16.0), Units.feetToMeters(TRAJ_CONFIG_MAX_ACCEL));
+      TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(TRAJ_CONFIG_MAX_VEL), Units.feetToMeters(TRAJ_CONFIG_MAX_ACCEL));
       config.setKinematics(m_kinematics);
       config.setStartVelocity(0.0);
       config.setEndVelocity(0.0);
 
-      config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(16.0)));
+      config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(TRAJ_CONFIG_MAX_VEL)));
       config.addConstraint(new CentripetalAccelerationConstraint(2.5));
 
       GameChangerTrajectories trajectories = new GameChangerTrajectories(config);
