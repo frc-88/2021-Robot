@@ -6,9 +6,11 @@ package frc.robot.util;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -128,8 +130,14 @@ public class GameChangerTrajectories {
         // race to the finish!
         waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.5),  Rotation2d.fromDegrees(180.0)));
 
-        // generate trajectory
-        return TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+        // generate trajectory and time how long it takes
+        Timer timer = new Timer();
+        timer.reset();
+        timer.start();
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+        SmartDashboard.putNumber("TrajGen:Slalom", timer.get());
+        
+        return trajectory;
     }
 
     private Trajectory generateBarrelRunTrajectory() {
@@ -159,8 +167,14 @@ public class GameChangerTrajectories {
         // ending pose, well past finish line, all the way into the finish zone
         Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.7),  Rotation2d.fromDegrees(179));
 
-        // generate trajectory
-        return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
+        // generate trajectory and time how long it takes
+        Timer timer = new Timer();
+        timer.reset();
+        timer.start();
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
+        SmartDashboard.putNumber("TrajGen:BarrelRun", timer.get());
+        
+        return trajectory;
     }
 
     private Trajectory generateBarrelRun2Trajectory() {
