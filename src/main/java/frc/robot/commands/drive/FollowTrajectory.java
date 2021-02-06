@@ -50,6 +50,7 @@ public class FollowTrajectory extends CommandBase {
     switch (m_state) {
       case 0: // Zero drive
         m_drive.zeroDrive();
+        m_drive.setBrakeMode();
         m_state++;
         break;
       case 1: // Check to make sure things are near zero
