@@ -74,7 +74,7 @@ public class FollowTrajectory extends CommandBase {
         // be now?
         m_drive.updateOdometry();
         double now = m_timer.get();
-        Trajectory.State goal = m_trajectory.sample(now + 0.020);
+        Trajectory.State goal = m_trajectory.sample(now);
         ChassisSpeeds targetSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
 
         DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);

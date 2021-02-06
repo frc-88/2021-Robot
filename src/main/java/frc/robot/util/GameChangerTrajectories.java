@@ -160,18 +160,18 @@ public class GameChangerTrajectories {
         // around the second barrel
         waypoints.add(new Translation2d(Units.feetToMeters(21.0), Units.feetToMeters(7.5)));
         waypoints.add(new Translation2d(Units.feetToMeters(23.5), Units.feetToMeters(10.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(20.0), Units.feetToMeters(13.3)));
-        waypoints.add(new Translation2d(Units.feetToMeters(16.5), Units.feetToMeters(10.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(20.0), Units.feetToMeters(11.8)));
+        waypoints.add(new Translation2d(Units.feetToMeters(17.5), Units.feetToMeters(10.0)));
         // around the third barrel
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(2.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(29.0), Units.feetToMeters(5.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(3.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(28.0), Units.feetToMeters(5.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(6.25)));
         // race to the finish!
-        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(8.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(7.8)));
 
         // ending pose, well past finish line, all the way into the finish zone
-        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.7),  Rotation2d.fromDegrees(179));
+        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.8),  Rotation2d.fromDegrees(179));
 
         // generate trajectory and time how long it takes
         Timer timer = new Timer();
