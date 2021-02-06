@@ -54,8 +54,14 @@ public class GameChangerTrajectories {
         // first star
         waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
 
-        // generate trajectory
-        return TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+        // generate trajectory and time how long it takes
+        Timer timer = new Timer();
+        timer.reset();
+        timer.start();
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+        SmartDashboard.putNumber("TrajGen:Bounce1", timer.get());
+        
+        return trajectory;
     }
 
     private Trajectory generateBounce2Trajectory() {
