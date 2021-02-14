@@ -305,7 +305,7 @@ public class Drive extends SubsystemBase {
     config.setEndVelocity(0.0);
 
     config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(16.0)));
-    config.addConstraint(new CentripetalAccelerationConstraint(2.7));
+    config.addConstraint(new CentripetalAccelerationConstraint(4.0));
 
     // generate trajectories
     trajectories = new GameChangerTrajectories(config);
