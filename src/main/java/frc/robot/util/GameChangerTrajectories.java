@@ -120,19 +120,19 @@ public class GameChangerTrajectories {
         // begining pose, at the end of the start zone, next to the right side
         waypoints.add(new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), new Rotation2d()));
         // first slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(8.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
         // midway left
         waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(8.5), Rotation2d.fromDegrees(0.0)));
         // second slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(23.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-90.0)));
         // loop
-        waypoints.add(new Pose2d(Units.feetToMeters(28.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(29.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
         // second slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(23.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-90.0)));
         // midway right
         waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(1.5), Rotation2d.fromDegrees(180.0)));
         // first slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(8.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
         // race to the finish!
         waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.5),  Rotation2d.fromDegrees(180.0)));
 
