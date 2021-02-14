@@ -50,6 +50,7 @@ public class FollowTrajectory extends CommandBase {
     switch (m_state) {
       case 0: // Zero drive
         m_drive.zeroDrive();
+        m_drive.setBrakeMode();
         m_state++;
         break;
       case 1: // Check to make sure things are near zero
@@ -73,7 +74,7 @@ public class FollowTrajectory extends CommandBase {
         // be now?
         m_drive.updateOdometry();
         double now = m_timer.get();
-        Trajectory.State goal = m_trajectory.sample(now + 0.020);
+        Trajectory.State goal = m_trajectory.sample(now);
         ChassisSpeeds targetSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
 
         DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
