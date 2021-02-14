@@ -32,7 +32,7 @@ public class HopperShootMode extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_hopper.setFeeders(m_percentOutput, m_percentOutput * (2./3.));
+    m_hopper.setPercentOutput(m_percentOutput);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,7 +43,7 @@ public class HopperShootMode extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_hopper.setFeeders(0, 0);
+    m_hopper.setPercentOutput(0);
   }
 
   // Returns true when the command should end.

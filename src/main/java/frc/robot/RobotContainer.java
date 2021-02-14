@@ -54,8 +54,6 @@ import frc.robot.commands.drive.TurnToLimelight;
 import frc.robot.commands.feeder.FeederRun;
 import frc.robot.commands.feeder.FeederStop;
 import frc.robot.commands.hopper.HopperEject;
-import frc.robot.commands.hopper.HopperIntakeFinishMode;
-import frc.robot.commands.hopper.HopperIntakeMode;
 import frc.robot.commands.hopper.HopperShootMode;
 import frc.robot.commands.hopper.HopperShootUnjamMode;
 import frc.robot.commands.hopper.HopperStop;
@@ -177,7 +175,7 @@ public class RobotContainer {
           new HopperShootMode(m_hopper), 
           new ArmFullUp(m_arm),
           new ShooterRunFromLimelight(m_shooter), 
-          new FeederRun(m_feeder, 1.0),
+          new FeederRun(m_feeder, 1),
           new RunIntake(m_intake, 0.3)
         )
       ),
@@ -191,7 +189,7 @@ public class RobotContainer {
           new HopperShootMode(m_hopper), 
           new ArmMotionMagic(m_arm, m_armLayupAngle.getValue()),
           new ShooterFlywheelRun(m_shooter, m_shooterLayupSpeed.getValue()), 
-          new FeederRun(m_feeder, 1.0),
+          new FeederRun(m_feeder, 1),
           new RunIntake(m_intake, 0.3)
         )
       ),
@@ -202,7 +200,7 @@ public class RobotContainer {
     new ConditionalCommand(
       new SequentialCommandGroup(
           new ParallelRaceGroup(
-            new HopperEject(m_hopper, -1.),
+            new HopperEject(m_hopper, -0.5),
             new WaitCommand(1),
             new FeederStop(m_feeder), 
             new ArmFullUp(m_arm),
@@ -214,7 +212,7 @@ public class RobotContainer {
           new ShooterRunFromLimelight(m_shooter))),
         new SequentialCommandGroup(
           new ParallelRaceGroup(
-            new HopperEject(m_hopper, -1.),
+            new HopperEject(m_hopper, -0.5),
             new WaitCommand(1),
             new FeederStop(m_feeder),
             new ArmMotionMagic(m_arm, m_armLayupAngle.getValue()),
@@ -258,7 +256,7 @@ public class RobotContainer {
       new DeployIntake(m_intake),
       new ParallelCommandGroup(
         new RunIntake(m_intake, -1.), 
-        new HopperEject(m_hopper, 1.),
+        new HopperEject(m_hopper, -0.5),
         new FeederRun(m_feeder, -1.)
       )
     );
@@ -362,7 +360,7 @@ public class RobotContainer {
           new ConditionalCommand(new TurnToLimelight(m_drive, m_sensors), new WaitCommand(0.01), () -> aim),
           new ArmFullUp(m_arm), 
           new ShooterRunFromLimelight(m_shooter),
-          new FeederRun(m_feeder, 1.0),
+          new FeederRun(m_feeder, 1),
           new HopperShootMode(m_hopper),
           new SequentialCommandGroup(
             new ParallelDeadlineGroup(
@@ -609,12 +607,10 @@ public class RobotContainer {
     SmartDashboard.putData("Stop Intake", new StopIntake(m_intake));
     SmartDashboard.putData("Eject Intake", new RunIntake(m_intake, -1));
 
-    SmartDashboard.putNumber("Hopper Left Speed", 0);
-    SmartDashboard.putNumber("Hopper Right Speed", 0);
-    SmartDashboard.putData("Hopper Intake Mode", new HopperIntakeMode(m_hopper));
+    SmartDashboard.putNumber("Hopper Speed", 0);
     SmartDashboard.putData("Hopper Shoot Mode", new HopperShootMode(m_hopper));
     SmartDashboard.putData("Hopper Stop", new HopperStop(m_hopper));
-    SmartDashboard.putData("Hopper Test", new InstantCommand(() -> (new HopperTest(m_hopper, SmartDashboard.getNumber("Hopper Left Speed", 0), SmartDashboard.getNumber("Hopper Right Speed", 0))).schedule()));
+    SmartDashboard.putData("Hopper Test", new InstantCommand(() -> (new HopperTest(m_hopper, SmartDashboard.getNumber("Hopper Speed", 0))).schedule()));
 
     SmartDashboard.putData("Arm Calibrate", new CalibrateArm(m_arm));
     SmartDashboard.putNumber("ArmTestPosition", 0);

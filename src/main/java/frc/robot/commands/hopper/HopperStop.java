@@ -28,7 +28,7 @@ public class HopperStop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_hopper.setFeeders(0, 0);
+    m_hopper.setPercentOutput(0);
   }
 
   // Called once the command ends or is interrupted.

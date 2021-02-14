@@ -12,15 +12,13 @@ import frc.robot.subsystems.Hopper;
 
 public class HopperTest extends CommandBase {
   private Hopper hopper;
-  private double leftSpeed;
-  private double rightSpeed;
+  private double speed;
   /**
    * Creates a new HopperTest.
    */
-  public HopperTest(Hopper hopper, double leftSpeed, double rightSpeed) {
+  public HopperTest(Hopper hopper, double speed) {
     this.hopper=hopper;
-    this.leftSpeed=leftSpeed;
-    this.rightSpeed=rightSpeed;
+    this.speed=speed;
     addRequirements(hopper);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -33,7 +31,7 @@ public class HopperTest extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    hopper.setFeeders(leftSpeed, rightSpeed);
+    hopper.setPercentOutput(this.speed);
   }
 
   // Called once the command ends or is interrupted.

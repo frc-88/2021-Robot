@@ -20,7 +20,7 @@ public class HopperShootUnjamMode extends CommandBase {
   private double m_percentOutput;
 
   public HopperShootUnjamMode(Hopper hopper) {
-    this(hopper, Constants.HOPPER_INTAKE_PERCENT_OUTPUT);
+    this(hopper, Constants.HOPPER_EJECT_PERCENT_OUTPUT);
   }
 
   public HopperShootUnjamMode(Hopper hopper, double percentOutput) {
@@ -32,7 +32,7 @@ public class HopperShootUnjamMode extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_hopper.setFeeders(-m_percentOutput, 0);
+    m_hopper.setPercentOutput(-m_percentOutput);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,7 +43,7 @@ public class HopperShootUnjamMode extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_hopper.setFeeders(0, 0);
+    m_hopper.setPercentOutput(0);
   }
 
   // Returns true when the command should end.

@@ -27,7 +27,7 @@ public class Feeder extends SubsystemBase {
   public Feeder() {
     m_feeder.configFactoryDefault();
     m_feeder.enableVoltageCompensation(true);
-    m_feeder.setInverted(false);
+    m_feeder.setInverted(true);
     m_feeder.setSensorPhase(false);
     m_feeder.setNeutralMode(NeutralMode.Brake);
 

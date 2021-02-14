@@ -39,7 +39,7 @@ public class WaitForShooterReady extends CommandBase {
     SmartDashboard.putBoolean("Arm On Target", this.arm.isOnTarget());
     SmartDashboard.putBoolean("Shooter On Target", this.shooter.flywheelOnTarget());
     if (this.arm.isOnTarget() && this.shooter.flywheelOnTarget()) {
-      debounceTicks++;
+      debounceTicks++; 
     } else {
       debounceTicks = 0;
     }
