@@ -118,23 +118,25 @@ public class GameChangerTrajectories {
         // set up waypoints for path
         var waypoints = new ArrayList<Pose2d>();
         // begining pose, at the end of the start zone, next to the right side
-        waypoints.add(new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), new Rotation2d()));
+        waypoints.add(new Pose2d(Units.feetToMeters(5.0 - Constants.WHEEL_BASE_WIDTH / 2.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), new Rotation2d()));
         // first slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(8.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(7.7), Units.feetToMeters(5.0), Rotation2d.fromDegrees(75.0)));
         // midway left
-        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(8.5), Rotation2d.fromDegrees(0.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(8.0), Rotation2d.fromDegrees(0.0)));
         // second slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(23.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-80.0)));
         // loop
-        waypoints.add(new Pose2d(Units.feetToMeters(29.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(25.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), new Rotation2d()));
+        waypoints.add(new Pose2d(Units.feetToMeters(30.0 - Constants.WHEEL_BASE_WIDTH / 2.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(7.0), Rotation2d.fromDegrees(180.0)));
         // second slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(23.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(25.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-100.0)));
         // midway right
-        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(1.5), Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), Rotation2d.fromDegrees(180.0)));
         // first slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(8.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(10.0), Units.feetToMeters(4.0), Rotation2d.fromDegrees(100.0)));
         // race to the finish!
-        waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.5),  Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.7),  Rotation2d.fromDegrees(180.0)));
 
         // generate trajectory and time how long it takes
         Timer timer = new Timer();
