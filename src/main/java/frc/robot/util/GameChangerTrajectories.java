@@ -24,12 +24,11 @@ public class GameChangerTrajectories {
     public Trajectory barrelRun2;
     public Trajectory slalom;
     public Trajectory bounce1, bounce2, bounce3, bounce4;
-    public Trajectory test1;
-    public Trajectory test2;
-    public Trajectory testLoop;
+    public Trajectory test;
 
+    private final Timer m_timer = new Timer();
     private TrajectoryConfig m_config;
-
+    
     public GameChangerTrajectories(TrajectoryConfig config) {
         m_config = config;
 
@@ -41,9 +40,98 @@ public class GameChangerTrajectories {
         bounce3 = generateBounce3Trajectory();
         bounce4 = generateBounce4Trajectory();
 
-        test1 = generateTestTrajectory();
-        test2 = generateTest2Trajectory();
-        testLoop = generateTestLoopTrajectory();
+        test = generateTestTrajectory();
+    }
+
+    private Trajectory generateBarrelRunTrajectory() {
+        // begining pose, on the center line, up against the start line
+        Pose2d start = new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5), new Rotation2d());
+
+        // set up waypoints for path
+        var waypoints = new ArrayList<Translation2d>();
+        // around the first barrel
+        waypoints.add(new Translation2d(Units.feetToMeters(13.5), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(16.0), Units.feetToMeters(4.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(12.0), Units.feetToMeters(3.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(7.5)));
+        // around the second barrel
+        waypoints.add(new Translation2d(Units.feetToMeters(21.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(10.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(18.5), Units.feetToMeters(12.8)));
+        //waypoints.add(new Translation2d(Units.feetToMeters(18.5), Units.feetToMeters(10.0)));
+        // around the third barrel
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(2.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(29.0), Units.feetToMeters(5.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(7.5)));
+        // race to the finish!
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(7.8)));
+
+        // ending pose, well past finish line, all the way into the finish zone
+        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.8),  Rotation2d.fromDegrees(179));
+
+        // generate trajectory and time how long it takes
+        m_timer.reset();
+        m_timer.start();
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
+        SmartDashboard.putNumber("TrajGen:BarrelRun", m_timer.get());
+        
+        return trajectory;
+    }
+
+    private Trajectory generateBarrelRun2Trajectory() {
+        // set up waypoints for path
+        var waypoints = new ArrayList<Pose2d>();
+        // begining pose, on the center line, up against the start line
+        waypoints.add(new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5), new Rotation2d()));
+        // around the first barrel
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(3.5), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(10.0), Units.feetToMeters(6.5), Rotation2d.fromDegrees(-90.0)));
+        // around the second barrel
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(11.5), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(17.5), Units.feetToMeters(8.5), Rotation2d.fromDegrees(90.0)));
+        // around the third barrel
+        waypoints.add(new Pose2d(Units.feetToMeters(26.5), Units.feetToMeters(2.5), new Rotation2d()));
+        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(6.5), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5), Rotation2d.fromDegrees(180.0)));
+        // race to the finish!
+        waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.5),  Rotation2d.fromDegrees(180.0)));
+
+        // generate trajectory
+        return TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+    }
+
+    private Trajectory generateSlalomTrajectory() {
+        // set up waypoints for path
+        var waypoints = new ArrayList<Pose2d>();
+        // begining pose, at the end of the start zone, next to the right side
+        waypoints.add(new Pose2d(Units.feetToMeters(5.0 - Constants.WHEEL_BASE_WIDTH / 2.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), new Rotation2d()));
+        // first slalom
+        waypoints.add(new Pose2d(Units.feetToMeters(7.7), Units.feetToMeters(5.0), Rotation2d.fromDegrees(75.0)));
+        // midway left
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(8.0), Rotation2d.fromDegrees(0.0)));
+        // second slalom
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-80.0)));
+        // loop
+        waypoints.add(new Pose2d(Units.feetToMeters(25.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), new Rotation2d()));
+        waypoints.add(new Pose2d(Units.feetToMeters(30.0 - Constants.WHEEL_BASE_WIDTH / 2.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(7.0), Rotation2d.fromDegrees(180.0)));
+        // second slalom
+        waypoints.add(new Pose2d(Units.feetToMeters(25.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-100.0)));
+        // midway right
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), Rotation2d.fromDegrees(180.0)));
+        // first slalom
+        waypoints.add(new Pose2d(Units.feetToMeters(10.0), Units.feetToMeters(4.0), Rotation2d.fromDegrees(100.0)));
+        // race to the finish!
+        waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.7),  Rotation2d.fromDegrees(180.0)));
+
+        // generate trajectory and time how long it takes
+        m_timer.reset();
+        m_timer.start();
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+        SmartDashboard.putNumber("TrajGen:Slalom", m_timer.get());
+        
+        return trajectory;
     }
 
     private Trajectory generateBounce1Trajectory() {
@@ -55,11 +143,10 @@ public class GameChangerTrajectories {
         waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
 
         // generate trajectory and time how long it takes
-        Timer timer = new Timer();
-        timer.reset();
-        timer.start();
+        m_timer.reset();
+        m_timer.start();
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, m_config);
-        SmartDashboard.putNumber("TrajGen:Bounce1", timer.get());
+        SmartDashboard.putNumber("TrajGen:Bounce1", m_timer.get());
         
         return trajectory;
     }
@@ -114,143 +201,22 @@ public class GameChangerTrajectories {
         return result;
     }
 
-    private Trajectory generateSlalomTrajectory() {
-        // set up waypoints for path
-        var waypoints = new ArrayList<Pose2d>();
-        // begining pose, at the end of the start zone, next to the right side
-        waypoints.add(new Pose2d(Units.feetToMeters(5.0 - Constants.WHEEL_BASE_WIDTH / 2.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), new Rotation2d()));
-        // first slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(7.7), Units.feetToMeters(5.0), Rotation2d.fromDegrees(75.0)));
-        // midway left
-        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(8.0), Rotation2d.fromDegrees(0.0)));
-        // second slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-80.0)));
-        // loop
-        waypoints.add(new Pose2d(Units.feetToMeters(25.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), new Rotation2d()));
-        waypoints.add(new Pose2d(Units.feetToMeters(30.0 - Constants.WHEEL_BASE_WIDTH / 2.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(7.0), Rotation2d.fromDegrees(180.0)));
-        // second slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(25.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-100.0)));
-        // midway right
-        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0), Rotation2d.fromDegrees(180.0)));
-        // first slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(10.0), Units.feetToMeters(4.0), Rotation2d.fromDegrees(100.0)));
-        // race to the finish!
-        waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.7),  Rotation2d.fromDegrees(180.0)));
-
-        // generate trajectory and time how long it takes
-        Timer timer = new Timer();
-        timer.reset();
-        timer.start();
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, m_config);
-        SmartDashboard.putNumber("TrajGen:Slalom", timer.get());
-        
-        return trajectory;
-    }
-
-    private Trajectory generateBarrelRunTrajectory() {
-        // begining pose, on the center line, up against the start line
-        Pose2d start = new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5), new Rotation2d());
-
-        // set up waypoints for path
-        var waypoints = new ArrayList<Translation2d>();
-        // around the first barrel
-        waypoints.add(new Translation2d(Units.feetToMeters(13.5), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(16.0), Units.feetToMeters(4.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(12.0), Units.feetToMeters(3.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(7.5)));
-        // around the second barrel
-        waypoints.add(new Translation2d(Units.feetToMeters(21.0), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(10.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(18.5), Units.feetToMeters(12.8)));
-        //waypoints.add(new Translation2d(Units.feetToMeters(18.5), Units.feetToMeters(10.0)));
-        // around the third barrel
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(2.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(29.0), Units.feetToMeters(5.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(7.5)));
-        // race to the finish!
-        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(7.8)));
-
-        // ending pose, well past finish line, all the way into the finish zone
-        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.8),  Rotation2d.fromDegrees(179));
-
-        // generate trajectory and time how long it takes
-        Timer timer = new Timer();
-        timer.reset();
-        timer.start();
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
-        SmartDashboard.putNumber("TrajGen:BarrelRun", timer.get());
-        
-        return trajectory;
-    }
-
-    private Trajectory generateBarrelRun2Trajectory() {
-        // set up waypoints for path
-        var waypoints = new ArrayList<Pose2d>();
-        // begining pose, on the center line, up against the start line
-        waypoints.add(new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5), new Rotation2d()));
-        // around the first barrel
-        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(3.5), Rotation2d.fromDegrees(90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(10.0), Units.feetToMeters(6.5), Rotation2d.fromDegrees(-90.0)));
-        // around the second barrel
-        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(11.5), Rotation2d.fromDegrees(-90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(17.5), Units.feetToMeters(8.5), Rotation2d.fromDegrees(90.0)));
-        // around the third barrel
-        waypoints.add(new Pose2d(Units.feetToMeters(26.5), Units.feetToMeters(2.5), new Rotation2d()));
-        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(6.5), Rotation2d.fromDegrees(-90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5), Rotation2d.fromDegrees(180.0)));
-        // race to the finish!
-        waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.5),  Rotation2d.fromDegrees(180.0)));
-
-        // generate trajectory
-        return TrajectoryGenerator.generateTrajectory(waypoints, m_config);
-    }
-
     private Trajectory generateTestTrajectory() {
-        // begining and ending poses
-        Pose2d start = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
-        Pose2d end = new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(0.0),  new Rotation2d());
 
-        // set up waypoints for path
-        var waypoints = new ArrayList<Translation2d>();
-        waypoints.add(new Translation2d(Units.feetToMeters(7.5), Units.feetToMeters(3.0)));
-        
-        // generate trajectory
-        return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
-    }
-
-    private Trajectory generateTest2Trajectory() {
-        // begining and ending poses
-        Pose2d start = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
-        Pose2d end = new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(0.0),  new Rotation2d());
-
-        // set up waypoints for path
-        var waypoints = new ArrayList<Translation2d>();
-        waypoints.add(new Translation2d(Units.feetToMeters(2.0), Units.feetToMeters(1.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(13.0), Units.feetToMeters(-1.0)));
-        
-        // generate trajectory
-        return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
-    }
-
-    private Trajectory generateTestLoopTrajectory() {
-        // begining and ending poses
-        Pose2d start = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d());
-        Pose2d end = new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(0.0),  new Rotation2d());
-
-        // set up waypoints for path
-        var waypoints = new ArrayList<Translation2d>();
-        waypoints.add(new Translation2d(Units.feetToMeters(7.5), Units.feetToMeters(-3.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(11.0), Units.feetToMeters(0.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(7.5), Units.feetToMeters(3.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(4.0), Units.feetToMeters(0.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(7.5), Units.feetToMeters(-3.5)));
-        
-        // generate trajectory
-        return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
-    }
-
-
+            // set up waypoints for path
+            var waypoints = new ArrayList<Pose2d>();
+            // begining pose, on the origin
+            waypoints.add(new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), new Rotation2d()));
+            // ending pose, 10 feet forward
+            waypoints.add(new Pose2d(Units.feetToMeters(10.0), Units.feetToMeters(0.0), new Rotation2d()));
+    
+            // generate trajectory and time how long it takes
+            m_timer.reset();
+            m_timer.start();
+            Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, m_config);
+            SmartDashboard.putNumber("TrajGen:Test", m_timer.get());
+            
+            return trajectory;
+        }
 }
 
