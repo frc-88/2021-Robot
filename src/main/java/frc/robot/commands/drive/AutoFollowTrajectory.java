@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Sensors;
 
-public class FollowTrajectory extends CommandBase {
+public class AutoFollowTrajectory extends CommandBase {
   private Drive m_drive;
   private Sensors m_sensors;
   private Trajectory m_trajectory;
@@ -27,7 +27,7 @@ public class FollowTrajectory extends CommandBase {
   // TODO maybe allow for tuning of RamseteController parameters
   private RamseteController m_controller = new RamseteController();
 
-  public FollowTrajectory(final Drive drive, final Sensors sensors, Trajectory trajectory) {
+  public AutoFollowTrajectory(final Drive drive, final Sensors sensors, Trajectory trajectory) {
     m_drive = drive;
     m_sensors = sensors;
     m_trajectory = trajectory;
