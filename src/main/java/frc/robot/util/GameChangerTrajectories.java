@@ -195,11 +195,11 @@ public class GameChangerTrajectories {
     private Trajectory generateBounce4Trajectory() {
         // set up waypoints for path
         var waypoints = new ArrayList<Pose2d>();
-        // start at first star
-        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
         // to the finish line
-        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(10), Rotation2d.fromDegrees(90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(7.5), Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(7.5), new Rotation2d()));
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(10), Rotation2d.fromDegrees(-90.0)));
+        // start at first star
+        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(-90.0)));
 
         // generate trajectory
         m_config.setReversed(true);
