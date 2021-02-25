@@ -89,17 +89,19 @@ public class GameChangerTrajectories {
         // set up waypoints for path
         var waypoints = new ArrayList<Pose2d>();
         // begining pose, on the center line, up against the start line
-        waypoints.add(new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5), new Rotation2d()));
+        waypoints.add(new Pose2d(Units.feetToMeters(5.0-(Constants.WHEEL_BASE_WIDTH/2)), Units.feetToMeters(7.5), new Rotation2d()));
         // around the first barrel
-        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(3.5), Rotation2d.fromDegrees(90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(10.0), Units.feetToMeters(6.5), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(15.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(12.5), Units.feetToMeters(2.0), Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(9.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
         // around the second barrel
-        waypoints.add(new Pose2d(Units.feetToMeters(22.5), Units.feetToMeters(11.5), Rotation2d.fromDegrees(-90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(17.5), Units.feetToMeters(8.5), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(23.0), Units.feetToMeters(10.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(20.0), Units.feetToMeters(13.0), Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(17.0), Units.feetToMeters(10.0), Rotation2d.fromDegrees(-90.0)));
         // around the third barrel
-        waypoints.add(new Pose2d(Units.feetToMeters(26.5), Units.feetToMeters(2.5), new Rotation2d()));
-        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(6.5), Rotation2d.fromDegrees(-90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5), Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(25.0), Units.feetToMeters(2.0), new Rotation2d()));
+        waypoints.add(new Pose2d(Units.feetToMeters(28.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(25.0), Units.feetToMeters(8.0), Rotation2d.fromDegrees(180.0)));
         // race to the finish!
         waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.5), Rotation2d.fromDegrees(180.0)));
 
