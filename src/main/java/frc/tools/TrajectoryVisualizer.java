@@ -162,17 +162,7 @@ public class TrajectoryVisualizer extends JPanel {
    }
 
    private static void createAndShowGui() {
-      // define constraints for trajectory generation
-      TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(TRAJ_CONFIG_MAX_VEL), Units.feetToMeters(TRAJ_CONFIG_MAX_ACCEL));
-      config.setKinematics(m_kinematics);
-      config.setStartVelocity(0.0);
-      config.setEndVelocity(0.0);
-
-      config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(TRAJ_CONFIG_MAX_VEL)));
-      config.addConstraint(new CentripetalAccelerationConstraint(2.5));
-
-      GameChangerTrajectories trajectories = new GameChangerTrajectories(config);
-
+      GameChangerTrajectories trajectories = new GameChangerTrajectories();
       Trajectory traj = trajectories.barrelRun;
       List<State> states = new ArrayList<State>();
 
