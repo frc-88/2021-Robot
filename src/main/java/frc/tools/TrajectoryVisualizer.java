@@ -13,12 +13,8 @@ import java.util.List;
 import javax.swing.*;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.Trajectory.State;
-import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.util.GameChangerTrajectories;
 
@@ -33,7 +29,6 @@ public class TrajectoryVisualizer extends JPanel {
    private static final int Y_HATCH_CNT = 16;
    private static final int X_HATCH_CNT = 31;
    private static final double WHEEL_BASE_WIDTH = (25. + 5. / 16.) / 12.;
-   private static final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(Units.feetToMeters(WHEEL_BASE_WIDTH));
    private static final double TRAJ_CONFIG_MAX_ACCEL = 8.0;
    private static final double TRAJ_CONFIG_MAX_VEL = 16.0;
 
