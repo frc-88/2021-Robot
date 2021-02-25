@@ -78,12 +78,15 @@ public class AutoFollowTrajectory extends CommandBase {
         DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
         leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
         rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
-        // SmartDashboard.putNumber("Trajectory left speed", leftSpeed);
-        // SmartDashboard.putNumber("Trajectory right speed", rightSpeed);
         break;
       default:
         break;
     }
+
+    SmartDashboard.putNumber("AFT State", m_state);
+    SmartDashboard.putNumber("AFT Left Speed", leftSpeed);
+    SmartDashboard.putNumber("AFT Right Speed", rightSpeed);
+
     m_drive.basicDriveLimited(leftSpeed, rightSpeed);
   }
 
