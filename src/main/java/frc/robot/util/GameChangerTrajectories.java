@@ -20,13 +20,15 @@ import frc.robot.Constants;
 
 /** Add your docs here. */
 public class GameChangerTrajectories {
-
     public Trajectory barrelRun;
     public Trajectory barrelRun2;
     public Trajectory slalom;
     public Trajectory bounce1, bounce2, bounce3, bounce4;
     public Trajectory test;
 
+    private static final double TRAJ_CONFIG_MAX_VEL = 16.0;
+    private static final double TRAJ_CONFIG_MAX_ACCEL = 8.0;
+    private static final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 4.5;
     private final TrajectoryConfig m_config;
 
     public GameChangerTrajectories() {
@@ -34,13 +36,13 @@ public class GameChangerTrajectories {
         DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(
                 Units.feetToMeters(Constants.WHEEL_BASE_WIDTH));
 
-        m_config = new TrajectoryConfig(Units.feetToMeters(16.0), Units.feetToMeters(8.0));
+        m_config = new TrajectoryConfig(Units.feetToMeters(TRAJ_CONFIG_MAX_VEL), Units.feetToMeters(TRAJ_CONFIG_MAX_ACCEL));
         m_config.setKinematics(kinematics);
         m_config.setStartVelocity(0.0);
         m_config.setEndVelocity(0.0);
 
-        m_config.addConstraint(new DifferentialDriveKinematicsConstraint(kinematics, Units.feetToMeters(16.0)));
-        m_config.addConstraint(new CentripetalAccelerationConstraint(4.5));
+        m_config.addConstraint(new DifferentialDriveKinematicsConstraint(kinematics, Units.feetToMeters(TRAJ_CONFIG_MAX_VEL)));
+        m_config.addConstraint(new CentripetalAccelerationConstraint(TRAJ_CONFIG_MAX_CENTRIP_ACCEL));
 
         barrelRun = generateBarrelRunTrajectory();
         barrelRun2 = generateBarrelRun2Trajectory();
