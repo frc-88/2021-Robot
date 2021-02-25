@@ -10,10 +10,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Constants;
 
@@ -27,10 +30,19 @@ public class GameChangerTrajectories {
     public Trajectory test;
 
     private final Timer m_timer = new Timer();
-    private TrajectoryConfig m_config;
+    private final TrajectoryConfig m_config;
     
-    public GameChangerTrajectories(TrajectoryConfig config) {
-        m_config = config;
+    public GameChangerTrajectories() {
+        // define constraints for trajectory generation
+        DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Units.feetToMeters(Constants.WHEEL_BASE_WIDTH));
+
+        m_config = new TrajectoryConfig(Units.feetToMeters(16.0), Units.feetToMeters(8.0));
+        m_config.setKinematics(kinematics);
+        m_config.setStartVelocity(0.0);
+        m_config.setEndVelocity(0.0);
+
+        m_config.addConstraint(new DifferentialDriveKinematicsConstraint(kinematics, Units.feetToMeters(16.0)));
+        m_config.addConstraint(new CentripetalAccelerationConstraint(4.5));
 
         barrelRun = generateBarrelRunTrajectory();
         barrelRun2 = generateBarrelRun2Trajectory();

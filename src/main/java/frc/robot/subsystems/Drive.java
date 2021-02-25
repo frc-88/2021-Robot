@@ -11,9 +11,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -128,7 +125,8 @@ public class Drive extends SubsystemBase {
     // Creating my kinematics object
     m_kinematics = new DifferentialDriveKinematics(Units.feetToMeters(Constants.WHEEL_BASE_WIDTH));
 
-    generateTrajectories();
+    // generate trajectories
+    trajectories = new GameChangerTrajectories();
 
     // Creating my odometry object
     // our starting pose is 1 meters along the long end of the field and in the
@@ -295,22 +293,6 @@ public class Drive extends SubsystemBase {
   public DifferentialDriveWheelSpeeds wheelSpeedsFromChassisSpeeds(ChassisSpeeds speeds) {
     return m_kinematics.toWheelSpeeds(speeds);
   }
-
-  private void generateTrajectories() {
-    
-    // define constraints for trajectory generation
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(16.0), Units.feetToMeters(8.0));
-    config.setKinematics(m_kinematics);
-    config.setStartVelocity(0.0);
-    config.setEndVelocity(0.0);
-
-    config.addConstraint(new DifferentialDriveKinematicsConstraint(m_kinematics, Units.feetToMeters(16.0)));
-    config.addConstraint(new CentripetalAccelerationConstraint(4.5));
-
-    // generate trajectories
-    trajectories = new GameChangerTrajectories(config);
-  }
-
 
   // Negative inertia! The idea is that the robot has some inertia
   // which theoretically is based on previously commanded values. Returns an
