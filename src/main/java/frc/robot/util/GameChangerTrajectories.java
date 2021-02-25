@@ -67,10 +67,8 @@ public class GameChangerTrajectories {
         waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(7.5)));
         // around the second barrel
         waypoints.add(new Translation2d(Units.feetToMeters(21.0), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(10.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(18.5), Units.feetToMeters(12.8)));
-        // waypoints.add(new Translation2d(Units.feetToMeters(18.5),
-        // Units.feetToMeters(10.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(12.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(19.0), Units.feetToMeters(12.8)));
         // around the third barrel
         waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(2.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(29.0), Units.feetToMeters(5.0)));
