@@ -7,6 +7,7 @@
 
 package frc.robot.commands.feeder;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Feeder;
@@ -16,7 +17,9 @@ public class FeederIndex extends CommandBase {
   private Feeder m_feeder;
   private double m_percentOutput;
   private Sensors m_Sensors;
-  
+  private long m_timeBallFirstSeen;
+  private static final long DELAY_US = (long)(0.5 * 1_000_000);
+
   /**
    * Sets feeder to desired percent output
    */
@@ -30,18 +33,26 @@ public class FeederIndex extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_timeBallFirstSeen = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (m_Sensors.hasBallAtMouth() && !m_Sensors.hasBallInShooter()) {
-      new WaitCommand(0.5);
-      m_feeder.setFeeder(m_percentOutput);
+      if(m_timeBallFirstSeen == 0) {
+        m_timeBallFirstSeen = RobotController.getFPGATime();
+      }
+      if (RobotController.getFPGATime() >= m_timeBallFirstSeen + DELAY_US) {
+        m_feeder.setFeeder(m_percentOutput);
+      }
+      else {
+        m_feeder.setFeeder(0);
+      }
     }
     else {
-      new WaitCommand(0.3);
       m_feeder.setFeeder(0);
+      m_timeBallFirstSeen = 0;
     }
   }
 
