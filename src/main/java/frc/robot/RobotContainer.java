@@ -51,9 +51,11 @@ import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.drive.TestDriveStaticFriction;
 import frc.robot.commands.drive.TurnToHeading;
 import frc.robot.commands.drive.TurnToLimelight;
+import frc.robot.commands.feeder.FeederIndex;
 import frc.robot.commands.feeder.FeederRun;
 import frc.robot.commands.feeder.FeederStop;
 import frc.robot.commands.hopper.HopperEject;
+import frc.robot.commands.hopper.HopperRun;
 import frc.robot.commands.hopper.HopperShootMode;
 import frc.robot.commands.hopper.HopperShootUnjamMode;
 import frc.robot.commands.hopper.HopperStop;
@@ -237,7 +239,11 @@ public class RobotContainer {
   private final CommandBase m_activateIntake = 
     new SequentialCommandGroup(
       new DeployIntake(m_intake),
-      new RunIntake(m_intake, 1.)
+      new ParallelCommandGroup(
+        new RunIntake(m_intake, 1.),
+        new FeederIndex(m_feeder, m_sensors, 0.4),
+        new HopperRun(m_hopper, 0.1)
+      )
     );
 
   // deactivateIntake - retracts the intake, stops the rollers and hopper after a delay
