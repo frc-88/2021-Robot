@@ -458,7 +458,8 @@ public class RobotContainer {
     new AutoClimber()
   );
 
-  private CommandBase m_autoCommand = m_autoTrench7Ball;
+  private CommandBase m_autoCommand = m_autoDoNothing;
+  // private CommandBase m_autoCommand = m_autoTrench7Ball;
   private class ButtonAutoPair {
     private Trigger button;
     private CommandBase auto;
@@ -477,8 +478,10 @@ public class RobotContainer {
   private final List<ButtonAutoPair> autoSelectors = Arrays.asList(
     new ButtonAutoPair(m_buttonBox.button2, m_autoDoNothing),
     new ButtonAutoPair(m_buttonBox.button3, m_autoJustDrive),
-    new ButtonAutoPair(m_buttonBox.button4, m_auto3Ball),
-    new ButtonAutoPair(m_buttonBox.button5, m_autoTrench7Ball)
+    new ButtonAutoPair(m_buttonBox.button4, new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun)),
+    new ButtonAutoPair(m_buttonBox.button5, new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom))
+    // new ButtonAutoPair(m_buttonBox.button4, m_auto3Ball),
+    // new ButtonAutoPair(m_buttonBox.button5, m_autoTrench7Ball)
   );
 
   /***
