@@ -158,7 +158,7 @@ public class TrajectoryVisualizer extends JPanel {
 
    private static void createAndShowGui() {
       GameChangerTrajectories trajectories = new GameChangerTrajectories();
-      Trajectory traj = trajectories.barrelRun;
+      Trajectory traj = trajectories.bounce2;
       List<State> states = new ArrayList<State>();
 
       for (double t = 0; t < traj.getTotalTimeSeconds(); t += 0.1) {

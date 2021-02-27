@@ -600,6 +600,10 @@ public class RobotContainer {
     SmartDashboard.putData("FollowBarrelRun", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun));
     SmartDashboard.putData("FollowSlalom", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom));
     //SmartDashboard.putData("FollowBounce", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce));
+    SmartDashboard.putData("Bounce1", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce1));
+    SmartDashboard.putData("Bounce2", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce2));
+    SmartDashboard.putData("Bounce3", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce3));
+    SmartDashboard.putData("Bounce4", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce4));
 
     // Intake testing
     SmartDashboard.putData("Deploy Intake", new DeployIntake(m_intake));

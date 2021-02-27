@@ -148,7 +148,7 @@ public class GameChangerTrajectories {
         // set up waypoints for path
         var waypoints = new ArrayList<Pose2d>();
         // begining pose, on the center line, up against the start line
-        waypoints.add(new Pose2d(Units.feetToMeters(5.0), Units.feetToMeters(7.5), new Rotation2d()));
+        waypoints.add(new Pose2d(Units.feetToMeters(5.0 - (Constants.WHEEL_BASE_WIDTH /2)), Units.feetToMeters(7.5), new Rotation2d()));
         // first star
         waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
 
@@ -160,13 +160,15 @@ public class GameChangerTrajectories {
     private Trajectory generateBounce2Trajectory() {
         // set up waypoints for path
         var waypoints = new ArrayList<Pose2d>();
-        // end at second star, reverse trajectory
-        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
-        // bounce
-        waypoints.add(new Pose2d(Units.feetToMeters(12.5), Units.feetToMeters(2.5), new Rotation2d()));
-        waypoints.add(new Pose2d(Units.feetToMeters(8.25), Units.feetToMeters(7.5), Rotation2d.fromDegrees(-60.0)));
         // start at first star
-        waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
+        // bounce
+        waypoints.add(new Pose2d(Units.feetToMeters(10.0), Units.feetToMeters(7.5), Rotation2d.fromDegrees(120.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(12.5), Units.feetToMeters(2.5), Rotation2d.fromDegrees(180.0)));
+        // end at second star
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(7.0), Rotation2d.fromDegrees(-95.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(12.5), Rotation2d.fromDegrees(-90.0)));
+
         // generate trajectory
         m_config.setReversed(true);
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, m_config);
