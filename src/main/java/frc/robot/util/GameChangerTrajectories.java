@@ -64,23 +64,22 @@ public class GameChangerTrajectories {
         var waypoints = new ArrayList<Translation2d>();
         // around the first barrel
         waypoints.add(new Translation2d(Units.feetToMeters(13.5), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(16.0), Units.feetToMeters(4.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(16.1), Units.feetToMeters(4.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(12.0), Units.feetToMeters(3.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(7.5)));
         // around the second barrel
         waypoints.add(new Translation2d(Units.feetToMeters(21.0), Units.feetToMeters(7.5)));
         waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(12.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(19.0), Units.feetToMeters(12.8)));
+        waypoints.add(new Translation2d(Units.feetToMeters(17.8), Units.feetToMeters(12.8)));
         // around the third barrel
         waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(2.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(29.0), Units.feetToMeters(5.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(26.0), Units.feetToMeters(7.7)));
         // race to the finish!
-        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(7.8)));
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(8.0)));
 
         // ending pose, well past finish line, all the way into the finish zone
-        Pose2d end = new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.8), Rotation2d.fromDegrees(179));
+        Pose2d end = new Pose2d(Units.feetToMeters(-10.0), Units.feetToMeters(7.7), Rotation2d.fromDegrees(180));
 
         // generate trajectory
         return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);

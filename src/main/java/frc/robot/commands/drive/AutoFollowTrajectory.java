@@ -71,14 +71,24 @@ public class AutoFollowTrajectory extends CommandBase {
         // fall through right away to case 4
       case 4: // follow the trajectory, our final state
         m_drive.updateOdometry();
-        double now = m_timer.get();
-        Trajectory.State goal = m_trajectory.sample(now);
-        ChassisSpeeds targetSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
+        if (m_timer.get() < m_duration) {
+          double now = m_timer.get();
+          Trajectory.State goal = m_trajectory.sample(now);
+          ChassisSpeeds targetSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
 
-        DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
-        leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
-        rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
+          DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
+          leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
+          rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
+        } else {
+          m_state++;
+        }
         break;
+
+      case 5: // keep updateing the odometry until we have stopped
+        m_drive.updateOdometry();
+        if ((Math.abs(m_drive.getLeftSpeed()) < 0.1) && (Math.abs(m_drive.getRightSpeed()) < 0.1)) {
+          m_state++;
+        }
       default:
         break;
     }
@@ -99,6 +109,6 @@ public class AutoFollowTrajectory extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timer.get() > m_duration + 1.0;
+    return m_state > 5;
   }
 }
