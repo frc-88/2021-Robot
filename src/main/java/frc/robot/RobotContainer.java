@@ -13,6 +13,7 @@ import java.util.function.BooleanSupplier;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -110,6 +111,7 @@ public class RobotContainer {
   private final TJController m_driverController = new TJController(0);
   private final ButtonBox m_buttonBox = new ButtonBox(1);
   private final TJController m_testController = new TJController(2);
+  private final DigitalInput m_armCoast = new DigitalInput(9);
 
 
   /***
@@ -125,7 +127,7 @@ public class RobotContainer {
   private final Sensors m_sensors = new Sensors(m_driverController::isButtonAPressed);
   private final Drive m_drive = new Drive(m_sensors);
   private final Climber m_climber = new Climber();
-  private final Arm m_arm = new Arm(m_driverController::isButtonStartPressed);
+  private final Arm m_arm = new Arm(()->m_driverController.isButtonStartPressed()||!m_armCoast.get());
   private final Feeder m_feeder = new Feeder();
   private final Hopper m_hopper = new Hopper();
   private final Shooter m_shooter = new Shooter(m_sensors);
@@ -168,6 +170,8 @@ public class RobotContainer {
         new ParallelRaceGroup(
           new ArmFullUp(m_arm), 
           new ShooterRunFromLimelight(m_shooter),
+          new HopperStop(m_hopper),
+          new FeederStop(m_feeder),
           new ParallelCommandGroup(
             new WaitForShooterReady(m_arm, m_shooter),
             new WaitForDriveAimed(m_drive)
@@ -203,7 +207,7 @@ public class RobotContainer {
       new SequentialCommandGroup(
           new ParallelRaceGroup(
             new HopperEject(m_hopper, -0.5),
-            new WaitCommand(1),
+            new WaitCommand(0),
             new FeederStop(m_feeder), 
             new ArmFullUp(m_arm),
             new ShooterRunFromLimelight(m_shooter)),
@@ -215,7 +219,7 @@ public class RobotContainer {
         new SequentialCommandGroup(
           new ParallelRaceGroup(
             new HopperEject(m_hopper, -0.5),
-            new WaitCommand(1),
+            new WaitCommand(0),
             new FeederStop(m_feeder),
             new ArmMotionMagic(m_arm, m_armLayupAngle.getValue()),
             new ShooterFlywheelRun(m_shooter, m_shooterLayupSpeed.getValue())),
