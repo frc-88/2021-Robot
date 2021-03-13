@@ -94,6 +94,7 @@ public final class Constants {
 
 	// Sensor constants
 	public static final int SHOOTER_BALL_SENSOR_ID = 1;
+	public static final int FEEDER_MOUTH_SENSOR_ID = 2;
 
 	// Field constants
 	public static final double FIELD_PORT_TARGET_HEIGHT = 90.75;
