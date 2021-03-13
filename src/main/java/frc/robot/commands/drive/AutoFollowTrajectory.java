@@ -73,11 +73,9 @@ public class AutoFollowTrajectory extends CommandBase {
         m_state++;
         // fall through right away to case 4
       case 4: // follow the trajectory, our final state
-        m_drive.updateOdometry();
         if (m_timer.get() < m_duration) {
           double now = m_timer.get();
           Trajectory.State goal = m_trajectory.sample(now);
-          SmartDashboard.putNumber("AFT Trajectory Velocity", Units.metersToFeet(goal.velocityMetersPerSecond));
           ChassisSpeeds targetSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
 
           DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
@@ -89,17 +87,12 @@ public class AutoFollowTrajectory extends CommandBase {
         break;
 
       case 5: // keep updateing the odometry until we have stopped
-        m_drive.updateOdometry();
         if ((Math.abs(m_drive.getLeftSpeed()) < 0.1) && (Math.abs(m_drive.getRightSpeed()) < 0.1)) {
           m_state++;
         }
       default:
         break;
     }
-
-    SmartDashboard.putNumber("AFT State", m_state);
-    SmartDashboard.putNumber("AFT Left Speed", leftSpeed);
-    SmartDashboard.putNumber("AFT Right Speed", rightSpeed);
 
     m_drive.basicDriveLimited(leftSpeed, rightSpeed);
   }

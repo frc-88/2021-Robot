@@ -364,6 +364,8 @@ public class Drive extends SubsystemBase {
       SmartDashboard.putBoolean("Zero Drive", false);
     }
     
+    updateOdometry();
+
     SmartDashboard.putNumber("L Drive Current", m_leftDrive.getTotalCurrent());
     SmartDashboard.putNumber("R Drive Current", m_rightDrive.getTotalCurrent());
     SmartDashboard.putNumber("L Drive Speed", m_leftDrive.getScaledSensorVelocity());
