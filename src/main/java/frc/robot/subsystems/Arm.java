@@ -42,7 +42,6 @@ public class Arm extends SubsystemBase {
 
   private TalonFX m_rotator = new TalonFX(Constants.ARM_MOTOR);
   private CANCoder m_armEncoder = new CANCoder(Constants.ARM_CANCODER);
-  private DigitalInput m_coastButton = new DigitalInput(Constants.ARM_COAST_DIO);
 
   private ArmConfig armConfig = new ArmConfig();
 
@@ -237,7 +236,6 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("Arm Abs Encoder Pos", m_armEncoder.getAbsolutePosition() / Constants.ENCODER_TO_ARM_RATIO);
 
     SmartDashboard.putBoolean("Arm Up Limit Switch", m_rotator.isFwdLimitSwitchClosed() == 1);
-    SmartDashboard.putBoolean("Arm Coast Mode", m_coastButton.get());
 
     if(coastEnabled.getAsBoolean() && DriverStation.getInstance().isDisabled()) {
       setToCoastMode();

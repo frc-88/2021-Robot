@@ -177,14 +177,13 @@ public class Drive extends SubsystemBase {
    *                 1 (clockwise)
    */
   public void arcadeDrive(double speed, double turn) {
-
     // Apply negative intertia
     turn = negativeInertia(speed, turn);
 
     // Convert to feet per second
     speed *= m_maxSpeed;
     turn *= m_maxSpeed;
-
+    
     // Calculate left and right speed
     double leftSpeed = (speed + turn);
     double rightSpeed = (speed - turn);

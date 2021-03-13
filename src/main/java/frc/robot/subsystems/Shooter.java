@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
   private TalonFX m_flywheelFollower = new TalonFX(Constants.SHOOTER_FLYWHEEL_FOLLOWER);
   private ShooterConfig m_shooterConfig = new ShooterConfig();
 
-  private double lastSpeed = 5200;
+  private double lastSpeed = 3000;
 
   private DoublePreferenceConstant flywheel_kP;
   private DoublePreferenceConstant flywheel_kI;
@@ -38,18 +38,11 @@ public class Shooter extends SubsystemBase {
   private DoublePreferenceConstant flywheel_iMax;
 
   private final ValueInterpolator distanceToSpeedInterpolator = new ValueInterpolator(
-    // new ValueInterpolator.ValuePair(92, 5375),
-    // new ValueInterpolator.ValuePair(113, 5280),
-    // new ValueInterpolator.ValuePair(119, 5280),
-    // new ValueInterpolator.ValuePair(128, 5280),
-    // new ValueInterpolator.ValuePair(162, 5260),
-    // new ValueInterpolator.ValuePair(224, 5360),
-    // new ValueInterpolator.ValuePair(239, 5390),
-    // new ValueInterpolator.ValuePair(254, 5490),
-    // new ValueInterpolator.ValuePair(277, 5390),
-    // new ValueInterpolator.ValuePair(284, 5580)
-    new ValueInterpolator.ValuePair(92, 3000),
-    new ValueInterpolator.ValuePair(284, 3000)
+    new ValueInterpolator.ValuePair(100, 3480),
+    new ValueInterpolator.ValuePair(136, 3150),
+    new ValueInterpolator.ValuePair(162, 3100),
+    new ValueInterpolator.ValuePair(193, 3150),
+    new ValueInterpolator.ValuePair(238, 3300)
   );
 
   /**
