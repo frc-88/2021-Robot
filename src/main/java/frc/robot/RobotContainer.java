@@ -521,7 +521,7 @@ public class RobotContainer {
     DoubleSupplier arcadeDriveCheesyDriveMaxTurn = () -> arcadeDriveForceLowGear.getAsBoolean() ? Constants.CHEESY_DRIVE_FORCE_LOW_MAX_TURN : Constants.CHEESY_DRIVE_MAX_TURN;
     DoubleSupplier arcadeDriveTurnSupplier = DriveUtils.cheesyTurn(
         arcadeDriveSpeedSupplier, DriveUtils.deadbandExponential(m_driverController::getRightStickX,
-            Constants.DRIVE_SPEED_EXP, Constants.DRIVE_JOYSTICK_DEADBAND),
+            Constants.DRIVE_TURN_EXP, Constants.DRIVE_JOYSTICK_DEADBAND),
         arcadeDriveCheesyDriveMinTurn.getAsDouble(), arcadeDriveCheesyDriveMaxTurn.getAsDouble());
     BooleanSupplier arcadeDriveShiftSupplier = () -> !arcadeDriveForceLowGear.getAsBoolean() && m_drive.autoshift(arcadeDriveSpeedSupplier.getAsDouble());
     DoubleSupplier arcadeDriveMaxSpeedSupplier = () -> arcadeDriveForceLowGear.getAsBoolean() ? Constants.MAX_SPEED_LOW : Constants.MAX_SPEED_HIGH;

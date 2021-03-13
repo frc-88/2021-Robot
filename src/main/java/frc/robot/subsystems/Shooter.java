@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase {
   );
 
   /**
-   * Creates a new Shooter.
+   * Creates a new Shooter.^
    */
   public Shooter(Sensors sensors) {
 

@@ -144,7 +144,7 @@ public final class Constants {
 	public static final int DRIVE_SPEED_EXP = 2;
 	public static final int DRIVE_TURN_EXP = 2;
 	public static final double DRIVE_JOYSTICK_DEADBAND = 0.12;
-	public static final double CHEESY_DRIVE_MIN_TURN = 0.4;
+	public static final double CHEESY_DRIVE_MIN_TURN = 0.25;
 	public static final double CHEESY_DRIVE_MAX_TURN = 0.9;
 	public static final double CHEESY_DRIVE_FORCE_LOW_MIN_TURN = 0.6;
 	public static final double CHEESY_DRIVE_FORCE_LOW_MAX_TURN = 1.5;
