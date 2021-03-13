@@ -77,6 +77,7 @@ public class AutoFollowTrajectory extends CommandBase {
         if (m_timer.get() < m_duration) {
           double now = m_timer.get();
           Trajectory.State goal = m_trajectory.sample(now);
+          SmartDashboard.putNumber("AFT Trajectory Velocity", Units.metersToFeet(goal.velocityMetersPerSecond));
           ChassisSpeeds targetSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
 
           DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
