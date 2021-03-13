@@ -16,7 +16,7 @@ public class TurnToLimelight extends CommandBase {
 
   private static final boolean LOG_DEBUG = true;
 
-  private static final double TOLERANCE = 0.75;
+  private static final double TOLERANCE = 0.33;
   private static final int TOLERANCE_TICKS = 5;
   private static final double TOLERANCE_SPEED = 5;
 

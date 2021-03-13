@@ -54,6 +54,7 @@ import frc.robot.commands.drive.TurnToHeading;
 import frc.robot.commands.drive.TurnToLimelight;
 import frc.robot.commands.feeder.FeederIndex;
 import frc.robot.commands.feeder.FeederRun;
+import frc.robot.commands.feeder.FeederShootMode;
 import frc.robot.commands.feeder.FeederStop;
 import frc.robot.commands.hopper.HopperEject;
 import frc.robot.commands.hopper.HopperRun;
@@ -178,10 +179,9 @@ public class RobotContainer {
           )
         ),
         new ParallelCommandGroup(
-          new HopperShootMode(m_hopper), 
           new ArmFullUp(m_arm),
           new ShooterRunFromLimelight(m_shooter), 
-          new FeederRun(m_feeder, 1),
+          new FeederShootMode(m_feeder, m_sensors, m_hopper, 1),
           new RunIntake(m_intake, 0.3)
         )
       ),
@@ -192,10 +192,9 @@ public class RobotContainer {
           new WaitForShooterReady(m_arm, m_shooter)
         ),
         new ParallelCommandGroup(
-          new HopperShootMode(m_hopper), 
           new ArmMotionMagic(m_arm, m_armLayupAngle.getValue()),
           new ShooterFlywheelRun(m_shooter, m_shooterLayupSpeed.getValue()), 
-          new FeederRun(m_feeder, 1),
+          new FeederShootMode(m_feeder, m_sensors, m_hopper, 1),
           new RunIntake(m_intake, 0.3)
         )
       ),
