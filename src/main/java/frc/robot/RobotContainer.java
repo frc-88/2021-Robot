@@ -47,7 +47,7 @@ import frc.robot.commands.climber.ZeroClimber;
 import frc.robot.commands.drive.ArcadeDrive;
 import frc.robot.commands.drive.BasicAutoDrive;
 import frc.robot.commands.drive.CalculateDriveEfficiency;
-import frc.robot.commands.drive.FollowTrajectory;
+import frc.robot.commands.drive.AutoFollowTrajectory;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.drive.TestDriveStaticFriction;
 import frc.robot.commands.drive.TurnToHeading;
@@ -468,7 +468,8 @@ public class RobotContainer {
     new AutoClimber()
   );
 
-  private CommandBase m_autoCommand = m_autoTrench7Ball;
+  private CommandBase m_autoCommand = m_autoDoNothing;
+  // private CommandBase m_autoCommand = m_autoTrench7Ball;
   private class ButtonAutoPair {
     private Trigger button;
     private CommandBase auto;
@@ -487,8 +488,10 @@ public class RobotContainer {
   private final List<ButtonAutoPair> autoSelectors = Arrays.asList(
     new ButtonAutoPair(m_buttonBox.button2, m_autoDoNothing),
     new ButtonAutoPair(m_buttonBox.button3, m_autoJustDrive),
-    new ButtonAutoPair(m_buttonBox.button4, m_auto3Ball),
-    new ButtonAutoPair(m_buttonBox.button5, m_autoTrench7Ball)
+    new ButtonAutoPair(m_buttonBox.button4, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun)),
+    new ButtonAutoPair(m_buttonBox.button5, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom))
+    // new ButtonAutoPair(m_buttonBox.button4, m_auto3Ball),
+    // new ButtonAutoPair(m_buttonBox.button5, m_autoTrench7Ball)
   );
 
   /***
@@ -603,12 +606,14 @@ public class RobotContainer {
     SmartDashboard.putData("Zero Yaw", new ZeroYaw(m_sensors));
 
     // Trajectory following testing    
-    SmartDashboard.putData("FollowTest1", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.test1));
-    //SmartDashboard.putData("FollowTest2", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.test2));
-    //SmartDashboard.putData("FollowLoop", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.testLoop));
-    SmartDashboard.putData("FollowBarrelRun", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun));
-    //SmartDashboard.putData("FollowSlalom", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom));
+    SmartDashboard.putData("FollowTest", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.test));
+    SmartDashboard.putData("FollowBarrelRun", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun));
+    SmartDashboard.putData("FollowSlalom", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom));
     //SmartDashboard.putData("FollowBounce", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce));
+    SmartDashboard.putData("Bounce1", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce1));
+    SmartDashboard.putData("Bounce2", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce2));
+    SmartDashboard.putData("Bounce3", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce3));
+    SmartDashboard.putData("Bounce4", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce4));
 
     // Intake testing
     SmartDashboard.putData("Deploy Intake", new DeployIntake(m_intake));

@@ -16,22 +16,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Sensors;
 
-public class FollowTrajectory extends CommandBase {
+public class AutoFollowTrajectory extends CommandBase {
   private Drive m_drive;
   private Sensors m_sensors;
   private Trajectory m_trajectory;
-  private double m_duration;
-
-  private int m_state;
-  private Timer m_timer = new Timer();
-  // TODO maybe allow for tuning of RamseteController parameters
   private RamseteController m_controller = new RamseteController();
+  private Timer m_timer = new Timer();
+  private double m_duration;
+  private int m_state;
+  private boolean m_trajReversed = false;
 
-  public FollowTrajectory(final Drive drive, final Sensors sensors, Trajectory trajectory) {
+  public AutoFollowTrajectory(final Drive drive, final Sensors sensors, Trajectory trajectory) {
     m_drive = drive;
     m_sensors = sensors;
     m_trajectory = trajectory;
     m_duration = m_trajectory.getTotalTimeSeconds();
+
+    m_trajReversed = (trajectory == m_drive.trajectories.bounce2)|| (trajectory == m_drive.trajectories.bounce4);
 
     addRequirements(m_drive);
     addRequirements(m_sensors);
@@ -47,9 +48,14 @@ public class FollowTrajectory extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double leftSpeed = 0.0;
+    double rightSpeed = 0.0;
+
     switch (m_state) {
       case 0: // Zero drive
         m_drive.zeroDrive();
+        m_drive.setBrakeMode();
+        m_drive.shiftToHigh();
         m_state++;
         break;
       case 1: // Check to make sure things are near zero
@@ -64,47 +70,42 @@ public class FollowTrajectory extends CommandBase {
         break;
       case 3: // reset the timer and go!
         m_timer.start();
-        m_drive.shiftToHigh();
         m_state++;
         // fall through right away to case 4
       case 4: // follow the trajectory, our final state
-        // calculate what we need to do to be where we need to be 20ms from now.
-        // TODO is that offset needed? Should I just calculate based on where I should
-        // be now?
-        m_drive.updateOdometry();
-        double now = m_timer.get();
-        Trajectory.State goal = m_trajectory.sample(now + 0.020);
-        ChassisSpeeds targetSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
+        if (m_timer.get() < m_duration) {
+          double now = m_timer.get();
+          Trajectory.State goal = m_trajectory.sample(now);
+          ChassisSpeeds targetSpeeds = m_controller.calculate(m_drive.getCurrentPose(), goal);
 
-        DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
-        double leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
-        double rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
-
-        SmartDashboard.putNumber("Trajectory left speed", leftSpeed);
-        SmartDashboard.putNumber("Trajectory right speed", rightSpeed);
-
-        if (m_timer.get() > m_duration) {
-          m_drive.basicDriveLimited(0.0, 0.0);
+          DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
+          leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
+          rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
         } else {
-          m_drive.basicDriveLimited(leftSpeed, rightSpeed);
+          m_state++;
         }
-
         break;
+
+      case 5: // keep updateing the odometry until we have stopped
+        if ((Math.abs(m_drive.getLeftSpeed()) < 0.1) && (Math.abs(m_drive.getRightSpeed()) < 0.1)) {
+          m_state++;
+        }
       default:
         break;
     }
 
+    m_drive.basicDriveLimited(leftSpeed, rightSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.basicDrive(0.0, 0.0);
+    m_drive.basicDriveLimited(0.0, 0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timer.get() > m_duration + 1.0;
+    return m_state > 5;
   }
 }
