@@ -17,9 +17,9 @@ public class DriveUtils{
 
         return value;
     }
-
+    
     public static double deadbandExponential(double spd, int exp, double deadband) {
-        return Math.abs(spd)<deadband ? 0 : DriveUtils.signedPow(spd - deadband, exp) / (1 - deadband);
+        return Math.abs(spd)<deadband ? 0 : DriveUtils.signedPow(spd - deadband*Math.signum(spd), exp) / (1 - deadband);
     }
 
     public static DoubleSupplier deadbandExponential(DoubleSupplier input, int exp, double deadband) {
@@ -32,7 +32,6 @@ public class DriveUtils{
         if (Math.abs(spd) < minTurn) {
             spd = minTurn;
         }
-
         return spd * turnRate * maxTurn;
     }
 

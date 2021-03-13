@@ -59,6 +59,7 @@ public class Sensors extends SubsystemBase {
   private double m_yawOffset = 0.0;
 
   private DigitalInput shooterBallSensor;
+  private DigitalInput feederMouthSensor;
 
   /**
    * Creates a new Sensors subsystem
@@ -74,6 +75,7 @@ public class Sensors extends SubsystemBase {
     SmartDashboard.putNumber("Limelight Test Distance", 120.0);
 
     shooterBallSensor = new DigitalInput(Constants.SHOOTER_BALL_SENSOR_ID);
+    feederMouthSensor = new DigitalInput(Constants.FEEDER_MOUTH_SENSOR_ID);
 
     //intakeCamera = cameraServer.startAutomaticCapture(0);
     //intakeCamera.setConfigJson("{'fps':15,'height':120,'pixel format':'MJPEG','width':160}");
@@ -215,6 +217,9 @@ public class Sensors extends SubsystemBase {
   public boolean hasBallInShooter() {
     return !shooterBallSensor.get();
   }
+  public boolean hasBallAtMouth() {
+    return !feederMouthSensor.get();
+  }
 
   @Override
   public void periodic() {
@@ -235,6 +240,7 @@ public class Sensors extends SubsystemBase {
 
     // Beam breaks
     SmartDashboard.putBoolean("Shooter Ball Sensor", shooterBallSensor.get());
+    SmartDashboard.putBoolean("Feeder Mouth Ball Sensor", feederMouthSensor.get());
 
     // Check LED override, only when disabled
     if(DriverStation.getInstance().isDisabled() && ledOverride.getAsBoolean()) {

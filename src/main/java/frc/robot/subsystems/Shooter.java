@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
   private TalonFX m_flywheelFollower = new TalonFX(Constants.SHOOTER_FLYWHEEL_FOLLOWER);
   private ShooterConfig m_shooterConfig = new ShooterConfig();
 
-  private double lastSpeed = 5200;
+  private double lastSpeed = 3000;
 
   private DoublePreferenceConstant flywheel_kP;
   private DoublePreferenceConstant flywheel_kI;
@@ -38,16 +38,11 @@ public class Shooter extends SubsystemBase {
   private DoublePreferenceConstant flywheel_iMax;
 
   private final ValueInterpolator distanceToSpeedInterpolator = new ValueInterpolator(
-    new ValueInterpolator.ValuePair(92, 5375),
-    new ValueInterpolator.ValuePair(113, 5280),
-    new ValueInterpolator.ValuePair(119, 5280),
-    new ValueInterpolator.ValuePair(128, 5280),
-    new ValueInterpolator.ValuePair(162, 5260),
-    new ValueInterpolator.ValuePair(224, 5360),
-    new ValueInterpolator.ValuePair(239, 5390),
-    new ValueInterpolator.ValuePair(254, 5490),
-    new ValueInterpolator.ValuePair(277, 5390),
-    new ValueInterpolator.ValuePair(284, 5580)
+    new ValueInterpolator.ValuePair(100, 3480),
+    new ValueInterpolator.ValuePair(136, 3150),
+    new ValueInterpolator.ValuePair(162, 3100),
+    new ValueInterpolator.ValuePair(193, 3150),
+    new ValueInterpolator.ValuePair(238, 3300)
   );
 
   /**
@@ -100,14 +95,14 @@ public class Shooter extends SubsystemBase {
 
   public void setFlywheel(double velocity) {
     m_flywheelMaster.set(ControlMode.Velocity, convertFlywheelVelocityToEncoderVelocity(velocity));
-    if (velocity > 2000) {
+    if (velocity > 500) {
       lastSpeed = velocity;
     }
   } 
 
   public void setFlywheelFromLimelight() {
     if (m_sensors.doesLimelightHaveTarget()) {
-      this.lastSpeed = Math.max(distanceToSpeedInterpolator.getInterpolatedValue(m_sensors.getDistanceToTarget()), 5200);
+      this.lastSpeed = Math.max(distanceToSpeedInterpolator.getInterpolatedValue(m_sensors.getDistanceToTarget()), 2000);
       this.setFlywheel(lastSpeed);
     } else {
       this.setFlywheel(lastSpeed);
@@ -134,9 +129,5 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     m_loopCounter += 1;
     SmartDashboard.putNumber("Flywheel velocity", convertEncoderVelocityToFlywheelVelocity((int)m_flywheelMaster.getSelectedSensorVelocity()));
-    if(m_loopCounter % 3. == 0) {
-      System.out.println(lastSpeed);
-      System.out.println(convertEncoderVelocityToFlywheelVelocity((int)m_flywheelMaster.getClosedLoopTarget()));
-    }
   }
 }

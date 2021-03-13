@@ -42,7 +42,6 @@ public class Arm extends SubsystemBase {
 
   private TalonFX m_rotator = new TalonFX(Constants.ARM_MOTOR);
   private CANCoder m_armEncoder = new CANCoder(Constants.ARM_CANCODER);
-  private DigitalInput m_coastButton = new DigitalInput(Constants.ARM_COAST_DIO);
 
   private ArmConfig armConfig = new ArmConfig();
 
@@ -59,7 +58,7 @@ public class Arm extends SubsystemBase {
 
     m_armEncoder.configFactoryDefault();
     m_armEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-    m_armEncoder.configSensorDirection(true);
+    m_armEncoder.configSensorDirection(false);
     /* Configure velocity measurements to be what we want */
 		// m_armEncoder.configVelocityMeasurementPeriod(VelocityPeriod.Period_100Ms);
     // m_armEncoder.configVelocityMeasurementWindow(64);
@@ -68,8 +67,8 @@ public class Arm extends SubsystemBase {
     m_rotator.configAllSettings(armConfig.armConfiguration);
 
     m_rotator.enableVoltageCompensation(true);
-    m_rotator.setInverted(false);
-    m_rotator.setSensorPhase(false);
+    m_rotator.setInverted(true);
+    m_rotator.setSensorPhase(true);
     m_rotator.setNeutralMode(NeutralMode.Brake);
 
     StatorCurrentLimitConfiguration currentLimit = new StatorCurrentLimitConfiguration();
@@ -237,12 +236,11 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("Arm Abs Encoder Pos", m_armEncoder.getAbsolutePosition() / Constants.ENCODER_TO_ARM_RATIO);
 
     SmartDashboard.putBoolean("Arm Up Limit Switch", m_rotator.isFwdLimitSwitchClosed() == 1);
-    SmartDashboard.putBoolean("Arm Coast Mode", m_coastButton.get());
 
-    if(m_coastButton.get() && DriverStation.getInstance().isDisabled()) {
-      setToBrakeMode();
-    } else {
+    if(coastEnabled.getAsBoolean() && DriverStation.getInstance().isDisabled()) {
       setToCoastMode();
+    } else {
+      setToBrakeMode();
     }
   }
 }

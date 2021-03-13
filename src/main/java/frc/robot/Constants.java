@@ -20,8 +20,8 @@ public final class Constants {
 	public static final float CPM_PHASE_2_WHEEL_ROTATIONS = 4;
     
     //Climber constants
-    public static final int CLIMBER_MOTOR_LEFT = 13;
-	public static final int CLIMBER_MOTOR_RIGHT = 2;
+    public static final int CLIMBER_MOTOR_LEFT = 9;
+	public static final int CLIMBER_MOTOR_RIGHT = 6;
 	public static final int CLIMBER_PNEUMATICS_FORWARD = 4;
 	public static final int CLIMBER_PNEUMATICS_REVERSE = 3;
 	public static final int CLIMBER_MIN_POSITION = 0;
@@ -39,7 +39,7 @@ public final class Constants {
 	public static final int SHOOTER_MOTOR_TICKS_PER_ROTATION = 2048;
 
 	// Feeder constants
-	public static final int FEEDER_MOTOR = 8;
+	public static final int FEEDER_MOTOR = 2;
 	public static final int FEEDER_CPM_PCM = 1;
 	public static final int FEEDER_CPM_PISTON_FORWARD = 0;
 	public static final int FEEDER_CPM_PISTON_REVERSE = 7;
@@ -64,8 +64,9 @@ public final class Constants {
 
 	// Intake constants
 	public static final int ROLLER_ID = 11;
-	public static final int INTAKE_DEPLOY_PISTON = 0;
-	public static final int INTAKE_RETRACT_PISTON = 7;
+	public static final int INTAKE_PCM = 1;
+	public static final int INTAKE_DEPLOY_PISTON = 6;
+	public static final int INTAKE_RETRACT_PISTON = 1;
 
 	// Sensor constants
 	public static final String PCC_CAMERA_NAME = "PCC";
@@ -88,13 +89,13 @@ public final class Constants {
 	public static final double PCC_CHAMBER_THRESHOLD = 30000;
 
 	// Hopper constants
-	public static final int LEFT_HOPPER = 9;
-	public static final int RIGHT_HOPPER = 10;
-	public static final double HOPPER_SHOOT_PERCENT_OUTPUT = .5;
-	public static final double HOPPER_INTAKE_PERCENT_OUTPUT = 0.5;
+	public static final int HOPPER = 10;
+	public static final double HOPPER_SHOOT_PERCENT_OUTPUT = .25;
+	public static final double HOPPER_EJECT_PERCENT_OUTPUT = -.3;
 
 	// Sensor constants
 	public static final int SHOOTER_BALL_SENSOR_ID = 1;
+	public static final int FEEDER_MOUTH_SENSOR_ID = 4;
 
 	// Field constants
 	public static final double FIELD_PORT_TARGET_HEIGHT = 90.75;
@@ -143,9 +144,9 @@ public final class Constants {
 	public static final int DRIVE_TURN_EXP = 2;
 	public static final double DRIVE_JOYSTICK_DEADBAND = 0.12;
 	public static final double CHEESY_DRIVE_MIN_TURN = 0.4;
-	public static final double CHEESY_DRIVE_MAX_TURN = 0.6;
+	public static final double CHEESY_DRIVE_MAX_TURN = 0.9;
 	public static final double CHEESY_DRIVE_FORCE_LOW_MIN_TURN = 0.6;
-	public static final double CHEESY_DRIVE_FORCE_LOW_MAX_TURN = 1.;
+	public static final double CHEESY_DRIVE_FORCE_LOW_MAX_TURN = 1.5;
 
 	//Test
 	public static final double TEST_JOYSTICK_DEADBAND = 0.12;

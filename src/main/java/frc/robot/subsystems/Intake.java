@@ -44,7 +44,7 @@ public class Intake extends SubsystemBase {
     rollerMotor.configSupplyCurrentLimit(currentLimit);
     
 
-    deployPiston = new DoubleSolenoid(Constants.INTAKE_DEPLOY_PISTON, Constants.INTAKE_RETRACT_PISTON);
+    deployPiston = new DoubleSolenoid(Constants.INTAKE_PCM, Constants.INTAKE_DEPLOY_PISTON, Constants.INTAKE_RETRACT_PISTON);
   }
 
   public void setRoller(double speed) {
