@@ -573,9 +573,9 @@ public class RobotContainer {
 
 
   private void configureTestController() {
-    SmartDashboard.putNumber("SetTestDriveSpeed", 0);
-    SmartDashboard.putNumber("SetTestDriveTurn", 0);
-    SmartDashboard.putBoolean("SetTestShiftHigh", false);
+    // SmartDashboard.putNumber("SetTestDriveSpeed", 0);
+    // SmartDashboard.putNumber("SetTestDriveTurn", 0);
+    // SmartDashboard.putBoolean("SetTestShiftHigh", false);
     BooleanSupplier testArcadeDriveShiftSupplier = () -> SmartDashboard.getBoolean("SetTestShiftHigh", false);
     DoubleSupplier testArcadeDriveSpeedSupplier = () -> SmartDashboard.getNumber("SetTestDriveSpeed", 0)
         / Constants.MAX_SPEED_HIGH;
@@ -584,85 +584,85 @@ public class RobotContainer {
     DoubleSupplier testArcadeDriveMaxSpeedSupplier = () -> Constants.MAX_SPEED_HIGH;
     m_testArcadeDrive = new ArcadeDrive(m_drive, testArcadeDriveSpeedSupplier, testArcadeDriveTurnSupplier,
         testArcadeDriveShiftSupplier, testArcadeDriveMaxSpeedSupplier);
-    SmartDashboard.putData("TestArcadeDrive", m_testArcadeDrive);
+    // SmartDashboard.putData("TestArcadeDrive", m_testArcadeDrive);
     
     DoubleSupplier shooterSpeedSupplier = DriveUtils.deadbandExponential(m_testController::getLeftStickY,
         Constants.SHOOTER_FLYWHEEL_SPEED_EXP, Constants.TEST_JOYSTICK_DEADBAND);
-    SmartDashboard.putData("Shooter Manual", new ShooterFlywheelRunBasic(m_shooter, shooterSpeedSupplier));
+    // SmartDashboard.putData("Shooter Manual", new ShooterFlywheelRunBasic(m_shooter, shooterSpeedSupplier));
 
     DoubleSupplier armSpeedSupplier = DriveUtils.deadbandExponential(m_testController::getRightStickY,
         Constants.ARM_SPEED_EXP, Constants.TEST_JOYSTICK_DEADBAND);
-    SmartDashboard.putData("Arm Manual", new RotateArm(m_arm, armSpeedSupplier));
+    // SmartDashboard.putData("Arm Manual", new RotateArm(m_arm, armSpeedSupplier));
 
   }
 
 
   private void configureSmartDashboardButtons() {
     // Drive testing
-    SmartDashboard.putData("TestDriveStaticFriction", new TestDriveStaticFriction(m_drive));
-    SmartDashboard.putData("CalculateDriveEfficiency", new CalculateDriveEfficiency(m_drive));
-    SmartDashboard.putNumber("TurnTestHeading", 0);
-    SmartDashboard.putData("TestTurnToHeading", new InstantCommand(() -> (new TurnToHeading(m_drive, m_sensors, SmartDashboard.getNumber("TurnTestHeading", 0))).schedule()));
-    SmartDashboard.putData("Zero Yaw", new ZeroYaw(m_sensors));
+    // SmartDashboard.putData("TestDriveStaticFriction", new TestDriveStaticFriction(m_drive));
+    // SmartDashboard.putData("CalculateDriveEfficiency", new CalculateDriveEfficiency(m_drive));
+    // SmartDashboard.putNumber("TurnTestHeading", 0);
+    // SmartDashboard.putData("TestTurnToHeading", new InstantCommand(() -> (new TurnToHeading(m_drive, m_sensors, SmartDashboard.getNumber("TurnTestHeading", 0))).schedule()));
+    // SmartDashboard.putData("Zero Yaw", new ZeroYaw(m_sensors));
 
     // Trajectory following testing    
-    SmartDashboard.putData("FollowTest", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.test));
-    SmartDashboard.putData("FollowBarrelRun", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun));
-    SmartDashboard.putData("FollowSlalom", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom));
-    //SmartDashboard.putData("FollowBounce", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce));
-    SmartDashboard.putData("Bounce1", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce1));
-    SmartDashboard.putData("Bounce2", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce2));
-    SmartDashboard.putData("Bounce3", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce3));
-    SmartDashboard.putData("Bounce4", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce4));
+    // SmartDashboard.putData("FollowTest", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.test));
+    // SmartDashboard.putData("FollowBarrelRun", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun));
+    // SmartDashboard.putData("FollowSlalom", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom));
+    // SmartDashboard.putData("FollowBounce", new FollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce));
+    // SmartDashboard.putData("Bounce1", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce1));
+    // SmartDashboard.putData("Bounce2", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce2));
+    // SmartDashboard.putData("Bounce3", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce3));
+    // SmartDashboard.putData("Bounce4", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce4));
 
     // Intake testing
-    SmartDashboard.putData("Deploy Intake", new DeployIntake(m_intake));
-    SmartDashboard.putData("Retract Intake", new RetractIntake(m_intake));
-    SmartDashboard.putData("Run Intake", new RunIntake(m_intake, 1));
-    SmartDashboard.putData("Stop Intake", new StopIntake(m_intake));
-    SmartDashboard.putData("Eject Intake", new RunIntake(m_intake, -1));
+    // SmartDashboard.putData("Deploy Intake", new DeployIntake(m_intake));
+    // SmartDashboard.putData("Retract Intake", new RetractIntake(m_intake));
+    // SmartDashboard.putData("Run Intake", new RunIntake(m_intake, 1));
+    // SmartDashboard.putData("Stop Intake", new StopIntake(m_intake));
+    // SmartDashboard.putData("Eject Intake", new RunIntake(m_intake, -1));
 
-    SmartDashboard.putNumber("Hopper Speed", 0);
-    SmartDashboard.putData("Hopper Shoot Mode", new HopperShootMode(m_hopper));
-    SmartDashboard.putData("Hopper Stop", new HopperStop(m_hopper));
-    SmartDashboard.putData("Hopper Test", new InstantCommand(() -> (new HopperTest(m_hopper, SmartDashboard.getNumber("Hopper Speed", 0))).schedule()));
+    // SmartDashboard.putNumber("Hopper Speed", 0);
+    // SmartDashboard.putData("Hopper Shoot Mode", new HopperShootMode(m_hopper));
+    // SmartDashboard.putData("Hopper Stop", new HopperStop(m_hopper));
+    // SmartDashboard.putData("Hopper Test", new InstantCommand(() -> (new HopperTest(m_hopper, SmartDashboard.getNumber("Hopper Speed", 0))).schedule()));
 
-    SmartDashboard.putData("Arm Calibrate", new CalibrateArm(m_arm));
-    SmartDashboard.putNumber("ArmTestPosition", 0);
-    SmartDashboard.putData("Arm to Position", new InstantCommand(() -> new ArmMotionMagic(m_arm, SmartDashboard.getNumber("ArmTestPosition", 0)).schedule()));
-    SmartDashboard.putData("Arm to Stow", new ArmStow(m_arm, () -> m_driverController.getRawButton(6)));
-    SmartDashboard.putData("Arm to Layup", new ArmMotionMagic(m_arm, m_armLayupAngle.getValue()));
-    SmartDashboard.putData("Arm Hold Position", new InstantCommand(() -> new ArmMotionMagic(m_arm, m_arm.getCurrentArmPosition()).schedule(), m_arm));
-    SmartDashboard.putData("Arm Test Brake Mode", new TestBrakeMode(m_arm));
+    // SmartDashboard.putData("Arm Calibrate", new CalibrateArm(m_arm));
+    // SmartDashboard.putNumber("ArmTestPosition", 0);
+    // SmartDashboard.putData("Arm to Position", new InstantCommand(() -> new ArmMotionMagic(m_arm, SmartDashboard.getNumber("ArmTestPosition", 0)).schedule()));
+    // SmartDashboard.putData("Arm to Stow", new ArmStow(m_arm, () -> m_driverController.getRawButton(6)));
+    // SmartDashboard.putData("Arm to Layup", new ArmMotionMagic(m_arm, m_armLayupAngle.getValue()));
+    // SmartDashboard.putData("Arm Hold Position", new InstantCommand(() -> new ArmMotionMagic(m_arm, m_arm.getCurrentArmPosition()).schedule(), m_arm));
+    // SmartDashboard.putData("Arm Test Brake Mode", new TestBrakeMode(m_arm));
     
-    SmartDashboard.putNumber("FeederTestSpeed", 0);
-    SmartDashboard.putData("FeederTest",new InstantCommand(() -> (new FeederRun(m_feeder, SmartDashboard.getNumber("FeederTestSpeed", 0))).schedule()));
-    SmartDashboard.putData("FeederStop", new FeederStop(m_feeder));
+    // SmartDashboard.putNumber("FeederTestSpeed", 0);
+    // SmartDashboard.putData("FeederTest",new InstantCommand(() -> (new FeederRun(m_feeder, SmartDashboard.getNumber("FeederTestSpeed", 0))).schedule()));
+    // SmartDashboard.putData("FeederStop", new FeederStop(m_feeder));
 
-    SmartDashboard.putNumber("ShooterTestFlywheelSpeed", 0);
-    SmartDashboard.putData("ShooterTestFlywheel", new InstantCommand(() -> (new ShooterFlywheelRun(m_shooter, SmartDashboard.getNumber("ShooterTestFlywheelSpeed", 0))).schedule()));
-    SmartDashboard.putData("ShooterStopFlywheel", new ShooterFlywheelRun(m_shooter, 0));
+    // SmartDashboard.putNumber("ShooterTestFlywheelSpeed", 0);
+    // SmartDashboard.putData("ShooterTestFlywheel", new InstantCommand(() -> (new ShooterFlywheelRun(m_shooter, SmartDashboard.getNumber("ShooterTestFlywheelSpeed", 0))).schedule()));
+    // SmartDashboard.putData("ShooterStopFlywheel", new ShooterFlywheelRun(m_shooter, 0));
     
-    SmartDashboard.putData("Regurgitate", m_regurgitate);
-    SmartDashboard.putData("Regurgitate Stop", m_regurgitateStop);
+    // SmartDashboard.putData("Regurgitate", m_regurgitate);
+    // SmartDashboard.putData("Regurgitate Stop", m_regurgitateStop);
 
-    SmartDashboard.putData("Limelight On", new LimelightToggle(m_sensors, true));
-    SmartDashboard.putData("Limelight Off", new LimelightToggle(m_sensors, false));
+    // SmartDashboard.putData("Limelight On", new LimelightToggle(m_sensors, true));
+    // SmartDashboard.putData("Limelight Off", new LimelightToggle(m_sensors, false));
 
-    SmartDashboard.putData("Zero Climber", new ZeroClimber(m_climber));
+    // SmartDashboard.putData("Zero Climber", new ZeroClimber(m_climber));
 
-    SmartDashboard.putData("Engage Ratchets", new EngageRatchets(m_climber));
-    SmartDashboard.putData("Disengage Ratchets", new DisengageRatchets(m_climber));
+    // SmartDashboard.putData("Engage Ratchets", new EngageRatchets(m_climber));
+    // SmartDashboard.putData("Disengage Ratchets", new DisengageRatchets(m_climber));
 
-    SmartDashboard.putData("Turn To Limelight", new TurnToLimelight(m_drive, m_sensors));
-    SmartDashboard.putData("Shoot Limelight", new ShooterRunFromLimelight(m_shooter));
+    // SmartDashboard.putData("Turn To Limelight", new TurnToLimelight(m_drive, m_sensors));
+    // SmartDashboard.putData("Shoot Limelight", new ShooterRunFromLimelight(m_shooter));
 
-    SmartDashboard.putData("Test Basic Auto 1", new BasicAutoDrive(m_drive, -10, -10, 8));
-    SmartDashboard.putData("Test Basic Auto 2", new BasicAutoDrive(m_drive, -1, -6, 8));
+    // SmartDashboard.putData("Test Basic Auto 1", new BasicAutoDrive(m_drive, -10, -10, 8));
+    // SmartDashboard.putData("Test Basic Auto 2", new BasicAutoDrive(m_drive, -1, -6, 8));
 
     // Auto stuff
-    SmartDashboard.putNumber("Auto Drive Wait", 10);
-    SmartDashboard.putNumber("Auto Drive Distance", -2);
+    // SmartDashboard.putNumber("Auto Drive Wait", 10);
+    // SmartDashboard.putNumber("Auto Drive Distance", -2);
   }
 
 

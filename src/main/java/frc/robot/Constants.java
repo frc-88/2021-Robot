@@ -142,7 +142,7 @@ public final class Constants {
 	public static final double WHEEL_BASE_WIDTH = (25. + 5./16.) / 12.; // feet
 	public static final double DRIVE_CURRENT_LIMIT = 300;
 	public static final int DRIVE_SPEED_EXP = 2;
-	public static final int DRIVE_TURN_EXP = 2;
+	public static final int DRIVE_TURN_EXP = 1;
 	public static final double DRIVE_JOYSTICK_DEADBAND = 0.12;
 	public static final double CHEESY_DRIVE_MIN_TURN = 0.25;
 	public static final double CHEESY_DRIVE_MAX_TURN = 0.9;
