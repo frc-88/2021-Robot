@@ -28,7 +28,7 @@ public class GameChangerTrajectories {
 
     public final double TRAJ_CONFIG_MAX_VEL = 16.0;
     public final double TRAJ_CONFIG_MAX_ACCEL = 8.0;
-    public final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 2.5;
+    public final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 3.1;
     private final TrajectoryConfig m_config;
 
     public GameChangerTrajectories() {
