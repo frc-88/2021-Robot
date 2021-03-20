@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class TJController extends Joystick {
 	private static final int LEFT_HORIZ_AXIS = 0;
 	private static final int LEFT_VERT_AXIS = 1;
-	private static final int RIGHT_Z_AXIS = 3;
+	private static final int RIGHT_Z_AXIS = 4;
 	private static final int LEFT_Z_AXIS = 2;
 	private static final int RIGHT_HORIZ_AXIS = 4;
 	private static final int RIGHT_VERT_AXIS = 5;
