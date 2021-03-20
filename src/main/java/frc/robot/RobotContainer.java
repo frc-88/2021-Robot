@@ -687,6 +687,8 @@ public class RobotContainer {
     for (ButtonAutoPair selector : autoSelectors) {
       selector.check();
     }
+
+    SmartDashboard.putString("Auto Selected", m_autoCommand.getName());
   }
 
   /**

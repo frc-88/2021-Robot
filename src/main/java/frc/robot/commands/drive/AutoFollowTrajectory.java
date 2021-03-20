@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -81,6 +80,16 @@ public class AutoFollowTrajectory extends CommandBase {
           DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
           leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
           rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
+
+          if (Math.abs(leftSpeed) > m_drive.trajectories.TRAJ_CONFIG_MAX_VEL) {
+            rightSpeed = rightSpeed * (m_drive.trajectories.TRAJ_CONFIG_MAX_VEL/leftSpeed);
+            leftSpeed = Math.signum(leftSpeed) * m_drive.trajectories.TRAJ_CONFIG_MAX_VEL;
+          }
+          
+          if (Math.abs(rightSpeed) > m_drive.trajectories.TRAJ_CONFIG_MAX_VEL) {
+            leftSpeed = leftSpeed * (m_drive.trajectories.TRAJ_CONFIG_MAX_VEL/rightSpeed);
+            rightSpeed = Math.signum(rightSpeed) * m_drive.trajectories.TRAJ_CONFIG_MAX_VEL;
+          }
         } else {
           m_state++;
         }

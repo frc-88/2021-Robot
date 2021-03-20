@@ -26,9 +26,9 @@ public class GameChangerTrajectories {
     public Trajectory bounce1, bounce2, bounce3, bounce4;
     public Trajectory test;
 
-    private static final double TRAJ_CONFIG_MAX_VEL = 16.0;
-    private static final double TRAJ_CONFIG_MAX_ACCEL = 8.0;
-    private static final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 4.5;
+    public final double TRAJ_CONFIG_MAX_VEL = 16.0;
+    public final double TRAJ_CONFIG_MAX_ACCEL = 8.0;
+    public final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 2.5;
     private final TrajectoryConfig m_config;
 
     public GameChangerTrajectories() {
@@ -69,10 +69,10 @@ public class GameChangerTrajectories {
         waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(7.5)));
         // around the second barrel
         waypoints.add(new Translation2d(Units.feetToMeters(21.0), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(12.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(17.8), Units.feetToMeters(12.8)));
+        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(12.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(18.0), Units.feetToMeters(11.0)));
         // around the third barrel
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(2.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(24.0), Units.feetToMeters(2.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(29.1), Units.feetToMeters(5.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(26.0), Units.feetToMeters(7.8)));
         // race to the finish!
