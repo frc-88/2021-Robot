@@ -78,7 +78,7 @@ public class Drive extends SubsystemBase {
 
     m_driveConfiguration = new DriveConfiguration();
 
-    velPIDConstants = new PIDPreferenceConstants("Drive Vel", 1.0, 0.02, 0, 0, 2, 2, 0);
+    velPIDConstants = new PIDPreferenceConstants("Drive Vel", 0.0, 0.02, 0, 0, 2, 2, 0);
     headingPIDConstants = new PIDPreferenceConstants("Heading", .01, .0005, 0, 0, 3, 1, 0.25);
     downshiftSpeed = new DoublePreferenceConstant("Downshift Speed", 4.5);
     upshiftSpeed = new DoublePreferenceConstant("UpshiftSpeed", 6);
