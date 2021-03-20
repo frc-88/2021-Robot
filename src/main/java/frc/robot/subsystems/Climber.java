@@ -116,16 +116,16 @@ public class Climber extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Left Climber Position", m_climber_motor_left.getSelectedSensorPosition());
-        SmartDashboard.putNumber("Right Climber Position", m_climber_motor_right.getSelectedSensorPosition());
-        SmartDashboard.putNumber("Left Climber Velocity", m_climber_motor_left.getSelectedSensorVelocity() / 10);
-        SmartDashboard.putNumber("Right Climber Velocity", m_climber_motor_right.getSelectedSensorVelocity() / 10);
-        SmartDashboard.putNumber("Left Climber Stator", m_climber_motor_left.getStatorCurrent());
-        SmartDashboard.putNumber("Right Climber Stator", m_climber_motor_right.getStatorCurrent());
-        SmartDashboard.putNumber("Left Climber Supply", m_climber_motor_left.getSupplyCurrent());
-        SmartDashboard.putNumber("Right Climber Supply", m_climber_motor_right.getSupplyCurrent());
+        // SmartDashboard.putNumber("Left Climber Position", m_climber_motor_left.getSelectedSensorPosition());
+        // SmartDashboard.putNumber("Right Climber Position", m_climber_motor_right.getSelectedSensorPosition());
+        // SmartDashboard.putNumber("Left Climber Velocity", m_climber_motor_left.getSelectedSensorVelocity() / 10);
+        // SmartDashboard.putNumber("Right Climber Velocity", m_climber_motor_right.getSelectedSensorVelocity() / 10);
+        // SmartDashboard.putNumber("Left Climber Stator", m_climber_motor_left.getStatorCurrent());
+        // SmartDashboard.putNumber("Right Climber Stator", m_climber_motor_right.getStatorCurrent());
+        // SmartDashboard.putNumber("Left Climber Supply", m_climber_motor_left.getSupplyCurrent());
+        // SmartDashboard.putNumber("Right Climber Supply", m_climber_motor_right.getSupplyCurrent());
 
-        SmartDashboard.putNumber("Right climber output voltage", m_climber_motor_right.getMotorOutputVoltage());
-        SmartDashboard.putNumber("Left climber output voltage", m_climber_motor_left.getMotorOutputVoltage());
+        // SmartDashboard.putNumber("Right climber output voltage", m_climber_motor_right.getMotorOutputVoltage());
+        // SmartDashboard.putNumber("Left climber output voltage", m_climber_motor_left.getMotorOutputVoltage());
     }
 }

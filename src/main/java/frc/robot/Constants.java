@@ -90,7 +90,7 @@ public final class Constants {
 
 	// Hopper constants
 	public static final int HOPPER = 10;
-	public static final double HOPPER_SHOOT_PERCENT_OUTPUT = .25;
+	public static final double HOPPER_SHOOT_PERCENT_OUTPUT = .5;
 	public static final double HOPPER_EJECT_PERCENT_OUTPUT = -.3;
 
 	// Sensor constants
@@ -140,7 +140,7 @@ public final class Constants {
 	public static final double MAX_SPEED_LOW = 8.8;
 	public static final double MAX_SPEED_HIGH = 18;
 	public static final double WHEEL_BASE_WIDTH = (25. + 5./16.) / 12.; // feet
-	public static final double DRIVE_CURRENT_LIMIT = 300;
+	public static final double DRIVE_CURRENT_LIMIT = 160;
 	public static final int DRIVE_SPEED_EXP = 2;
 	public static final int DRIVE_TURN_EXP = 2;
 	public static final double DRIVE_JOYSTICK_DEADBAND = 0.12;

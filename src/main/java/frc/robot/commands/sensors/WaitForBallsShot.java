@@ -32,7 +32,7 @@ public class WaitForBallsShot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_currentSensorState = false;
+    m_currentSensorState = m_sensors.hasBallInShooter();
     m_numDebounceTicks = 0;
     m_numBallsPassed = 0;
   }

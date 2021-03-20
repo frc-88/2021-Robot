@@ -47,6 +47,7 @@ import frc.robot.commands.climber.ZeroClimber;
 import frc.robot.commands.drive.ArcadeDrive;
 import frc.robot.commands.drive.BasicAutoDrive;
 import frc.robot.commands.drive.CalculateDriveEfficiency;
+import frc.robot.commands.drive.DriveAndAim;
 import frc.robot.commands.drive.AutoFollowTrajectory;
 import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.drive.TestDriveStaticFriction;
@@ -58,7 +59,6 @@ import frc.robot.commands.feeder.FeederStop;
 import frc.robot.commands.hopper.HopperEject;
 import frc.robot.commands.hopper.HopperRun;
 import frc.robot.commands.hopper.HopperShootMode;
-import frc.robot.commands.hopper.HopperShootUnjamMode;
 import frc.robot.commands.hopper.HopperStop;
 import frc.robot.commands.hopper.HopperTest;
 import frc.robot.commands.shooter.ShooterFlywheelRun;
@@ -80,6 +80,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.util.ButtonBox;
 import frc.robot.util.TJController;
 import frc.robot.util.preferenceconstants.DoublePreferenceConstant;
+import frc.robot.util.preferenceconstants.PIDPreferenceConstants;
 
 public class RobotContainer {
 
@@ -494,6 +495,54 @@ public class RobotContainer {
     // new ButtonAutoPair(m_buttonBox.button5, m_autoTrench7Ball)
   );
 
+
+  private final DoublePreferenceConstant m_powerPortShoot = new DoublePreferenceConstant("Power Port Shoot", 0);
+  private final DoublePreferenceConstant m_powerPortLoad = new DoublePreferenceConstant("Power Port Load", -10);
+  private final DoublePreferenceConstant m_powerPortMaxSpeed = new DoublePreferenceConstant("Power Port Max Speed", 18);
+  private final PIDPreferenceConstants m_powerPortDrivePID = new PIDPreferenceConstants("Power Port Drive", 8., 0., 0.75, 0., 0., 0., 0.);
+  private final PIDPreferenceConstants m_powerPortAimPID = new PIDPreferenceConstants("Power Port Aim", 0., 0., 0., 0., 0., 0., 0.);
+  private final CommandBase m_powerPort =
+    new SequentialCommandGroup(
+      new ParallelDeadlineGroup(
+        new WaitCommand(0.1),
+        new LimelightToggle(m_sensors, true),
+        new DeployIntake(m_intake)
+      ),
+      new ParallelDeadlineGroup(
+        new ParallelCommandGroup(
+          new WaitForShooterReady(m_arm, m_shooter),
+          new WaitForDriveAimed(m_drive)
+        ),
+        new DeployIntake(m_intake),
+        new DriveAndAim(m_drive, m_sensors, m_powerPortShoot::getValue, m_powerPortMaxSpeed::getValue, m_powerPortDrivePID, m_powerPortAimPID),
+        new FeederIndex(m_feeder, m_sensors, 0.4),
+        new HopperRun(m_hopper, 0.1),
+        new ShooterRunFromLimelight(m_shooter),
+        new ArmFullUp(m_arm)
+      ),
+      new ParallelDeadlineGroup(
+        new ParallelRaceGroup(
+          new ParallelCommandGroup(
+            new WaitForBallsShot(m_sensors, 3),
+            new WaitCommand(.25)
+          ),
+          new WaitCommand(3)
+        ),
+        new DriveAndAim(m_drive, m_sensors, m_powerPortShoot::getValue, m_powerPortMaxSpeed::getValue, m_powerPortDrivePID, m_powerPortAimPID),
+        new FeederRun(m_feeder, 1),
+        new HopperShootMode(m_hopper),
+        new ShooterRunFromLimelight(m_shooter),
+        new ArmFullUp(m_arm)
+      ),
+      new ParallelCommandGroup(
+        new DriveAndAim(m_drive, m_sensors, m_powerPortLoad::getValue, m_powerPortMaxSpeed::getValue, m_powerPortDrivePID, m_powerPortAimPID),
+        new FeederIndex(m_feeder, m_sensors, 0.4),
+        new HopperRun(m_hopper, 0.2),
+        new ShooterRunFromLimelight(m_shooter),
+        new ArmFullUp(m_arm)
+      )
+    );
+
   /***
   *      ______   ______   .__   __.      _______.___________..______       __    __    ______ .___________.  ______   .______      
   *     /      | /  __  \  |  \ |  |     /       |           ||   _  \     |  |  |  |  /      ||           | /  __  \  |   _  \     
@@ -505,6 +554,7 @@ public class RobotContainer {
   */    
 
   public RobotContainer() {
+    m_drive.resetEncoderPositions();
     configureDriverController();
     configureButtonBox();
     configureTestController();
@@ -534,14 +584,13 @@ public class RobotContainer {
     CommandBase m_tankDrive = new TankDrive(m_drive, tankDriveLeftSupplier, tankDriveRightSupplier);
     SmartDashboard.putData("Tank Drive", m_tankDrive);
 
-    m_driverController.buttonA.whileHeld(new TurnToLimelight(m_drive, m_sensors));
-
-    // m_driverController.buttonB.whileHeld(m_reportColor);
-    // m_driverController.buttonA.whenPressed(m_moveColorWheelToTargetColor);
-    // m_driverController.buttonY.whenPressed(m_rotateColorWheel);
-
-    // m_driverController.buttonRightBumper.whenPressed(m_setToFrontCamera);
-    // m_driverController.buttonRightBumper.whenReleased(m_setToRearCamera);
+    m_driverController.buttonA.whenPressed(new ShooterRunFromLimelight(m_shooter));
+    m_driverController.buttonA.whenPressed(new FeederIndex(m_feeder, m_sensors, 0.4));
+    m_driverController.buttonA.whenPressed(new HopperRun(m_hopper, 0.1));
+    m_driverController.buttonA.whenPressed(new ArmFullUp(m_arm));
+    m_driverController.buttonA.whenPressed(m_arcadeDrive);
+    m_driverController.buttonA.whenReleased(m_powerPort);
+    
   }
 
 
@@ -687,6 +736,10 @@ public class RobotContainer {
     for (ButtonAutoPair selector : autoSelectors) {
       selector.check();
     }
+  }
+
+  public void teleopInit() {
+    m_drive.resetEncoderPositions();
   }
 
   /**

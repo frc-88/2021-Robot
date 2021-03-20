@@ -63,7 +63,6 @@ public class BasicAutoDrive extends CommandBase {
     m_leftSpeed *= Math.signum(m_leftDistance);
     m_rightSpeed *= Math.signum(m_rightDistance);
 
-    m_drive.resetEncoderPositions();
     m_numLoops = 0;
   }
 
@@ -78,11 +77,7 @@ public class BasicAutoDrive extends CommandBase {
     m_rightSpeed += desyncAmount * m_syncP.getValue();
 
     m_drive.basicDriveLimited(m_leftSpeed, m_rightSpeed);
-    if (m_drive.autoshift((m_leftSpeed + m_rightSpeed) / 2)) {
-      m_drive.shiftToHigh();
-    } else {
-      m_drive.shiftToLow();
-    }
+    m_drive.shiftToLow();
   }
 
   // Called once the command ends or is interrupted.
@@ -93,7 +88,6 @@ public class BasicAutoDrive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_numLoops > 5 // The encoders don't reseting immediately, causing the command to end early without this
-        && Math.abs(m_drive.getLeftPosition() / m_leftDistance) + Math.abs(m_drive.getRightPosition() / m_rightDistance) > 2;
+    return false;
   }
 }
