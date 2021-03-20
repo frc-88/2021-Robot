@@ -45,6 +45,7 @@ import frc.robot.commands.climber.RunClimber;
 import frc.robot.commands.climber.StopClimber;
 import frc.robot.commands.climber.ZeroClimber;
 import frc.robot.commands.drive.ArcadeDrive;
+import frc.robot.commands.drive.AutoBounce;
 import frc.robot.commands.drive.BasicAutoDrive;
 import frc.robot.commands.drive.CalculateDriveEfficiency;
 import frc.robot.commands.drive.AutoFollowTrajectory;
@@ -485,13 +486,12 @@ public class RobotContainer {
       }
     }
   }
+
   private final List<ButtonAutoPair> autoSelectors = Arrays.asList(
-    new ButtonAutoPair(m_buttonBox.button2, m_autoDoNothing),
-    new ButtonAutoPair(m_buttonBox.button3, m_autoJustDrive),
-    new ButtonAutoPair(m_buttonBox.button4, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun)),
-    new ButtonAutoPair(m_buttonBox.button5, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom))
-    // new ButtonAutoPair(m_buttonBox.button4, m_auto3Ball),
-    // new ButtonAutoPair(m_buttonBox.button5, m_autoTrench7Ball)
+    new ButtonAutoPair(m_testController.buttonA, m_autoDoNothing),
+    new ButtonAutoPair(m_testController.buttonB, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun)),
+    new ButtonAutoPair(m_testController.buttonX, new AutoBounce(m_drive, m_sensors)),
+    new ButtonAutoPair(m_testController.buttonY, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom))
   );
 
   /***
