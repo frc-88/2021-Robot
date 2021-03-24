@@ -73,7 +73,11 @@ public class AutoBounce extends CommandBase {
         break;
 
       case 2: // Reset the odometry to the starting pose of the Trajectory
-        m_drive.resetOdometry(m_trajectory[m_currentTraj].getInitialPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
+        if (m_currentTraj == 0) {
+          m_drive.resetOdometry(m_trajectory[m_currentTraj].getInitialPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
+        } else {
+          m_drive.resetOdometry(m_drive.getCurrentPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
+        }
         m_state++;
         break;
 
@@ -83,7 +87,7 @@ public class AutoBounce extends CommandBase {
         // fall through right away to case 4
 
       case 4: // follow the trajectory
-        m_drive.updateOdometry();
+        // m_drive.updateOdometry();
         double now = m_timer.get();
 
         if (m_timer.get() < m_duration) {
