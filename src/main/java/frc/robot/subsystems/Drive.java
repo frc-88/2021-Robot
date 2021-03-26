@@ -160,8 +160,8 @@ public class Drive extends SubsystemBase {
       leftCurrentLimit = m_currentLimit * leftExpectedCurrent / totalExpectedCurrent;
       rightCurrentLimit = m_currentLimit * rightExpectedCurrent / totalExpectedCurrent;
       // Bound the current allocated to a single side
-      maxSideCurrent = totalExpectedCurrent * MAX_CURRENT_PER_SIDE;
-      minSideCurrent = totalExpectedCurrent * (1 - MAX_CURRENT_PER_SIDE);
+      double maxSideCurrent = totalExpectedCurrent * MAX_CURRENT_PER_SIDE;
+      double minSideCurrent = totalExpectedCurrent * (1 - MAX_CURRENT_PER_SIDE);
       leftCurrentLimit = Math.min(maxSideCurrent, Math.max(minSideCurrent, leftCurrentLimit));
       rightCurrentLimit = Math.min(maxSideCurrent, Math.max(minSideCurrent, rightCurrentLimit));
     }
