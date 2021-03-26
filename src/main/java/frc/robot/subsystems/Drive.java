@@ -72,6 +72,9 @@ public class Drive extends SubsystemBase {
   private static final double LARGE_DECREASE_TURN_SCALAR = 2.5;
   private double m_prevTurn = 0; // The last turn value
   private double m_negInertialAccumulator = 0; // Accumulates our current inertia value
+  
+  // The max percentage of the current limit that can be allocated to one side of the drivetrain
+  private static final double MAX_CURRENT_PER_SIDE = 0.8;
 
   public Drive(Sensors sensors) {
     m_sensors = sensors;
@@ -156,6 +159,11 @@ public class Drive extends SubsystemBase {
     } else {
       leftCurrentLimit = m_currentLimit * leftExpectedCurrent / totalExpectedCurrent;
       rightCurrentLimit = m_currentLimit * rightExpectedCurrent / totalExpectedCurrent;
+      // Bound the current allocated to a single side
+      maxSideCurrent = totalExpectedCurrent * MAX_CURRENT_PER_SIDE;
+      minSideCurrent = totalExpectedCurrent * (1 - MAX_CURRENT_PER_SIDE);
+      leftCurrentLimit = Math.min(maxSideCurrent, Math.max(minSideCurrent, leftCurrentLimit));
+      rightCurrentLimit = Math.min(maxSideCurrent, Math.max(minSideCurrent, rightCurrentLimit));
     }
 
     m_leftDrive.setVelocityCurrentLimited(leftVelocity, leftCurrentLimit);
