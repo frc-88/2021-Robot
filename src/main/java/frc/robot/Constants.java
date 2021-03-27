@@ -133,10 +133,10 @@ public final class Constants {
 	public static final double DRIVE_SENSOR_RATIO = (1. / ((WHEEL_DIAMETER/12.) * Math.PI)) * 7.5;
 	public static final double DRIVE_LOW_STATIC_FRICTION_VOLTAGE = 0.2;
 	public static final double DRIVE_HIGH_STATIC_FRICTION_VOLTAGE = 0.24;
-	public static final double DRIVE_LEFT_LOW_EFFICIENCY = 1.025;
-	public static final double DRIVE_LEFT_HIGH_EFFICIENCY = 1.03;
-	public static final double DRIVE_RIGHT_LOW_EFFICIENCY = 1.03;
-	public static final double DRIVE_RIGHT_HIGH_EFFICIENCY = 1.02;
+	public static final double DRIVE_LEFT_LOW_EFFICIENCY = 1.05;
+	public static final double DRIVE_LEFT_HIGH_EFFICIENCY = 1.05;
+	public static final double DRIVE_RIGHT_LOW_EFFICIENCY = 1.04;
+	public static final double DRIVE_RIGHT_HIGH_EFFICIENCY = 1.03;
 	public static final double MAX_SPEED_LOW = 8.8;
 	public static final double MAX_SPEED_HIGH = 18;
 	public static final double WHEEL_BASE_WIDTH = (25. + 5./16.) / 12.; // feet

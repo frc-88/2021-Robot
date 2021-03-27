@@ -79,6 +79,7 @@ import frc.robot.subsystems.Sensors;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.ButtonBox;
 import frc.robot.util.TJController;
+import frc.robot.util.preferenceconstants.BooleanPreferenceConstant;
 import frc.robot.util.preferenceconstants.DoublePreferenceConstant;
 import frc.robot.util.preferenceconstants.PIDPreferenceConstants;
 
@@ -179,7 +180,7 @@ public class RobotContainer {
           )
         ),
         new ParallelCommandGroup(
-          new HopperShootMode(m_hopper), 
+          new HopperShootMode(m_hopper, m_sensors), 
           new ArmFullUp(m_arm),
           new ShooterRunFromLimelight(m_shooter), 
           new FeederRun(m_feeder, 1),
@@ -193,7 +194,7 @@ public class RobotContainer {
           new WaitForShooterReady(m_arm, m_shooter)
         ),
         new ParallelCommandGroup(
-          new HopperShootMode(m_hopper), 
+          new HopperShootMode(m_hopper, m_sensors), 
           new ArmMotionMagic(m_arm, m_armLayupAngle.getValue()),
           new ShooterFlywheelRun(m_shooter, m_shooterLayupSpeed.getValue()), 
           new FeederRun(m_feeder, 1),
@@ -246,7 +247,7 @@ public class RobotContainer {
       new DeployIntake(m_intake),
       new ParallelCommandGroup(
         new RunIntake(m_intake, 1.),
-        new FeederIndex(m_feeder, m_sensors, 0.4),
+        new FeederIndex(m_feeder, m_hopper, m_sensors, 0.4),
         new HopperRun(m_hopper, 0.1)
       )
     );
@@ -372,7 +373,7 @@ public class RobotContainer {
           new ArmFullUp(m_arm), 
           new ShooterRunFromLimelight(m_shooter),
           new FeederRun(m_feeder, 1),
-          new HopperShootMode(m_hopper),
+          new HopperShootMode(m_hopper, m_sensors),
           new SequentialCommandGroup(
             new ParallelDeadlineGroup(
               new WaitCommand(1.5),
@@ -499,23 +500,24 @@ public class RobotContainer {
   private final DoublePreferenceConstant m_powerPortShoot = new DoublePreferenceConstant("Power Port Shoot", 0);
   private final DoublePreferenceConstant m_powerPortLoad = new DoublePreferenceConstant("Power Port Load", -10);
   private final DoublePreferenceConstant m_powerPortMaxSpeed = new DoublePreferenceConstant("Power Port Max Speed", 18);
+  private final DoublePreferenceConstant m_powerPortMaxAcceleration = new DoublePreferenceConstant("Power Port Max Acceleration", 18);
+  private final BooleanSupplier m_powerPortShootUseLimelight = () -> Math.abs(m_powerPortShoot.getValue() - (m_drive.getLeftPosition() + m_drive.getRightPosition()) / 2) < 3;
   private final PIDPreferenceConstants m_powerPortDrivePID = new PIDPreferenceConstants("Power Port Drive", 8., 0., 0.75, 0., 0., 0., 0.);
   private final PIDPreferenceConstants m_powerPortAimPID = new PIDPreferenceConstants("Power Port Aim", 0., 0., 0., 0., 0., 0., 0.);
+  private double gyroSetpoint = 4.5;
+  private double setpointOffset = 0.3;
+  private FeederIndex powerPortIndex0 = new FeederIndex(m_feeder, m_hopper, m_sensors, 0.4);
+  private FeederIndex powerPortIndex1 = new FeederIndex(m_feeder, m_hopper, m_sensors, 0.4, powerPortIndex0);
   private final CommandBase m_powerPort =
     new SequentialCommandGroup(
-      new ParallelDeadlineGroup(
-        new WaitCommand(0.1),
-        new LimelightToggle(m_sensors, true),
-        new DeployIntake(m_intake)
-      ),
+      new LimelightToggle(m_sensors, true),
       new ParallelDeadlineGroup(
         new ParallelCommandGroup(
           new WaitForShooterReady(m_arm, m_shooter),
           new WaitForDriveAimed(m_drive)
         ),
-        new DeployIntake(m_intake),
-        new DriveAndAim(m_drive, m_sensors, m_powerPortShoot::getValue, m_powerPortMaxSpeed::getValue, m_powerPortDrivePID, m_powerPortAimPID),
-        new FeederIndex(m_feeder, m_sensors, 0.4),
+        new DriveAndAim(m_drive, m_sensors, m_powerPortShootUseLimelight, () -> m_powerPortShoot.getValue() + setpointOffset, m_powerPortMaxSpeed::getValue, m_powerPortMaxAcceleration::getValue, () -> -gyroSetpoint, m_powerPortDrivePID, m_powerPortAimPID),
+        new FeederIndex(m_feeder, m_hopper, m_sensors, 0.4, powerPortIndex1),
         new HopperRun(m_hopper, 0.1),
         new ShooterRunFromLimelight(m_shooter),
         new ArmFullUp(m_arm)
@@ -526,18 +528,22 @@ public class RobotContainer {
             new WaitForBallsShot(m_sensors, 3),
             new WaitCommand(.25)
           ),
-          new WaitCommand(3)
+          new WaitCommand(4)
         ),
-        new DriveAndAim(m_drive, m_sensors, m_powerPortShoot::getValue, m_powerPortMaxSpeed::getValue, m_powerPortDrivePID, m_powerPortAimPID),
+        new DriveAndAim(m_drive, m_sensors, () -> true, () -> m_powerPortShoot.getValue() + setpointOffset, m_powerPortMaxSpeed::getValue, m_powerPortMaxSpeed::getValue, () -> 0, m_powerPortDrivePID, m_powerPortAimPID),
         new FeederRun(m_feeder, 1),
-        new HopperShootMode(m_hopper),
+        new HopperShootMode(m_hopper, m_sensors),
         new ShooterRunFromLimelight(m_shooter),
         new ArmFullUp(m_arm)
       ),
       new ParallelCommandGroup(
-        new DriveAndAim(m_drive, m_sensors, m_powerPortLoad::getValue, m_powerPortMaxSpeed::getValue, m_powerPortDrivePID, m_powerPortAimPID),
-        new FeederIndex(m_feeder, m_sensors, 0.4),
-        new HopperRun(m_hopper, 0.2),
+        new DeployIntake(m_intake),
+        new InstantCommand(() -> {setpointOffset -= 0.3;})
+      ),
+      new ParallelCommandGroup(
+        new DriveAndAim(m_drive, m_sensors, () -> false, () -> m_powerPortLoad.getValue() + setpointOffset, m_powerPortMaxSpeed::getValue, m_powerPortMaxAcceleration::getValue, () -> gyroSetpoint, m_powerPortDrivePID, m_powerPortAimPID),
+        powerPortIndex0,
+        new HopperRun(m_hopper, 0.1),
         new ShooterRunFromLimelight(m_shooter),
         new ArmFullUp(m_arm)
       )
@@ -585,12 +591,19 @@ public class RobotContainer {
     SmartDashboard.putData("Tank Drive", m_tankDrive);
 
     m_driverController.buttonA.whenPressed(new ShooterRunFromLimelight(m_shooter));
-    m_driverController.buttonA.whenPressed(new FeederIndex(m_feeder, m_sensors, 0.4));
+    m_driverController.buttonA.whenPressed(powerPortIndex1);
     m_driverController.buttonA.whenPressed(new HopperRun(m_hopper, 0.1));
     m_driverController.buttonA.whenPressed(new ArmFullUp(m_arm));
     m_driverController.buttonA.whenPressed(m_arcadeDrive);
     m_driverController.buttonA.whenReleased(m_powerPort);
-    
+
+    m_driverController.buttonY.whenPressed(new RetractIntake(m_intake));
+
+    m_driverController.buttonLeftBumper.whenPressed(new InstantCommand(() -> {gyroSetpoint += 2;}));
+    m_driverController.buttonRightBumper.whenPressed(new InstantCommand(() -> {gyroSetpoint -= 2;}));
+
+    m_driverController.buttonX.whenPressed(new InstantCommand(() -> {setpointOffset += 0.1;}));
+    m_driverController.buttonB.whenPressed(new InstantCommand(() -> {setpointOffset -= 0.1;}));
   }
 
 
@@ -672,7 +685,7 @@ public class RobotContainer {
     SmartDashboard.putData("Eject Intake", new RunIntake(m_intake, -1));
 
     SmartDashboard.putNumber("Hopper Speed", 0);
-    SmartDashboard.putData("Hopper Shoot Mode", new HopperShootMode(m_hopper));
+    SmartDashboard.putData("Hopper Shoot Mode", new HopperShootMode(m_hopper, m_sensors));
     SmartDashboard.putData("Hopper Stop", new HopperStop(m_hopper));
     SmartDashboard.putData("Hopper Test", new InstantCommand(() -> (new HopperTest(m_hopper, SmartDashboard.getNumber("Hopper Speed", 0))).schedule()));
 
@@ -740,6 +753,9 @@ public class RobotContainer {
 
   public void teleopInit() {
     m_drive.resetEncoderPositions();
+    m_sensors.zeroYaw();
+    gyroSetpoint = 2.5;
+    setpointOffset = 0;
   }
 
   /**

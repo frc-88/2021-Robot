@@ -19,6 +19,7 @@ public class NavX {
 
     public NavX() {
         m_ahrs = new AHRS(SPI.Port.kMXP);
+        m_ahrs.calibrate();
     }
 
     public void zeroYaw() {

@@ -39,8 +39,8 @@ public class Shooter extends SubsystemBase {
 
   private final ValueInterpolator distanceToSpeedInterpolator = new ValueInterpolator(
     new ValueInterpolator.ValuePair(104, 3250),
-    new ValueInterpolator.ValuePair(130, 3150),
-    new ValueInterpolator.ValuePair(152, 3150)
+    new ValueInterpolator.ValuePair(130, 3210),
+    new ValueInterpolator.ValuePair(152, 3210)
   );
 
   /**
