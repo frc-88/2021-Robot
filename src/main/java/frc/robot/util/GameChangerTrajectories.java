@@ -24,6 +24,7 @@ public class GameChangerTrajectories {
     public Trajectory barrelRun2;
     public Trajectory slalom;
     public Trajectory bounce1, bounce2, bounce3, bounce4;
+    public Trajectory gsaRed, gsaBlue, gsbRed, gsbBlue;
     public Trajectory test;
 
     public final double TRAJ_CONFIG_MAX_VEL = 16.0;
@@ -52,9 +53,13 @@ public class GameChangerTrajectories {
         bounce3 = generateBounce3Trajectory();
         bounce4 = generateBounce4Trajectory();
 
+        gsaRed = generateGSARedTrajectory();
+        gsaBlue = generateGSABlueTrajectory();
+        gsbRed = generateGSBRedTrajectory();
+        gsbBlue = generateGSBBlueTrajectory();
+
         test = generateTestTrajectory();
     }
-
 
     private Trajectory generateBarrelRunTrajectory() {
         // begining pose, on the center line, up against the start line
@@ -210,6 +215,97 @@ public class GameChangerTrajectories {
         return trajectory;
     }
 
+    private Trajectory generateGSARedTrajectory() {
+        // begining pose, on the center line, up against the start line
+        Pose2d start = new Pose2d(Units.feetToMeters(2.5 + Constants.WHEEL_BASE_WIDTH), Units.feetToMeters(7.5), new Rotation2d());
+
+        // set up waypoints for path
+        var waypoints = new ArrayList<Translation2d>();
+        // 1 Power cell
+        waypoints.add(new Translation2d(Units.feetToMeters(7.5), Units.feetToMeters(7.5)));
+        // 2 Power cell
+        waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(5)));
+        // 3 Power cells!
+        waypoints.add(new Translation2d(Units.feetToMeters(15), Units.feetToMeters(12.5)));
+
+        // ending pose, well past finish line, all the way into the finish zone
+        Pose2d end = new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(12.5), new Rotation2d());
+        // generate trajectory
+        m_config.setReversed(true);
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);        m_config.setReversed(false);
+        m_config.setReversed(false);
+
+        return trajectory;
+    }
+
+    private Trajectory generateGSABlueTrajectory() {
+        // begining pose, on the center line, up against the start line
+        Pose2d start = new Pose2d(Units.feetToMeters(2.5 + Constants.WHEEL_BASE_WIDTH), Units.feetToMeters(7.5), new Rotation2d());
+
+        // set up waypoints for path
+        var waypoints = new ArrayList<Translation2d>();
+        // 1 Power cell
+        waypoints.add(new Translation2d(Units.feetToMeters(15), Units.feetToMeters(2.5)));
+        // 2 Power cell
+        waypoints.add(new Translation2d(Units.feetToMeters(17.5), Units.feetToMeters(10)));
+        // 3 Power cells!
+        waypoints.add(new Translation2d(Units.feetToMeters(22.5), Units.feetToMeters(7.5)));
+
+        // ending pose, well past finish line, all the way into the finish zone
+        Pose2d end = new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(7.5), new Rotation2d());
+        // generate trajectory
+        m_config.setReversed(true);
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);        m_config.setReversed(false);
+        m_config.setReversed(false);
+
+        return trajectory;
+    }
+
+    private Trajectory generateGSBRedTrajectory() {
+        // begining pose, on the center line, up against the start line
+        Pose2d start = new Pose2d(Units.feetToMeters(2.5 + Constants.WHEEL_BASE_WIDTH), Units.feetToMeters(10), new Rotation2d());
+
+        // set up waypoints for path
+        var waypoints = new ArrayList<Translation2d>();
+        // 1 Power cell
+        waypoints.add(new Translation2d(Units.feetToMeters(7.5), Units.feetToMeters(10)));
+        // 2 Power cell
+        waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(5)));
+        // 3 Power cells!
+        waypoints.add(new Translation2d(Units.feetToMeters(17.5), Units.feetToMeters(10)));
+
+        // ending pose, well past finish line, all the way into the finish zone
+        Pose2d end = new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(10), new Rotation2d());
+        // generate trajectory
+        m_config.setReversed(true);
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);        m_config.setReversed(false);
+        m_config.setReversed(false);
+
+        return trajectory;
+    }
+
+    private Trajectory generateGSBBlueTrajectory() {
+        // begining pose, on the center line, up against the start line
+        Pose2d start = new Pose2d(Units.feetToMeters(2.5 + Constants.WHEEL_BASE_WIDTH), Units.feetToMeters(10), new Rotation2d());
+
+        // set up waypoints for path
+        var waypoints = new ArrayList<Translation2d>();
+        // 1 Power cell
+        waypoints.add(new Translation2d(Units.feetToMeters(15), Units.feetToMeters(5)));
+        // 2 Power cell
+        waypoints.add(new Translation2d(Units.feetToMeters(20), Units.feetToMeters(10)));
+        // 3 Power cells!
+        waypoints.add(new Translation2d(Units.feetToMeters(25), Units.feetToMeters(5)));
+
+        // ending pose, well past finish line, all the way into the finish zone
+        Pose2d end = new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(5), new Rotation2d());
+        // generate trajectory
+        m_config.setReversed(true);
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);        m_config.setReversed(false);
+        m_config.setReversed(false);
+
+        return trajectory;
+    }
 
     private Trajectory generateTestTrajectory() {
         // set up waypoints for path
