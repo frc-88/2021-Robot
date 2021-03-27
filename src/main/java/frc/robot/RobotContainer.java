@@ -615,6 +615,13 @@ public class RobotContainer {
     SmartDashboard.putData("Bounce3", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce3));
     SmartDashboard.putData("Bounce4", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.bounce4));
 
+    // Galactic Search trajectories
+    SmartDashboard.putData("GSARed", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaRed));
+    SmartDashboard.putData("GSABlue", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaBlue));
+    SmartDashboard.putData("GSBRed", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsbRed));
+    SmartDashboard.putData("GSBBlue", new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsbBlue));
+
+
     // Intake testing
     SmartDashboard.putData("Deploy Intake", new DeployIntake(m_intake));
     SmartDashboard.putData("Retract Intake", new RetractIntake(m_intake));
