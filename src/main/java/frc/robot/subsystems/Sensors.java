@@ -77,6 +77,8 @@ public class Sensors extends SubsystemBase {
     shooterBallSensor = new DigitalInput(Constants.SHOOTER_BALL_SENSOR_ID);
     feederMouthSensor = new DigitalInput(Constants.FEEDER_MOUTH_SENSOR_ID);
 
+    cameraServer.startAutomaticCapture(0);
+
     //intakeCamera = cameraServer.startAutomaticCapture(0);
     //intakeCamera.setConfigJson("{'fps':15,'height':120,'pixel format':'MJPEG','width':160}");
     //intakeCamera.setFPS(15);
@@ -91,7 +93,7 @@ public class Sensors extends SubsystemBase {
     
     // startCounter(hopperCamera);
 
-    // cameraServer.getServer().setSource(intakeCamera);
+     //cameraServer.getServer().setSource(intakeCamera);
   }
  
 

@@ -74,7 +74,7 @@ public class Drive extends SubsystemBase {
   private double m_negInertialAccumulator = 0; // Accumulates our current inertia value
   
   // The max percentage of the current limit that can be allocated to one side of the drivetrain
-  private static final double MAX_CURRENT_PER_SIDE = 0.8;
+  private static final double MAX_CURRENT_PER_SIDE = 0.5;
 
   public Drive(Sensors sensors) {
     m_sensors = sensors;
