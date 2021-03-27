@@ -81,15 +81,15 @@ public class AutoFollowTrajectory extends CommandBase {
           leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
           rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
 
-          if (Math.abs(leftSpeed) > m_drive.trajectories.TRAJ_CONFIG_MAX_VEL) {
-            rightSpeed = rightSpeed * (m_drive.trajectories.TRAJ_CONFIG_MAX_VEL/leftSpeed);
-            leftSpeed = Math.signum(leftSpeed) * m_drive.trajectories.TRAJ_CONFIG_MAX_VEL;
-          }
+          // if (Math.abs(leftSpeed) > m_drive.trajectories.TRAJ_CONFIG_MAX_VEL) {
+          //   rightSpeed = rightSpeed * (m_drive.trajectories.TRAJ_CONFIG_MAX_VEL/leftSpeed);
+          //   leftSpeed = Math.signum(leftSpeed) * m_drive.trajectories.TRAJ_CONFIG_MAX_VEL;
+          // }
           
-          if (Math.abs(rightSpeed) > m_drive.trajectories.TRAJ_CONFIG_MAX_VEL) {
-            leftSpeed = leftSpeed * (m_drive.trajectories.TRAJ_CONFIG_MAX_VEL/rightSpeed);
-            rightSpeed = Math.signum(rightSpeed) * m_drive.trajectories.TRAJ_CONFIG_MAX_VEL;
-          }
+          // if (Math.abs(rightSpeed) > m_drive.trajectories.TRAJ_CONFIG_MAX_VEL) {
+          //   leftSpeed = leftSpeed * (m_drive.trajectories.TRAJ_CONFIG_MAX_VEL/rightSpeed);
+          //   rightSpeed = Math.signum(rightSpeed) * m_drive.trajectories.TRAJ_CONFIG_MAX_VEL;
+          // }
         } else {
           m_state++;
         }

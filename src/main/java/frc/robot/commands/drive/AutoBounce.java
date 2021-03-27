@@ -62,8 +62,12 @@ public class AutoBounce extends CommandBase {
       case 0: // Zero drive
         m_timer.reset();
         m_duration = m_trajectory[m_currentTraj].getTotalTimeSeconds();
-        m_drive.resetEncoderPositions();
-        m_state++;
+        if (m_currentTraj == 0) {
+          m_drive.resetEncoderPositions();
+          m_state++;
+        } else {
+          m_state = 2;
+        }
         break;
 
       case 1: // Check to make sure things are near zero
@@ -76,7 +80,7 @@ public class AutoBounce extends CommandBase {
         if (m_currentTraj == 0) {
           m_drive.resetOdometry(m_trajectory[m_currentTraj].getInitialPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
         } else {
-          m_drive.resetOdometry(m_drive.getCurrentPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
+          //m_drive.resetOdometry(m_drive.getCurrentPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
         }
         m_state++;
         break;
