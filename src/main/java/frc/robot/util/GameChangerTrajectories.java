@@ -29,11 +29,11 @@ public class GameChangerTrajectories {
 
     public final double TRAJ_CONFIG_MAX_VEL = 16.0;
     // go fast:
-    // public final double TRAJ_CONFIG_MAX_ACCEL = 16.0;
-    // public final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 3.1;
+    public final double TRAJ_CONFIG_MAX_ACCEL = 20.0;
+    public final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 3.5;
     // for testing:
-    public final double TRAJ_CONFIG_MAX_ACCEL = 8.0;
-    public final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 2.5;
+    // public final double TRAJ_CONFIG_MAX_ACCEL = 8.0;
+    // public final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 2.5;
     private final TrajectoryConfig m_config;
 
     public GameChangerTrajectories() {
@@ -77,18 +77,20 @@ public class GameChangerTrajectories {
         waypoints.add(new Translation2d(Units.feetToMeters(12.0), Units.feetToMeters(3.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(7.5)));
         // around the second barrel
-        waypoints.add(new Translation2d(Units.feetToMeters(21.0), Units.feetToMeters(7.5)));
-        waypoints.add(new Translation2d(Units.feetToMeters(25.0), Units.feetToMeters(12.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(20.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(24.0), Units.feetToMeters(12.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(18.0), Units.feetToMeters(11.0)));
         // around the third barrel
-        waypoints.add(new Translation2d(Units.feetToMeters(24.0), Units.feetToMeters(2.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(24.0), Units.feetToMeters(3.5)));
         waypoints.add(new Translation2d(Units.feetToMeters(29.1), Units.feetToMeters(5.0)));
-        waypoints.add(new Translation2d(Units.feetToMeters(26.0), Units.feetToMeters(7.8)));
+        waypoints.add(new Translation2d(Units.feetToMeters(26.0), Units.feetToMeters(7.9)));
         // race to the finish!
-        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(8.1)));
+        waypoints.add(new Translation2d(Units.feetToMeters(15.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(7.0), Units.feetToMeters(7.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(5.0), Units.feetToMeters(6.5)));
 
         // ending pose, well past finish line, all the way into the finish zone
-        Pose2d end = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(8.1), Rotation2d.fromDegrees(180));
+        Pose2d end = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(6.5), Rotation2d.fromDegrees(180));
 
         // generate trajectory
         return TrajectoryGenerator.generateTrajectory(start, waypoints, end, m_config);
