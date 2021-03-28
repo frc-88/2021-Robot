@@ -141,14 +141,14 @@ public class GameChangerTrajectories {
                 Rotation2d.fromDegrees(90.0)));
         waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(7.0), Rotation2d.fromDegrees(180.0)));
         // second slalom
-        waypoints.add(new Pose2d(Units.feetToMeters(24.5), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-100.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(24.2), Units.feetToMeters(5.0), Rotation2d.fromDegrees(-100.0)));
         // midway right
         waypoints.add(new Pose2d(Units.feetToMeters(15.0), Units.feetToMeters(Constants.WHEEL_BASE_WIDTH / 2.0),
                 Rotation2d.fromDegrees(180.0)));
         // first slalom
         waypoints.add(new Pose2d(Units.feetToMeters(9.5), Units.feetToMeters(4.0), Rotation2d.fromDegrees(100.0)));
         // race to the finish!
-        waypoints.add(new Pose2d(Units.feetToMeters(0.5), Units.feetToMeters(7.2), Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(6.2), Rotation2d.fromDegrees(180.0)));
 
         // generate trajectory
         return TrajectoryGenerator.generateTrajectory(waypoints, m_config);
