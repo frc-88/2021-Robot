@@ -542,7 +542,10 @@ public class RobotContainer {
       ),
       new ParallelCommandGroup(
         new DriveAndAim(m_drive, m_sensors, () -> false, () -> m_powerPortLoad.getValue() + setpointOffset, m_powerPortMaxSpeed::getValue, m_powerPortMaxAcceleration::getValue, () -> gyroSetpoint, m_powerPortDrivePID, m_powerPortAimPID),
-        powerPortIndex0,
+        new SequentialCommandGroup(
+          new WaitCommand(2),
+          powerPortIndex0
+        ),
         new HopperRun(m_hopper, 0.1),
         new ShooterRunFromLimelight(m_shooter),
         new ArmFullUp(m_arm)
