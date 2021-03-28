@@ -40,7 +40,7 @@ public class HopperShootMode extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_hopper.setPercentOutput(m_sensors.hasBallAtMouth() ? 0:  m_percentOutput);
+    m_hopper.setPercentOutput(m_sensors.hasBallAtMouth() ? 0.2:  m_percentOutput);
   }
 
   // Called once the command ends or is interrupted.
