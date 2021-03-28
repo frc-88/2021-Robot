@@ -54,6 +54,6 @@ public class Feeder extends SubsystemBase {
   @Override
   public void periodic() {
     retractCPM();
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Feeder Velocity", m_feeder.getSelectedSensorVelocity());
   }
 }
