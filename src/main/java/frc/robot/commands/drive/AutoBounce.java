@@ -60,14 +60,8 @@ public class AutoBounce extends CommandBase {
 
     switch (m_state) {
       case 0: // Zero drive
-        m_timer.reset();
-        m_duration = m_trajectory[m_currentTraj].getTotalTimeSeconds();
-        if (m_currentTraj == 0) {
-          m_drive.resetEncoderPositions();
-          m_state++;
-        } else {
-          m_state = 2;
-        }
+        m_drive.resetEncoderPositions();
+        m_state++;
         break;
 
       case 1: // Check to make sure things are near zero
@@ -77,21 +71,17 @@ public class AutoBounce extends CommandBase {
         break;
 
       case 2: // Reset the odometry to the starting pose of the Trajectory
-        if (m_currentTraj == 0) {
-          m_drive.resetOdometry(m_trajectory[m_currentTraj].getInitialPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
-        } else {
-          //m_drive.resetOdometry(m_drive.getCurrentPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
-        }
+        m_drive.resetOdometry(m_trajectory[m_currentTraj].getInitialPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
         m_state++;
         break;
 
       case 3: // reset the timer and go!
+        m_duration = m_trajectory[m_currentTraj].getTotalTimeSeconds();
+        m_timer.reset();
         m_timer.start();
         m_state++;
         // fall through right away to case 4
-
       case 4: // follow the trajectory
-        // m_drive.updateOdometry();
         double now = m_timer.get();
 
         if (m_timer.get() < m_duration) {
@@ -109,7 +99,7 @@ public class AutoBounce extends CommandBase {
 
       case 5: // go to the next trajectory
         if (m_currentTraj++ < m_trajectory.length) {
-          m_state = 0;
+          m_state = 3;
         } else {
           m_state++;
         }
@@ -118,10 +108,6 @@ public class AutoBounce extends CommandBase {
       default:
         break;
     }
-
-    SmartDashboard.putNumber("AFT State", m_state);
-    SmartDashboard.putNumber("AFT Left Speed", leftSpeed);
-    SmartDashboard.putNumber("AFT Right Speed", rightSpeed);
 
     m_drive.basicDriveLimited(leftSpeed, rightSpeed);
   }
