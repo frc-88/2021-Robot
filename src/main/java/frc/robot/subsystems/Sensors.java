@@ -87,8 +87,7 @@ public class Sensors extends SubsystemBase {
   public void startPowerCellDetector(UsbCamera camera) {
     new Thread(() -> {
       camera.setResolution(Constants.PCD_IMAGE_WIDTH, Constants.PCD_IMAGE_HEIGHT);
-
-      CvSink cvSink = cameraServer.getVideo(Constants.PCD_CAMERA_NAME);
+      CvSink cvSink = cameraServer.getVideo(camera.getName());
       CvSource outputStream = cameraServer.putVideo(Constants.PCD_STREAM_NAME, Constants.PCD_FRAME_WIDTH,
           Constants.PCD_FRAME_HEIGHT);
 
