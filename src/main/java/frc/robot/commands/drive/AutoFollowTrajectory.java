@@ -23,15 +23,12 @@ public class AutoFollowTrajectory extends CommandBase {
   private Timer m_timer = new Timer();
   private double m_duration;
   private int m_state;
-  private boolean m_trajReversed = false;
 
   public AutoFollowTrajectory(final Drive drive, final Sensors sensors, Trajectory trajectory) {
     m_drive = drive;
     m_sensors = sensors;
     m_trajectory = trajectory;
     m_duration = m_trajectory.getTotalTimeSeconds();
-
-    m_trajReversed = (trajectory == m_drive.trajectories.bounce2)|| (trajectory == m_drive.trajectories.bounce4);
 
     addRequirements(m_drive);
     addRequirements(m_sensors);
@@ -57,21 +54,24 @@ public class AutoFollowTrajectory extends CommandBase {
         m_drive.shiftToHigh();
         m_state++;
         break;
+
       case 1: // Check to make sure things are near zero
         if ((Math.abs(m_drive.getLeftPosition()) < 0.2) && (Math.abs(m_drive.getRightPosition()) < 0.2)
             && (Math.abs(m_sensors.getYaw()) < 2.0)) {
           m_state++;
         }
         break;
+
       case 2: // Reset the odometry to the starting pose of the Trajectory
         m_drive.resetOdometry(m_trajectory.getInitialPose(), Rotation2d.fromDegrees(m_sensors.getYaw()));
         m_state++;
         break;
+
       case 3: // reset the timer and go!
         m_timer.start();
         m_state++;
-        // fall through right away to case 4
-      case 4: // follow the trajectory, our final state
+        // fall through right away to next case
+      case 4: // follow the trajectory for its full duration
         if (m_timer.get() < m_duration) {
           double now = m_timer.get();
           Trajectory.State goal = m_trajectory.sample(now);
@@ -80,22 +80,12 @@ public class AutoFollowTrajectory extends CommandBase {
           DifferentialDriveWheelSpeeds wheelSpeeds = m_drive.wheelSpeedsFromChassisSpeeds(targetSpeeds);
           leftSpeed = Units.metersToFeet(wheelSpeeds.leftMetersPerSecond);
           rightSpeed = Units.metersToFeet(wheelSpeeds.rightMetersPerSecond);
-
-          // if (Math.abs(leftSpeed) > m_drive.trajectories.TRAJ_CONFIG_MAX_VEL) {
-          //   rightSpeed = rightSpeed * (m_drive.trajectories.TRAJ_CONFIG_MAX_VEL/leftSpeed);
-          //   leftSpeed = Math.signum(leftSpeed) * m_drive.trajectories.TRAJ_CONFIG_MAX_VEL;
-          // }
-          
-          // if (Math.abs(rightSpeed) > m_drive.trajectories.TRAJ_CONFIG_MAX_VEL) {
-          //   leftSpeed = leftSpeed * (m_drive.trajectories.TRAJ_CONFIG_MAX_VEL/rightSpeed);
-          //   rightSpeed = Math.signum(rightSpeed) * m_drive.trajectories.TRAJ_CONFIG_MAX_VEL;
-          // }
         } else {
           m_state++;
         }
         break;
 
-      case 5: // keep updateing the odometry until we have stopped
+      case 5: // don't end command until we have stopped
         if ((Math.abs(m_drive.getLeftSpeed()) < 0.1) && (Math.abs(m_drive.getRightSpeed()) < 0.1)) {
           m_state++;
         }
