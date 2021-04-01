@@ -107,8 +107,8 @@ public class Sensors extends SubsystemBase {
         contours.clear();
 
         Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2HSV);
-        output = new Mat(output, new Rect(Constants.PCD_BOTTOM_X, Constants.PCD_BOTTOM_Y,
-                      Constants.PCD_BOTTOM_WIDTH, Constants.PCD_BOTTOM_HEIGHT));
+        output = new Mat(output, new Rect(Constants.PCD_FRAME_X, Constants.PCD_FRAME_Y,
+                      Constants.PCD_FRAME_WIDTH, Constants.PCD_FRAME_HEIGHT));
         Imgproc.blur(output, output, new Size(Constants.PCD_BLUR, Constants.PCD_BLUR));
         Core.inRange(output, new Scalar(Constants.PCD_HUE_LO, Constants.PCD_SAT_LO, Constants.PCD_VAL_LO),
             new Scalar(Constants.PCD_HUE_HI, Constants.PCD_SAT_HI, Constants.PCD_VAL_HI), output);

@@ -82,10 +82,10 @@ public final class Constants {
 	public static final int PCD_VAL_LO = 0;
 	public static final int PCD_VAL_HI = 255;
 
-	public static final int PCD_BOTTOM_X = 160;
-	public static final int PCD_BOTTOM_Y = 0;
-	public static final int PCD_BOTTOM_WIDTH = 160;
-	public static final int PCD_BOTTOM_HEIGHT = 180;
+	public static final int PCD_FRAME_X = 160;
+	public static final int PCD_FRAME_Y = 0;
+	public static final int PCD_FRAME_WIDTH = 160;
+	public static final int PCD_FRAME_HEIGHT = 180;
 
 	// Hopper constants
 	public static final int HOPPER = 10;
