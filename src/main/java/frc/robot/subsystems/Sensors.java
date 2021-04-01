@@ -42,8 +42,8 @@ import frc.robot.util.Limelight;
  */
 
 public class Sensors extends SubsystemBase {
+
   private final NavX m_navx;
-  
   private final Limelight limelight;
   private BooleanSupplier ledOverride;
 
@@ -76,20 +76,21 @@ public class Sensors extends SubsystemBase {
     feederMouthSensor = new DigitalInput(Constants.FEEDER_MOUTH_SENSOR_ID);
 
     intakeCamera = cameraServer.startAutomaticCapture(0);
-    intakeCamera.setConfigJson("{'pixel format':'MJPEG','fps':" + Constants.PCD_FPS+",'height':" + 
-      Constants.PCD_IMAGE_HEIGHT+",'width':" + Constants.PCD_IMAGE_WIDTH+"}");
+    intakeCamera.setConfigJson("{'pixel format':'MJPEG','fps':" + Constants.PCD_FPS + ",'height':"
+        + Constants.PCD_IMAGE_HEIGHT + ",'width':" + Constants.PCD_IMAGE_WIDTH + "}");
     intakeCamera.setFPS(Constants.PCD_FPS);
     intakeCamera.setPixelFormat(PixelFormat.kMJPEG);
-   
+
     startPowerCellDetector(intakeCamera);
   }
- 
+
   public void startPowerCellDetector(UsbCamera camera) {
     new Thread(() -> {
       camera.setResolution(Constants.PCD_IMAGE_WIDTH, Constants.PCD_IMAGE_HEIGHT);
 
       CvSink cvSink = cameraServer.getVideo(Constants.PCD_CAMERA_NAME);
-      CvSource outputStream = cameraServer.putVideo(Constants.PCD_STREAM_NAME, Constants.PCD_FRAME_WIDTH, Constants.PCD_FRAME_HEIGHT);
+      CvSource outputStream = cameraServer.putVideo(Constants.PCD_STREAM_NAME, Constants.PCD_FRAME_WIDTH,
+          Constants.PCD_FRAME_HEIGHT);
 
       Mat source = new Mat();
       Mat output = new Mat();
@@ -105,8 +106,8 @@ public class Sensors extends SubsystemBase {
         contours.clear();
 
         Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2HSV);
-        output = new Mat(output, new Rect(Constants.PCD_FRAME_X, Constants.PCD_FRAME_Y,
-                      Constants.PCD_FRAME_WIDTH, Constants.PCD_FRAME_HEIGHT));
+        output = new Mat(output, new Rect(Constants.PCD_FRAME_X, Constants.PCD_FRAME_Y, Constants.PCD_FRAME_WIDTH,
+            Constants.PCD_FRAME_HEIGHT));
         Imgproc.blur(output, output, new Size(Constants.PCD_BLUR, Constants.PCD_BLUR));
         Core.inRange(output, new Scalar(Constants.PCD_HUE_LO, Constants.PCD_SAT_LO, Constants.PCD_VAL_LO),
             new Scalar(Constants.PCD_HUE_HI, Constants.PCD_SAT_HI, Constants.PCD_VAL_HI), output);
@@ -129,14 +130,14 @@ public class Sensors extends SubsystemBase {
 
   public double getYawRate() {
     return m_navx.getYawRate();
-  } 
+  }
 
   public void ledOn() {
     limelight.ledOn();
   }
 
   public void ledOff() {
-    if(!(DriverStation.getInstance().isDisabled() && ledOverride.getAsBoolean())) {
+    if (!(DriverStation.getInstance().isDisabled() && ledOverride.getAsBoolean())) {
       limelight.ledOff();
     }
   }
@@ -144,13 +145,13 @@ public class Sensors extends SubsystemBase {
   public boolean powerCellDetected() {
     return m_powerCellDetected;
   }
-  
+
   public double getDistanceToTarget() {
     double distance = 0;
 
     if (limelight.isConnected() && limelight.hasTarget()) {
       //
-      // After further analysis of the spreadsheet data, 
+      // After further analysis of the spreadsheet data,
       // a polynomial curve matches the empirical data best
       // Sorry, Bill, for the magic numbers. They came from
       // a spreadsheet, I swear! :D
@@ -158,8 +159,8 @@ public class Sensors extends SubsystemBase {
 
       double ty = limelight.getTargetVerticalOffsetAngle();
 
-      distance = (Constants.FIELD_PORT_TARGET_HEIGHT - m_limelightHeight.getValue()) / 
-         Math.tan(Math.toRadians(m_limelightAngle.getValue() + ty));
+      distance = (Constants.FIELD_PORT_TARGET_HEIGHT - m_limelightHeight.getValue())
+          / Math.tan(Math.toRadians(m_limelightAngle.getValue() + ty));
 
     }
 
@@ -174,15 +175,16 @@ public class Sensors extends SubsystemBase {
     double distance = getDistanceToTarget();
     double tx = -limelight.getTargetHorizontalOffsetAngle();
 
-    return Math.toDegrees( Math.atan( ( ( distance * Math.sin(Math.toRadians(tx)) ) + m_limelightOffset.getValue() ) /
-                      ( distance * Math.cos(Math.toRadians(tx)) ) ) );
+    return Math.toDegrees(Math.atan(((distance * Math.sin(Math.toRadians(tx))) + m_limelightOffset.getValue())
+        / (distance * Math.cos(Math.toRadians(tx)))));
   }
 
   public double calcLimelightAngle() {
     double distance = SmartDashboard.getNumber("Limelight Test Distance", 120.0);
     double ty = limelight.getTargetVerticalOffsetAngle();
 
-    return Math.toDegrees(Math.atan( (Constants.FIELD_PORT_TARGET_HEIGHT - m_limelightHeight.getValue()) / distance)) - ty;
+    return Math.toDegrees(Math.atan((Constants.FIELD_PORT_TARGET_HEIGHT - m_limelightHeight.getValue()) / distance))
+        - ty;
   }
 
   public boolean doesLimelightHaveTarget() {
@@ -192,6 +194,7 @@ public class Sensors extends SubsystemBase {
   public boolean hasBallInShooter() {
     return !shooterBallSensor.get();
   }
+
   public boolean hasBallAtMouth() {
     return !feederMouthSensor.get();
   }
@@ -218,7 +221,7 @@ public class Sensors extends SubsystemBase {
     SmartDashboard.putBoolean("Feeder Mouth Ball Sensor", feederMouthSensor.get());
 
     // Check LED override, only when disabled
-    if(DriverStation.getInstance().isDisabled() && ledOverride.getAsBoolean()) {
+    if (DriverStation.getInstance().isDisabled() && ledOverride.getAsBoolean()) {
       limelight.ledOn();
     }
 
