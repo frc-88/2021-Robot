@@ -48,11 +48,9 @@ public class Sensors extends SubsystemBase {
   private BooleanSupplier ledOverride;
 
   private CameraServer cameraServer = CameraServer.getInstance();
-  // private UsbCamera intakeCamera, hopperCamera;
+  private UsbCamera intakeCamera;
 
-  private double m_totalYellow = 0.0;
-  private double m_totalYellowChamber = 0.0;
-  private boolean m_cellInChamber = false;
+  private boolean m_powerCellDetected = false;
   private final DoublePreferenceConstant m_limelightHeight = new DoublePreferenceConstant("Limelight Height", 19.5);
   private final DoublePreferenceConstant m_limelightAngle = new DoublePreferenceConstant("Limelight Angle", 20.0);
   private final DoublePreferenceConstant m_limelightOffset = new DoublePreferenceConstant("Limelight Offset", 8.0);
@@ -77,38 +75,27 @@ public class Sensors extends SubsystemBase {
     shooterBallSensor = new DigitalInput(Constants.SHOOTER_BALL_SENSOR_ID);
     feederMouthSensor = new DigitalInput(Constants.FEEDER_MOUTH_SENSOR_ID);
 
-    cameraServer.startAutomaticCapture(0);
-    //intakeCamera = cameraServer.startAutomaticCapture(0);
-    //intakeCamera.setConfigJson("{'fps':15,'height':120,'pixel format':'MJPEG','width':160}");
-    //intakeCamera.setFPS(15);
-    //intakeCamera.setResolution(160, 120);
-    //intakeCamera.setPixelFormat(PixelFormat.kMJPEG);
-
-    // hopperCamera = cameraServer.startAutomaticCapture(Constants.PCC_CAMERA_NAME, Constants.PCC_CAMERA_ID);
-    // hopperCamera.setFPS(15);
-    // hopperCamera.setResolution(320, 240);
-    // hopperCamera.setPixelFormat(PixelFormat.kMJPEG);
-
-    
-    // startCounter(hopperCamera);
-
-    // cameraServer.getServer().setSource(intakeCamera);
+    intakeCamera = cameraServer.startAutomaticCapture(0);
+    intakeCamera.setConfigJson("{'fps':15,'height':120,'pixel format':'MJPEG','width':160}");
+    intakeCamera.setFPS(15);
+    intakeCamera.setPixelFormat(PixelFormat.kMJPEG);
+   
+    startPowerCellDetector(intakeCamera);
   }
  
 
-  public void startCounter(UsbCamera camera) {
+  public void startPowerCellDetector(UsbCamera camera) {
     new Thread(() -> {
-      camera.setResolution(Constants.PCC_IMAGE_WIDTH, Constants.PCC_IMAGE_HEIGHT);
+      camera.setResolution(Constants.PCD_IMAGE_WIDTH, Constants.PCD_IMAGE_HEIGHT);
 
-      CvSink cvSink = cameraServer.getVideo(Constants.PCC_CAMERA_NAME);
-      CvSource outputStream = cameraServer.putVideo(Constants.PCC_STREAM_NAME, 
-      Constants.PCC_IMAGE_WIDTH,
-          Constants.PCC_IMAGE_HEIGHT);
+      CvSink cvSink = cameraServer.getVideo(Constants.PCD_CAMERA_NAME);
+      CvSource outputStream = cameraServer.putVideo(Constants.PCD_STREAM_NAME, 
+      Constants.PCD_IMAGE_WIDTH,
+          Constants.PCD_IMAGE_HEIGHT);
 
       Mat source = new Mat();
       Mat output = new Mat();
       Mat hierarchy = new Mat();
-      Mat chamber;
 
       List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
@@ -116,29 +103,18 @@ public class Sensors extends SubsystemBase {
         if (cvSink.grabFrame(source) == 0) {
           continue;
         }
-        double area = 0.0;
+
+        contours.clear();
+
         Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2HSV);
-        Imgproc.blur(output, output, new Size(Constants.PCC_BLUR, Constants.PCC_BLUR));
-        Core.inRange(output, new Scalar(Constants.PCC_HUE_LO, Constants.PCC_SAT_LO, Constants.PCC_VAL_LO),
-            new Scalar(Constants.PCC_HUE_HI, Constants.PCC_SAT_HI, Constants.PCC_VAL_HI), output);
-        contours.clear();
+        output = new Mat(output, new Rect(Constants.PCD_BOTTOM_X, Constants.PCD_BOTTOM_Y,
+                      Constants.PCD_BOTTOM_WIDTH, Constants.PCD_BOTTOM_HEIGHT));
+        Imgproc.blur(output, output, new Size(Constants.PCD_BLUR, Constants.PCD_BLUR));
+        Core.inRange(output, new Scalar(Constants.PCD_HUE_LO, Constants.PCD_SAT_LO, Constants.PCD_VAL_LO),
+            new Scalar(Constants.PCD_HUE_HI, Constants.PCD_SAT_HI, Constants.PCD_VAL_HI), output);
         Imgproc.findContours(output, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
-        for (MatOfPoint contour : contours) {
-          area += Imgproc.contourArea(contour);
-        }
-        m_totalYellow = area;
 
-        area = 0.0;
-        chamber = new Mat(output, new Rect(Constants.PCC_CHAMBER_X, Constants.PCC_CHAMBER_Y,
-            Constants.PCC_CHAMBER_WIDTH, Constants.PCC_CHAMBER_HEIGHT));
-        contours.clear();
-        Imgproc.findContours(chamber, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
-        for (MatOfPoint contour : contours) {
-          area += Imgproc.contourArea(contour);
-        }
-
-        m_totalYellowChamber = area;
-        m_cellInChamber = area > Constants.PCC_CHAMBER_THRESHOLD;
+        m_powerCellDetected = contours.size() > 0;
 
         outputStream.putFrame(output);
       }
@@ -167,8 +143,8 @@ public class Sensors extends SubsystemBase {
     }
   }
 
-  public boolean isCellInChamber() {
-    return m_cellInChamber;
+  public boolean powerCellDetected() {
+    return m_powerCellDetected;
   }
   
   public double getDistanceToTarget() {
@@ -248,9 +224,7 @@ public class Sensors extends SubsystemBase {
       limelight.ledOn();
     }
 
-    // PCC data
-    SmartDashboard.putNumber("PCC Total Yellow", m_totalYellow);
-    SmartDashboard.putBoolean("PCC Chamber Loaded?", m_cellInChamber);
-    SmartDashboard.putNumber("PCC Total Yellow (Chamber)", m_totalYellowChamber);
+    // PCD data
+    SmartDashboard.putBoolean("Powercell Detected?", m_powerCellDetected);
   }
 }

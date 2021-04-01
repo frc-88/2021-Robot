@@ -487,11 +487,29 @@ public class RobotContainer {
     }
   }
 
+  private CommandBase m_autoGSA = new SequentialCommandGroup(
+      new DeployIntake(m_intake),
+      new RunIntake(m_intake, 1.),
+      new ConditionalCommand(new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaRed),
+        new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaBlue),
+        m_sensors::powerCellDetected),
+      new RunIntake(m_intake, 0.0),
+      new RetractIntake(m_intake));
+
+  private CommandBase m_autoGSB = new SequentialCommandGroup(
+    new DeployIntake(m_intake),
+    new RunIntake(m_intake, 1.),
+    new ConditionalCommand(new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsbRed),
+      new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsbBlue),
+      m_sensors::powerCellDetected),
+    new RunIntake(m_intake, 0.0),
+    new RetractIntake(m_intake));
+  
   private final List<ButtonAutoPair> autoSelectors = Arrays.asList(
-    new ButtonAutoPair(m_testController.buttonA, m_autoDoNothing),
-    new ButtonAutoPair(m_testController.buttonB, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun)),
+    new ButtonAutoPair(m_testController.buttonA, m_autoGSA),
+    new ButtonAutoPair(m_testController.buttonB, m_autoGSB),
     new ButtonAutoPair(m_testController.buttonX, new AutoBounce(m_drive, m_sensors)),
-    new ButtonAutoPair(m_testController.buttonY, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom))
+    new ButtonAutoPair(m_testController.buttonY, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun))
   );
 
   /***

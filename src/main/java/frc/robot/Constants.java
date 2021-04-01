@@ -69,24 +69,23 @@ public final class Constants {
 	public static final int INTAKE_RETRACT_PISTON = 1;
 
 	// Sensor constants
-	public static final String PCC_CAMERA_NAME = "PCC";
-	public static final String PCC_STREAM_NAME = "PCC";
-	public static final int PCC_CAMERA_ID = 1;
-	public static final int PCC_IMAGE_WIDTH = 640;
-	public static final int PCC_IMAGE_HEIGHT = 480;
-	public static final int PCC_BLUR = 10;
-	public static final int PCC_HUE_LO = 10;
-	public static final int PCC_HUE_HI = 80;
-	public static final int PCC_SAT_LO = 20;
-	public static final int PCC_SAT_HI = 255;
-	public static final int PCC_VAL_LO = 20;
-	public static final int PCC_VAL_HI = 255;
+	public static final String PCD_CAMERA_NAME = "PCD";
+	public static final String PCD_STREAM_NAME = "PCD";
+	public static final int PCD_CAMERA_ID = 1;
+	public static final int PCD_IMAGE_WIDTH = 320;
+	public static final int PCD_IMAGE_HEIGHT = 180;
+	public static final int PCD_BLUR = 10;
+	public static final int PCD_HUE_LO = 0;
+	public static final int PCD_HUE_HI = 180;
+	public static final int PCD_SAT_LO = 128;
+	public static final int PCD_SAT_HI = 255;
+	public static final int PCD_VAL_LO = 0;
+	public static final int PCD_VAL_HI = 255;
 
-	public static final int PCC_CHAMBER_X = 200;
-	public static final int PCC_CHAMBER_Y = 285;
-	public static final int PCC_CHAMBER_WIDTH = 185;
-	public static final int PCC_CHAMBER_HEIGHT = 185;
-	public static final double PCC_CHAMBER_THRESHOLD = 30000;
+	public static final int PCD_BOTTOM_X = 160;
+	public static final int PCD_BOTTOM_Y = 0;
+	public static final int PCD_BOTTOM_WIDTH = 160;
+	public static final int PCD_BOTTOM_HEIGHT = 180;
 
 	// Hopper constants
 	public static final int HOPPER = 10;
