@@ -75,7 +75,7 @@ public class Sensors extends SubsystemBase {
     shooterBallSensor = new DigitalInput(Constants.SHOOTER_BALL_SENSOR_ID);
     feederMouthSensor = new DigitalInput(Constants.FEEDER_MOUTH_SENSOR_ID);
 
-    intakeCamera = cameraServer.startAutomaticCapture(0);
+    intakeCamera = cameraServer.startAutomaticCapture(Constants.PCD_CAMERA_NAME, Constants.PCD_CAMERA_ID);
     // intakeCamera.setConfigJson("{'pixel format':'MJPEG','fps':" + Constants.PCD_FPS + ",'height':"
     //     + Constants.PCD_IMAGE_HEIGHT + ",'width':" + Constants.PCD_IMAGE_WIDTH + "}");
     intakeCamera.setFPS(Constants.PCD_FPS);
@@ -87,7 +87,7 @@ public class Sensors extends SubsystemBase {
   public void startPowerCellDetector(UsbCamera camera) {
     new Thread(() -> {
       camera.setResolution(Constants.PCD_IMAGE_WIDTH, Constants.PCD_IMAGE_HEIGHT);
-      CvSink cvSink = cameraServer.getVideo(camera.getName());
+      CvSink cvSink = cameraServer.getVideo(Constants.PCD_CAMERA_NAME);
       CvSource outputStream = cameraServer.putVideo(Constants.PCD_STREAM_NAME, Constants.PCD_FRAME_WIDTH,
           Constants.PCD_FRAME_HEIGHT);
 
