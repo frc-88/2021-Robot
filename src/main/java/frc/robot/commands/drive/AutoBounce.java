@@ -98,7 +98,7 @@ public class AutoBounce extends CommandBase {
         break;
 
       case 5: // go to the next trajectory
-        if (m_currentTraj++ < m_trajectory.length) {
+        if (++m_currentTraj < m_trajectory.length) {
           m_state = 3;
         } else {
           m_state++;

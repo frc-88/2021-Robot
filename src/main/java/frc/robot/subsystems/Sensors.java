@@ -76,8 +76,8 @@ public class Sensors extends SubsystemBase {
     feederMouthSensor = new DigitalInput(Constants.FEEDER_MOUTH_SENSOR_ID);
 
     intakeCamera = cameraServer.startAutomaticCapture(0);
-    intakeCamera.setConfigJson("{'pixel format':'MJPEG','fps':" + Constants.PCD_FPS + ",'height':"
-        + Constants.PCD_IMAGE_HEIGHT + ",'width':" + Constants.PCD_IMAGE_WIDTH + "}");
+    // intakeCamera.setConfigJson("{'pixel format':'MJPEG','fps':" + Constants.PCD_FPS + ",'height':"
+    //     + Constants.PCD_IMAGE_HEIGHT + ",'width':" + Constants.PCD_IMAGE_WIDTH + "}");
     intakeCamera.setFPS(Constants.PCD_FPS);
     intakeCamera.setPixelFormat(PixelFormat.kMJPEG);
 

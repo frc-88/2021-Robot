@@ -174,11 +174,11 @@ public class GameChangerTrajectories {
         // start at first star
         waypoints.add(new Pose2d(Units.feetToMeters(7.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
         // bounce
-        waypoints.add(new Pose2d(Units.feetToMeters(10.0), Units.feetToMeters(7.5), Rotation2d.fromDegrees(120.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(12.5), Units.feetToMeters(2.5), Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(9.5), Units.feetToMeters(7.5), Rotation2d.fromDegrees(120.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(12.5), Units.feetToMeters(2.5), Rotation2d.fromDegrees(175.0)));
         // end at second star
-        waypoints.add(new Pose2d(Units.feetToMeters(15.2), Units.feetToMeters(7.0), Rotation2d.fromDegrees(-95.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(15.2), Units.feetToMeters(12.5), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(15.5), Units.feetToMeters(7.0), Rotation2d.fromDegrees(-95.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(15.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(-90.0)));
 
         // generate trajectory
         m_config.setReversed(true);
@@ -193,11 +193,12 @@ public class GameChangerTrajectories {
         // set up waypoints for path
         var waypoints = new ArrayList<Pose2d>();
         // start at second star
-        waypoints.add(new Pose2d(Units.feetToMeters(15.2), Units.feetToMeters(12.5), Rotation2d.fromDegrees(-90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(15.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(-90.0)));
         // bounce
-        waypoints.add(new Pose2d(Units.feetToMeters(18.7), Units.feetToMeters(2.5), Rotation2d.fromDegrees(0.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(19.0), Units.feetToMeters(2.5), Rotation2d.fromDegrees(0.0)));
         // end at third star
-        waypoints.add(new Pose2d(Units.feetToMeters(22.8), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(23.5), Units.feetToMeters(10.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(23.5), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
 
         // generate trajectory
         return TrajectoryGenerator.generateTrajectory(waypoints, m_config);
@@ -208,9 +209,10 @@ public class GameChangerTrajectories {
         // set up waypoints for path
         var waypoints = new ArrayList<Pose2d>();
 
-        waypoints.add(new Pose2d(Units.feetToMeters(22.8), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(22.8), Units.feetToMeters(10), Rotation2d.fromDegrees(90.0)));
-        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(7.5), Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(23.0), Units.feetToMeters(12.5), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(23.0), Units.feetToMeters(11.0), Rotation2d.fromDegrees(90.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(27.5), Units.feetToMeters(9.3), Rotation2d.fromDegrees(180.0)));
+        waypoints.add(new Pose2d(Units.feetToMeters(30.0), Units.feetToMeters(8.8), Rotation2d.fromDegrees(180.0)));
 
         // generate trajectory
         m_config.setReversed(true);
