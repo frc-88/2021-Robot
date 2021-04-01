@@ -72,6 +72,7 @@ public final class Constants {
 	public static final String PCD_CAMERA_NAME = "PCD";
 	public static final String PCD_STREAM_NAME = "PCD";
 	public static final int PCD_CAMERA_ID = 1;
+	public static final int PCD_FPS = 15;
 	public static final int PCD_IMAGE_WIDTH = 320;
 	public static final int PCD_IMAGE_HEIGHT = 180;
 	public static final int PCD_BLUR = 10;
