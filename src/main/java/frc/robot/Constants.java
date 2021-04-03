@@ -90,7 +90,7 @@ public final class Constants {
 
 	// Hopper constants
 	public static final int HOPPER = 10;
-	public static final double HOPPER_SHOOT_PERCENT_OUTPUT = .5;
+	public static final double HOPPER_SHOOT_PERCENT_OUTPUT = .8;
 	public static final double HOPPER_EJECT_PERCENT_OUTPUT = -.3;
 
 	// Sensor constants

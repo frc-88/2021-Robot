@@ -24,8 +24,8 @@ public class FeederIndex extends CommandBase {
   private Sensors m_Sensors;
   protected long m_timeBallFirstSeen;
   protected long m_timeBallLastSeen;
-  private static final long FIRST_SEEN_DELAY_US = (long)(0.5 * 1_000_000);
-  private static final long LAST_SEEN_DELAY_US = (long)(0.075 * 1_000_000);
+  private static final long FIRST_SEEN_DELAY_US = (long)(0.1 * 1_000_000);
+  private static final long LAST_SEEN_DELAY_US = (long)(0.1 * 1_000_000);
   /**
    * states include: 
    * 0 - mouth sensor not triggered, feeder not running
@@ -74,7 +74,7 @@ public class FeederIndex extends CommandBase {
     switch(m_state) {
       case 0:
       m_feeder.setFeeder(0);
-      m_hopper.setPercentOutput(0.3);
+      m_hopper.setPercentOutput(0.9);
 
       if (m_Sensors.hasBallAtMouth()) {
         m_state = 1;
@@ -87,7 +87,7 @@ public class FeederIndex extends CommandBase {
 
       case 1:
       m_feeder.setFeeder(0);
-      m_hopper.setPercentOutput(0.3);
+      m_hopper.setPercentOutput(0.9);
       if (RobotController.getFPGATime() >= m_timeBallFirstSeen + FIRST_SEEN_DELAY_US) {
         m_state = 2;
       }
@@ -113,7 +113,7 @@ public class FeederIndex extends CommandBase {
 
       case 3:
       m_feeder.setFeeder(m_percentOutput);
-      m_hopper.setPercentOutput(0.15);
+      m_hopper.setPercentOutput(0.1);
       if (RobotController.getFPGATime() >= m_timeBallLastSeen + LAST_SEEN_DELAY_US) {
         m_state = 0;
       }
@@ -135,7 +135,7 @@ public class FeederIndex extends CommandBase {
 
       case 5:
       m_feeder.setFeeder(m_percentOutput);
-      m_hopper.setPercentOutput(0.3);
+      m_hopper.setPercentOutput(0.8);
 
       if (m_Sensors.hasBallAtMouth()) {
         m_state = 2;

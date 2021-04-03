@@ -501,13 +501,13 @@ public class RobotContainer {
   private final DoublePreferenceConstant m_powerPortLoad = new DoublePreferenceConstant("Power Port Load", -10);
   private final DoublePreferenceConstant m_powerPortMaxSpeed = new DoublePreferenceConstant("Power Port Max Speed", 18);
   private final DoublePreferenceConstant m_powerPortMaxAcceleration = new DoublePreferenceConstant("Power Port Max Acceleration", 18);
-  private final BooleanSupplier m_powerPortShootUseLimelight = () -> Math.abs(m_powerPortShoot.getValue() - (m_drive.getLeftPosition() + m_drive.getRightPosition()) / 2) < 3;
+  private final BooleanSupplier m_powerPortShootUseLimelight = () -> Math.abs(m_powerPortShoot.getValue() - (m_drive.getLeftPosition() + m_drive.getRightPosition()) / 2) < 5;
   private final PIDPreferenceConstants m_powerPortDrivePID = new PIDPreferenceConstants("Power Port Drive", 8., 0., 0.75, 0., 0., 0., 0.);
   private final PIDPreferenceConstants m_powerPortAimPID = new PIDPreferenceConstants("Power Port Aim", 0., 0., 0., 0., 0., 0., 0.);
   private double gyroSetpoint = 4.5;
   private double setpointOffset = 0.3;
-  private FeederIndex powerPortIndex0 = new FeederIndex(m_feeder, m_hopper, m_sensors, 0.4);
-  private FeederIndex powerPortIndex1 = new FeederIndex(m_feeder, m_hopper, m_sensors, 0.4, powerPortIndex0);
+  private FeederIndex powerPortIndex0 = new FeederIndex(m_feeder, m_hopper, m_sensors, 0.6);
+  private FeederIndex powerPortIndex1 = new FeederIndex(m_feeder, m_hopper, m_sensors, 0.6, powerPortIndex0);
   private final CommandBase m_powerPort =
     new SequentialCommandGroup(
       new LimelightToggle(m_sensors, true),
@@ -517,7 +517,7 @@ public class RobotContainer {
           new WaitForDriveAimed(m_drive)
         ),
         new DriveAndAim(m_drive, m_sensors, m_powerPortShootUseLimelight, () -> m_powerPortShoot.getValue() + setpointOffset, m_powerPortMaxSpeed::getValue, m_powerPortMaxAcceleration::getValue, () -> -gyroSetpoint, m_powerPortDrivePID, m_powerPortAimPID),
-        new FeederIndex(m_feeder, m_hopper, m_sensors, 0.4, powerPortIndex1),
+        new FeederIndex(m_feeder, m_hopper, m_sensors, 0.6, powerPortIndex1),
         new HopperRun(m_hopper, 0.1),
         new ShooterRunFromLimelight(m_shooter),
         new ArmFullUp(m_arm)
@@ -538,7 +538,7 @@ public class RobotContainer {
       ),
       new ParallelCommandGroup(
         new DeployIntake(m_intake),
-        new InstantCommand(() -> {setpointOffset -= 0.3;})
+        new InstantCommand(() -> {setpointOffset -= 0.6;})
       ),
       new ParallelCommandGroup(
         new DriveAndAim(m_drive, m_sensors, () -> false, () -> m_powerPortLoad.getValue() + setpointOffset, m_powerPortMaxSpeed::getValue, m_powerPortMaxAcceleration::getValue, () -> gyroSetpoint, m_powerPortDrivePID, m_powerPortAimPID),
@@ -757,7 +757,7 @@ public class RobotContainer {
   public void teleopInit() {
     m_drive.resetEncoderPositions();
     m_sensors.zeroYaw();
-    gyroSetpoint = 2.5;
+    gyroSetpoint = 1.5;
     setpointOffset = 0;
   }
 

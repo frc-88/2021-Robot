@@ -38,7 +38,9 @@ public class Shooter extends SubsystemBase {
   private DoublePreferenceConstant flywheel_iMax;
 
   private final ValueInterpolator distanceToSpeedInterpolator = new ValueInterpolator(
-    new ValueInterpolator.ValuePair(104, 3250),
+    new ValueInterpolator.ValuePair(98.3, 3600),
+    new ValueInterpolator.ValuePair(106.1, 3400),
+    new ValueInterpolator.ValuePair(118.2, 3340),
     new ValueInterpolator.ValuePair(130, 3210),
     new ValueInterpolator.ValuePair(152, 3210)
   );
