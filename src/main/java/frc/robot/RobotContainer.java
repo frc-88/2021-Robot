@@ -488,22 +488,24 @@ public class RobotContainer {
   }
 
   private CommandBase m_autoGSA = new SequentialCommandGroup(
-      new DeployIntake(m_intake),
-      new RunIntake(m_intake, 1.),
-      new ConditionalCommand(new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaRed),
-        new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaBlue),
-        m_sensors::powerCellDetected),
-      new RunIntake(m_intake, 0.0),
-      new RetractIntake(m_intake));
+    new DeployIntake(m_intake),
+    new WaitCommand(0.1),
+    new ParallelDeadlineGroup(new ConditionalCommand(new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaRed),
+      new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaBlue),
+      m_sensors::powerCellDetected),
+      new RunIntake(m_intake, 1.)),
+    new RetractIntake(m_intake),
+    new RunIntake(m_intake, 0.0));
 
   private CommandBase m_autoGSB = new SequentialCommandGroup(
     new DeployIntake(m_intake),
-    new RunIntake(m_intake, 1.),
-    new ConditionalCommand(new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsbRed),
+    new WaitCommand(0.1),
+    new ParallelDeadlineGroup(new ConditionalCommand(new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsbRed),
       new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsbBlue),
       m_sensors::powerCellDetected),
-    new RunIntake(m_intake, 0.0),
-    new RetractIntake(m_intake));
+      new RunIntake(m_intake, 1.)),
+    new RetractIntake(m_intake),
+    new RunIntake(m_intake, 0.0));
   
   private final List<ButtonAutoPair> autoSelectors = Arrays.asList(
     new ButtonAutoPair(m_testController.buttonA, m_autoGSA),

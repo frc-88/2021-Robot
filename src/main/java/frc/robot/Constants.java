@@ -82,11 +82,11 @@ public final class Constants {
 	public static final int PCD_SAT_HI = 255;
 	public static final int PCD_VAL_LO = 0;
 	public static final int PCD_VAL_HI = 255;
-
 	public static final int PCD_FRAME_X = 160;
 	public static final int PCD_FRAME_Y = 0;
 	public static final int PCD_FRAME_WIDTH = 160;
 	public static final int PCD_FRAME_HEIGHT = 180;
+	public static final double PCD_CONTOUR_FILTER = 500;
 
 	// Hopper constants
 	public static final int HOPPER = 10;

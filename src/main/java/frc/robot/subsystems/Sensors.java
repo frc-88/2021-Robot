@@ -103,7 +103,14 @@ public class Sensors extends SubsystemBase {
             new Scalar(Constants.PCD_HUE_HI, Constants.PCD_SAT_HI, Constants.PCD_VAL_HI), output);
         Imgproc.findContours(output, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        m_powerCellDetected = contours.size() > 0;
+        boolean powerCellDetected = false;
+        for (MatOfPoint contour : contours) {
+          if (Imgproc.contourArea(contour) > Constants.PCD_CONTOUR_FILTER) {
+            powerCellDetected = true;
+          };
+        }
+
+        m_powerCellDetected = powerCellDetected;
 
         outputStream.putFrame(output);
       }
@@ -132,7 +139,7 @@ public class Sensors extends SubsystemBase {
     }
   }
 
-  public boolean powerCellDetected() {
+  public Boolean powerCellDetected() {
     return m_powerCellDetected;
   }
 
