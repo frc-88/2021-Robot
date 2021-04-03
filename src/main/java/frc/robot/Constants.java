@@ -69,9 +69,9 @@ public final class Constants {
 	public static final int INTAKE_RETRACT_PISTON = 1;
 
 	// Sensor constants
-	public static final String PCD_CAMERA_NAME = "PCD";
-	public static final String PCD_STREAM_NAME = "PCD";
-	public static final int PCD_CAMERA_ID = 1;
+	public static final String PCD_CAMERA_NAME = "PCD_CAM";
+	public static final String PCD_STREAM_NAME = "PCD_VIZ";
+	public static final int PCD_CAMERA_ID = 0;
 	public static final int PCD_FPS = 15;
 	public static final int PCD_IMAGE_WIDTH = 320;
 	public static final int PCD_IMAGE_HEIGHT = 180;
