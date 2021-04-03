@@ -13,6 +13,7 @@ import java.util.function.BooleanSupplier;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -135,6 +136,8 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter(m_sensors);
   private final Intake m_intake = new Intake();
   // private final ControlPanelManipulator m_cpm = new ControlPanelManipulator();
+
+  private final Compressor m_compressor = new Compressor();
 
   /***
   *      ______   ______   .___  ___. .___  ___.      ___      .__   __.  _______       _______.
@@ -511,30 +514,33 @@ public class RobotContainer {
   private final CommandBase m_powerPort =
     new SequentialCommandGroup(
       new LimelightToggle(m_sensors, true),
-      new ParallelDeadlineGroup(
-        new ParallelCommandGroup(
-          new WaitForShooterReady(m_arm, m_shooter),
-          new WaitForDriveAimed(m_drive)
-        ),
+      new ParallelRaceGroup(
         new DriveAndAim(m_drive, m_sensors, m_powerPortShootUseLimelight, () -> m_powerPortShoot.getValue() + setpointOffset, m_powerPortMaxSpeed::getValue, m_powerPortMaxAcceleration::getValue, () -> -gyroSetpoint, m_powerPortDrivePID, m_powerPortAimPID),
-        new FeederIndex(m_feeder, m_hopper, m_sensors, 0.6, powerPortIndex1),
-        new HopperRun(m_hopper, 0.1),
-        new ShooterRunFromLimelight(m_shooter),
-        new ArmFullUp(m_arm)
-      ),
-      new ParallelDeadlineGroup(
-        new ParallelRaceGroup(
-          new ParallelCommandGroup(
-            new WaitForBallsShot(m_sensors, 3),
-            new WaitCommand(.25)
+        new SequentialCommandGroup(
+          new ParallelDeadlineGroup(
+            new ParallelCommandGroup(
+              new WaitForShooterReady(m_arm, m_shooter),
+              new WaitForDriveAimed(m_drive)
+            ),
+            new FeederIndex(m_feeder, m_hopper, m_sensors, 0.6, powerPortIndex1),
+            new HopperRun(m_hopper, 0.1),
+            new ShooterRunFromLimelight(m_shooter),
+            new ArmFullUp(m_arm)
           ),
-          new WaitCommand(4)
-        ),
-        new DriveAndAim(m_drive, m_sensors, () -> true, () -> m_powerPortShoot.getValue() + setpointOffset, m_powerPortMaxSpeed::getValue, m_powerPortMaxSpeed::getValue, () -> 0, m_powerPortDrivePID, m_powerPortAimPID),
-        new FeederRun(m_feeder, 1),
-        new HopperShootMode(m_hopper, m_sensors),
-        new ShooterRunFromLimelight(m_shooter),
-        new ArmFullUp(m_arm)
+          new ParallelDeadlineGroup(
+            new ParallelRaceGroup(
+              new ParallelCommandGroup(
+                new WaitForBallsShot(m_sensors, 3),
+                new WaitCommand(.25)
+              ),
+              new WaitCommand(3)
+            ),
+            new FeederRun(m_feeder, 1),
+            new HopperShootMode(m_hopper, m_sensors),
+            new ShooterRunFromLimelight(m_shooter),
+            new ArmFullUp(m_arm)
+          )
+        )
       ),
       new ParallelCommandGroup(
         new DeployIntake(m_intake),
@@ -607,6 +613,10 @@ public class RobotContainer {
 
     m_driverController.buttonX.whenPressed(new InstantCommand(() -> {setpointOffset += 0.1;}));
     m_driverController.buttonB.whenPressed(new InstantCommand(() -> {setpointOffset -= 0.1;}));
+
+    m_compressor.stop();
+    m_driverController.buttonBack.whenPressed(new InstantCommand(m_compressor::start));
+    m_driverController.buttonBack.whenReleased(new InstantCommand(m_compressor::stop));
   }
 
 

@@ -24,7 +24,7 @@ public class FeederIndex extends CommandBase {
   private Sensors m_Sensors;
   protected long m_timeBallFirstSeen;
   protected long m_timeBallLastSeen;
-  private static final long FIRST_SEEN_DELAY_US = (long)(0.1 * 1_000_000);
+  private static final long FIRST_SEEN_DELAY_US = (long)(0.03 * 1_000_000);
   private static final long LAST_SEEN_DELAY_US = (long)(0.1 * 1_000_000);
   /**
    * states include: 
