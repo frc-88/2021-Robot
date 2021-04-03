@@ -490,7 +490,7 @@ public class RobotContainer {
   private CommandBase m_autoGSA = new SequentialCommandGroup(
     new DeployIntake(m_intake),
     new ParallelDeadlineGroup(
-      new WaitCommand(0.3),
+      new ConditionalCommand(new WaitCommand(0.3), new WaitCommand(0.01), m_sensors::powerCellDetected),
       new RunIntake(m_intake, 1.)),
     new ParallelDeadlineGroup(new ConditionalCommand(new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaRed),
       new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsaBlue),
@@ -502,7 +502,7 @@ public class RobotContainer {
   private CommandBase m_autoGSB = new SequentialCommandGroup(
     new DeployIntake(m_intake),
     new ParallelDeadlineGroup(
-      new WaitCommand(0.3),
+      new ConditionalCommand(new WaitCommand(0.3), new WaitCommand(0.01), m_sensors::powerCellDetected),
       new RunIntake(m_intake, 1.)),
     new ParallelDeadlineGroup(new ConditionalCommand(new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsbRed),
       new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.gsbBlue),
