@@ -78,7 +78,7 @@ public final class Constants {
 	public static final int PCD_BLUR = 10;
 	public static final int PCD_HUE_LO = 0;
 	public static final int PCD_HUE_HI = 180;
-	public static final int PCD_SAT_LO = 128;
+	public static final int PCD_SAT_LO = 150;
 	public static final int PCD_SAT_HI = 255;
 	public static final int PCD_VAL_LO = 0;
 	public static final int PCD_VAL_HI = 255;
