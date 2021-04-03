@@ -23,7 +23,6 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -46,9 +45,6 @@ public class Sensors extends SubsystemBase {
   private final NavX m_navx;
   private final Limelight limelight;
   private BooleanSupplier ledOverride;
-
-  private CameraServer cameraServer = CameraServer.getInstance();
-  private UsbCamera intakeCamera;
 
   private boolean m_powerCellDetected = false;
   private final DoublePreferenceConstant m_limelightHeight = new DoublePreferenceConstant("Limelight Height", 19.5);
@@ -75,26 +71,20 @@ public class Sensors extends SubsystemBase {
     shooterBallSensor = new DigitalInput(Constants.SHOOTER_BALL_SENSOR_ID);
     feederMouthSensor = new DigitalInput(Constants.FEEDER_MOUTH_SENSOR_ID);
 
-    intakeCamera = cameraServer.startAutomaticCapture(Constants.PCD_CAMERA_NAME, Constants.PCD_CAMERA_ID);
-    // intakeCamera.setConfigJson("{'pixel format':'MJPEG','fps':" + Constants.PCD_FPS + ",'height':"
-    //     + Constants.PCD_IMAGE_HEIGHT + ",'width':" + Constants.PCD_IMAGE_WIDTH + "}");
-    intakeCamera.setFPS(Constants.PCD_FPS);
-    intakeCamera.setPixelFormat(PixelFormat.kMJPEG);
-
-    startPowerCellDetector(intakeCamera);
+    startPowerCellDetector();
   }
 
-  public void startPowerCellDetector(UsbCamera camera) {
+  public void startPowerCellDetector() {
     new Thread(() -> {
+      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
       camera.setResolution(Constants.PCD_IMAGE_WIDTH, Constants.PCD_IMAGE_HEIGHT);
-      CvSink cvSink = cameraServer.getVideo(Constants.PCD_CAMERA_NAME);
-      CvSource outputStream = cameraServer.putVideo(Constants.PCD_STREAM_NAME, Constants.PCD_FRAME_WIDTH,
+      CvSink cvSink = CameraServer.getInstance().getVideo();
+      CvSource outputStream = CameraServer.getInstance().putVideo(Constants.PCD_STREAM_NAME, Constants.PCD_FRAME_WIDTH,
           Constants.PCD_FRAME_HEIGHT);
 
       Mat source = new Mat();
       Mat output = new Mat();
       Mat hierarchy = new Mat();
-
       List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
       while (!Thread.interrupted()) {
