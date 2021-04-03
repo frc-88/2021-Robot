@@ -252,12 +252,14 @@ public class GameChangerTrajectories {
         // set up waypoints for path
         var waypoints = new ArrayList<Translation2d>();
         // 1 Power cell
-        waypoints.add(new Translation2d(Units.feetToMeters(12.0), Units.feetToMeters(2.0)));
+        waypoints.add(new Translation2d(Units.feetToMeters(10.0), Units.feetToMeters(3.0)));
         waypoints.add(new Translation2d(Units.feetToMeters(15.5), Units.feetToMeters(2.0)));
         // 2 Power cell
-        waypoints.add(new Translation2d(Units.feetToMeters(17.5), Units.feetToMeters(9)));
+        waypoints.add(new Translation2d(Units.feetToMeters(16.0), Units.feetToMeters(7.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(18.0), Units.feetToMeters(11.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(20.0), Units.feetToMeters(11.0)));
         // 3 Power cells!
-        waypoints.add(new Translation2d(Units.feetToMeters(22.5), Units.feetToMeters(6.5)));
+        waypoints.add(new Translation2d(Units.feetToMeters(22.5), Units.feetToMeters(7.5)));
 
         // ending pose, well past finish line, all the way into the finish zone
         Pose2d end = new Pose2d(Units.feetToMeters(30), Units.feetToMeters(7.0), Rotation2d.fromDegrees(180));
@@ -276,7 +278,7 @@ public class GameChangerTrajectories {
         // set up waypoints for path
         var waypoints = new ArrayList<Translation2d>();
         // 1 Power cell
-        waypoints.add(new Translation2d(Units.feetToMeters(7.5), Units.feetToMeters(10)));
+        //waypoints.add(new Translation2d(Units.feetToMeters(7.5), Units.feetToMeters(10)));
         // 2 Power cell
         waypoints.add(new Translation2d(Units.feetToMeters(12.5), Units.feetToMeters(5)));
         // 3 Power cells!
