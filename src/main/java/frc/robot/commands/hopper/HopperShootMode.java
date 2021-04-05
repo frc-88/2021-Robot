@@ -23,6 +23,7 @@ public class HopperShootMode extends CommandBase {
     this(hopper, Constants.HOPPER_SHOOT_PERCENT_OUTPUT);
   }
 
+  
   public HopperShootMode(Hopper hopper, double percentOutput) {
     m_hopper = hopper;
     m_percentOutput = percentOutput;

@@ -22,7 +22,7 @@ public class FeederShootMode extends CommandBase {
   private long m_timeBallLastSeen;
   private long m_timeBallShot;
   private Hopper m_hopper;
-  private static final long TIMER_0_US = (long)(0.1 * 1_000_000);
+  private static final long TIMER_0_US = (long)(0.03 * 1_000_000);
   private static final long TIMER_1_US = (long)(1.5 * 1_000_000);
   /**
    * states include: 
