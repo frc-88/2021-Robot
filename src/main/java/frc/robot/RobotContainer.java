@@ -239,25 +239,32 @@ public class RobotContainer {
       new FeederStop(m_feeder)
     );
 
-  // activateIntake - deploys and runs the intake, run hopper in intake mode
+  // activateIntake - deploys and runs the intake
   private final CommandBase m_activateIntake = 
     new SequentialCommandGroup(
       new DeployIntake(m_intake),
-      new ParallelCommandGroup(
-        new RunIntake(m_intake, 1.),
-        new FeederIndex(m_feeder, m_sensors, 0.4),
-        new HopperRun(m_hopper, 0.1)
-      )
+      new RunIntake(m_intake, 1.)
     );
 
-  // deactivateIntake - retracts the intake, stops the rollers and hopper after a delay
+  // deactivateIntake - retracts the intake, stops the rollers after a delay
   private final CommandBase m_deactivateIntake = 
     new SequentialCommandGroup(
-      new ParallelDeadlineGroup(
-        new WaitCommand(0.75),
-        new RetractIntake(m_intake)
-      ),
-      new StopIntake(m_intake)
+    new RetractIntake(m_intake),
+    new StopIntake(m_intake)
+    );
+
+  //intakePlayer - opens intake without running the motor, lifts arm to 45 for manual power cell introduction
+  private final CommandBase m_intakePlayer =
+    new ParallelCommandGroup(
+      new ArmMotionMagic(m_arm, 45),
+      new DeployIntake(m_intake)
+    );
+
+  //intakePlayerOff - closes intake and lowers arm
+  private final CommandBase m_intakePlayerOff =
+    new ParallelCommandGroup(
+      new ArmStow(m_arm, () -> false),
+      new RetractIntake(m_intake)
     );
 
   // regurgitate - deploy the intake and run the intake, hopper, and feeder in reverse
@@ -488,10 +495,10 @@ public class RobotContainer {
   private final List<ButtonAutoPair> autoSelectors = Arrays.asList(
     new ButtonAutoPair(m_buttonBox.button2, m_autoDoNothing),
     new ButtonAutoPair(m_buttonBox.button3, m_autoJustDrive),
-    new ButtonAutoPair(m_buttonBox.button4, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun)),
-    new ButtonAutoPair(m_buttonBox.button5, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom))
-    // new ButtonAutoPair(m_buttonBox.button4, m_auto3Ball),
-    // new ButtonAutoPair(m_buttonBox.button5, m_autoTrench7Ball)
+    // new ButtonAutoPair(m_buttonBox.button4, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun)),
+    // new ButtonAutoPair(m_buttonBox.button5, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom))
+    new ButtonAutoPair(m_buttonBox.button4, m_auto3Ball),
+    new ButtonAutoPair(m_buttonBox.button5, m_autoTrench7Ball)
   );
 
   /***
@@ -556,8 +563,8 @@ public class RobotContainer {
     m_buttonBox.button4.whenPressed(new InstantCommand(() -> m_currentFASHCommand = m_stopShoot));
     m_buttonBox.button9.whenPressed(m_activateIntake);
     m_buttonBox.button9.whenReleased(m_deactivateIntake);
-    m_buttonBox.button8.whenPressed(m_regurgitate);
-    m_buttonBox.button8.whenReleased(m_regurgitateStop);
+    m_buttonBox.button8.whenPressed(m_intakePlayer);
+    m_buttonBox.button8.whenReleased(m_intakePlayerOff);
     m_buttonBox.button7.whenPressed(new InstantCommand(() -> {
       m_currentFASHCommand.cancel();
       m_currentFASHCommand.schedule();
