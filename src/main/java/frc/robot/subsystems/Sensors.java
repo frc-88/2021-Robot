@@ -47,7 +47,7 @@ public class Sensors extends SubsystemBase {
   private final Limelight limelight;
   private BooleanSupplier ledOverride;
 
-  private CameraServer cameraServer = CameraServer.getInstance();
+  //private CameraServer cameraServer = CameraServer.getInstance();
   // private UsbCamera intakeCamera, hopperCamera;
 
   private double m_totalYellow = 0.0;
@@ -95,7 +95,7 @@ public class Sensors extends SubsystemBase {
   }
  
 
-  public void startCounter(UsbCamera camera) {
+  /*public void startCounter(UsbCamera camera) {
     new Thread(() -> {
       camera.setResolution(Constants.PCC_IMAGE_WIDTH, Constants.PCC_IMAGE_HEIGHT);
 
@@ -143,7 +143,7 @@ public class Sensors extends SubsystemBase {
       }
     }).start();
   }
-
+*/
   public void zeroYaw() {
     m_yawOffset = m_navx.getYaw();
   }

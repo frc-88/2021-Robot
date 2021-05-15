@@ -40,9 +40,6 @@ public final class Constants {
 
 	// Feeder constants
 	public static final int FEEDER_MOTOR = 2;
-	public static final int FEEDER_CPM_PCM = 1;
-	public static final int FEEDER_CPM_PISTON_FORWARD = 0;
-	public static final int FEEDER_CPM_PISTON_REVERSE = 7;
 
 	// Arm constants
 	public static final int ARM_MOTOR = 4;
@@ -92,6 +89,9 @@ public final class Constants {
 	public static final int HOPPER = 10;
 	public static final double HOPPER_SHOOT_PERCENT_OUTPUT = .25;
 	public static final double HOPPER_EJECT_PERCENT_OUTPUT = -.3;
+	public static final int HOPPER_UNJAMMER_PCM = 1;
+	public static final int HOPPER_UNJAMMER_DEPLOY = 7;
+	public static final int HOPPER_UNJAMMER_RETRACT = 0;
 
 	// Sensor constants
 	public static final int SHOOTER_BALL_SENSOR_ID = 1;
