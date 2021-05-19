@@ -13,8 +13,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -59,6 +57,14 @@ public class Feeder extends SubsystemBase {
 
   public void setFeederPosition(double position) {
     m_feeder.set(ControlMode.Position, position);
+  }
+
+  public void setZeroOnBallSensed(boolean enabled) {
+    m_feeder.configClearPositionOnLimitR(enabled, 0);
+  }
+
+  public void setSensorPosition(double position) {
+    m_feeder.setSelectedSensorPosition(position);
   }
 
   @Override
