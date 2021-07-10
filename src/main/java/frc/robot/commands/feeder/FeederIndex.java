@@ -36,7 +36,8 @@ public class FeederIndex extends CommandBase {
   public void initialize() {
     m_state = 0;
     m_feeder.setZeroOnBallSensed(true);
-    m_feeder.setSensorPosition(-Integer.MIN_VALUE);
+    m_feeder.setSensorPosition(-Integer.MIN_VALUE + 1);
+    m_feeder.configLimitSwitches(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,8 +45,24 @@ public class FeederIndex extends CommandBase {
   public void execute() {
     switch(m_state) {
       case 0:
-        m_feeder.setFeederPosition(0);
+        
+        if(m_Sensors.hasBallAtMouth()) {
+          m_state = 1;
+        }
+        if(m_feeder.checkReverseLimitSwitch() == true) {
+          m_state = 8;
+        }
         break;
+      case 1:
+        
+      break;
+      case 8:
+        m_feeder.setSensorPosition(0);
+        m_feeder.setFeederPosition(0);
+        m_feeder.setFeeder(0);
+        break;
+
+      
     }
 
 

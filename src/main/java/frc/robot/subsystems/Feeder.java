@@ -9,9 +9,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,7 +21,7 @@ import frc.robot.Constants;
 import frc.robot.util.preferenceconstants.DoublePreferenceConstant;
 
 public class Feeder extends SubsystemBase {
-  private TalonSRX m_feeder = new TalonSRX(Constants.FEEDER_MOTOR);
+  private TalonFX m_feeder = new TalonFX(Constants.FEEDER_MOTOR);
   
   private DoublePreferenceConstant feeder_kP;
   private DoublePreferenceConstant feeder_kD;
@@ -29,6 +31,10 @@ public class Feeder extends SubsystemBase {
    */
   public Feeder() {
     m_feeder.configFactoryDefault();
+    //TalonFXConfiguration allConfigs = new TalonFXConfiguration();
+    //allConfigs.forwardLimitSwitchSource = LimitSwitchSource.Deactivated;
+    //m_feeder.configAllSettings(allConfigs);
+    
     m_feeder.enableVoltageCompensation(true);
     m_feeder.setInverted(true);
     m_feeder.setSensorPhase(false);
@@ -65,6 +71,23 @@ public class Feeder extends SubsystemBase {
 
   public void setSensorPosition(double position) {
     m_feeder.setSelectedSensorPosition(position);
+  }
+
+  public void configLimitSwitches(boolean state) {
+    if(state) {
+      m_feeder.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+    }
+    else {
+      m_feeder.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyClosed);
+    }
+  }
+
+  public boolean checkForwardLimitSwitch() {
+    return m_feeder.isFwdLimitSwitchClosed() == 1;
+  }
+
+  public boolean checkReverseLimitSwitch() {
+    return m_feeder.isRevLimitSwitchClosed() == 1;
   }
 
   @Override

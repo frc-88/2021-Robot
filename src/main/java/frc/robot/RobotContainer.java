@@ -572,6 +572,8 @@ public class RobotContainer {
     m_buttonBox.button13.whenPressed(m_intakePlayer);
     m_buttonBox.button13.whenReleased(m_intakePlayerOff);
     m_buttonBox.button12.whenPressed(new Unjam(m_hopper).withTimeout(0.25));
+    m_buttonBox.button5.whenPressed(new HopperEject(m_hopper, -0.25));
+    m_buttonBox.button5.whenReleased(new HopperStop(m_hopper));
     m_buttonBox.button7.whenPressed(new InstantCommand(() -> {
       m_currentFASHCommand.cancel();
       m_currentFASHCommand.schedule();
