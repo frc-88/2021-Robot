@@ -3,15 +3,16 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class TJController extends Joystick {
-	private static final int LEFT_HORIZ_AXIS = 0;
-	private static final int LEFT_VERT_AXIS = 1;
-	private static final int RIGHT_Z_AXIS = 3;
+	private static final int LEFT_HORIZ_AXIS = 3;
+	private static final int LEFT_VERT_AXIS = 0;
+	private static final int RIGHT_Z_AXIS = 4;
 	private static final int LEFT_Z_AXIS = 2;
-	private static final int RIGHT_HORIZ_AXIS = 4;
+	private static final int RIGHT_HORIZ_AXIS = 1;
 	private static final int RIGHT_VERT_AXIS = 5;
-	private static final int BUTTON_A = 1;
+	private static final int BUTTON_A = 5;
 	private static final int BUTTON_B = 2;
 	private static final int BUTTON_X = 3;
 	private static final int BUTTON_Y = 4;
@@ -26,7 +27,7 @@ public class TJController extends Joystick {
 		super(port);
 	}
 
-	public Button buttonA = new JoystickButton(this, BUTTON_A);
+	public Button buttonA = new JoystickButton(this, BUTTON_A);	
 	public Button buttonB = new JoystickButton(this, BUTTON_B);
 	public Button buttonX = new JoystickButton(this, BUTTON_X);
 	public Button buttonY = new JoystickButton(this, BUTTON_Y);
@@ -40,6 +41,7 @@ public class TJController extends Joystick {
 	public boolean isButtonAPressed() {
 		return this.getRawButton(BUTTON_A);
 	}
+
 	
 	public boolean isButtonBPressed() {
 		return this.getRawButton(BUTTON_B);
@@ -86,7 +88,7 @@ public class TJController extends Joystick {
 	}
 
 	public double getLeftStickY() {
-		return -this.getRawAxis(LEFT_VERT_AXIS);
+		return this.getRawAxis(LEFT_VERT_AXIS);
 	}
 
 	public double getLeftStickX() {

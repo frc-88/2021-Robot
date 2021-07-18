@@ -69,6 +69,10 @@ public class Feeder extends SubsystemBase {
     m_feeder.configClearPositionOnLimitR(enabled, 0);
   }
 
+  public void resetOnBallSensed(boolean enabled) {
+    m_feeder.configClearPositionOnLimitF(enabled, 0);
+  }
+
   public void setSensorPosition(double position) {
     m_feeder.setSelectedSensorPosition(position);
   }

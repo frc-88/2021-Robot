@@ -183,7 +183,7 @@ public class RobotContainer {
           new ArmFullUp(m_arm),
           new ShooterRunFromLimelight(m_shooter), 
           new FeederRun(m_feeder, 1),
-          new RunIntake(m_intake, 0.3)
+          new RunIntake(m_intake, 0.1)
         )
       ),
       new SequentialCommandGroup(
@@ -244,7 +244,16 @@ public class RobotContainer {
   private final CommandBase m_activateIntake = 
     new SequentialCommandGroup(
       new DeployIntake(m_intake),
-      new RunIntake(m_intake, 1.)
+      new ParallelCommandGroup(
+        new RunIntake(m_intake, 1.),
+        //new FeederIndex(m_feeder, m_sensors, m_arm)
+      )
+    );
+
+  private final CommandBase m_activateIntakeSlow =
+    new SequentialCommandGroup(
+      new DeployIntake(m_intake),
+      new RunIntake(m_intake, 0.1)
     );
 
   // deactivateIntake - retracts the intake, stops the rollers after a delay
@@ -290,6 +299,12 @@ public class RobotContainer {
       ),
       new StopIntake(m_intake)
     );
+
+    private final CommandBase m_unjamWithIntake = 
+      new ParallelCommandGroup(
+        new Unjam(m_hopper).withTimeout(0.25),
+        m_activateIntakeSlow
+      );
 
   // The currently running FASH (Feeder/Arm/Shooter/Hopper) combined command
   private CommandBase m_currentFASHCommand = m_stopShoot;
@@ -542,10 +557,14 @@ public class RobotContainer {
     CommandBase m_tankDrive = new TankDrive(m_drive, tankDriveLeftSupplier, tankDriveRightSupplier);
     SmartDashboard.putData("Tank Drive", m_tankDrive);
 
-    m_driverController.buttonA.whileHeld(new TurnToLimelight(m_drive, m_sensors));
+    new Trigger() {
+      public boolean get() {
+        return m_driverController.getRawAxis(5) > .75;
+      }
+    }.whileActiveContinuous(new TurnToLimelight(m_drive, m_sensors));
 
     // m_driverController.buttonB.whileHeld(m_reportColor);
-    // m_driverController.buttonA.whenPressed(m_moveColorWheelToTargetColor);
+    // m_driverController.buttonA.whenPressed(m_moveColorWheelToTargetColor);^
     // m_driverController.buttonY.whenPressed(m_rotateColorWheel);
 
     // m_driverController.buttonRightBumper.whenPressed(m_setToFrontCamera);
@@ -571,7 +590,8 @@ public class RobotContainer {
     m_buttonBox.button10.whenReleased(m_deactivateIntake);
     m_buttonBox.button13.whenPressed(m_intakePlayer);
     m_buttonBox.button13.whenReleased(m_intakePlayerOff);
-    m_buttonBox.button12.whenPressed(new Unjam(m_hopper).withTimeout(0.25));
+    m_buttonBox.button12.whenPressed(m_unjamWithIntake);
+    m_buttonBox.button12.whenReleased(m_deactivateIntake);
     m_buttonBox.button5.whenPressed(new HopperEject(m_hopper, -0.25));
     m_buttonBox.button5.whenReleased(new HopperStop(m_hopper));
     m_buttonBox.button7.whenPressed(new InstantCommand(() -> {
