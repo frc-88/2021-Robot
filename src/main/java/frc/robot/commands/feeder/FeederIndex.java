@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Sensors;
 
 public class FeederIndex extends CommandBase {
   private Feeder m_feeder;
   private Sensors m_Sensors;
-  private Arm m_Arm;
+  private Arm m_arm;
+  private Hopper m_hopper;
   /**
    * states when arm is up include:
    *  0: No actions
@@ -24,27 +26,24 @@ public class FeederIndex extends CommandBase {
    *  2: Ball at mouth, feeder running
    *  3: no ball at mouth, feeder running
    *  4: no ball at mouth, feeder stopped
-   *  5: ball at 1st switch, feeder running
-   *  6: ball at 1st switch, feeder off (waiting for new ball to show up)
-   *  8: ball at top switch
+   *  
    * states when arm is down include: 
    *  0: No actions
    *  1: Ball at mouth
    *  2: Ball at mouth, feeder running
    *  3: no ball at mouth, feeder running
    *  4: no ball at mouth, feeder stopped
-   *  5: ball at 1st switch (ball would be pushed out of feeder if it still ran)
-   *  6: ball at top switch (shouldn't be possible in this mode)
    */
   private int m_state;
 
   /**
    * Sets feeder to desired percent output
    */
-  public FeederIndex(Feeder feeder, Sensors sensors, Arm arm) {
+  public FeederIndex(Feeder feeder, Sensors sensors, Arm arm, Hopper hopper) {
     m_feeder = feeder;
     m_Sensors = sensors;
-    m_Arm = arm;
+    m_arm = arm;
+    m_hopper = hopper;
     addRequirements(m_feeder);
   }
 
@@ -54,17 +53,17 @@ public class FeederIndex extends CommandBase {
     m_state = 0;
     m_feeder.setZeroOnBallSensed(true);
     m_feeder.resetOnBallSensed(true);
-    m_feeder.setSensorPosition(-Integer.MIN_VALUE + 1);
+    m_feeder.setSensorPosition(Integer.MIN_VALUE + 1);
     m_feeder.configLimitSwitches(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if (m_Arm.getCurrentArmPosition() < 10) {
+    if (m_arm.getCurrentArmPosition() <= 10) {
       switch (m_state) {
         case 0:
+          m_hopper.setPercentOutput(0.1);
           if (m_Sensors.hasBallAtMouth()) {
             m_state = 1;
           }
@@ -77,6 +76,7 @@ public class FeederIndex extends CommandBase {
           break;
         case 1:
           m_feeder.setFeederPosition(0);
+          m_hopper.setPercentOutput(0);
           if (m_feeder.checkForwardLimitSwitch() == true) {
             m_state = 5;
           }
@@ -89,6 +89,7 @@ public class FeederIndex extends CommandBase {
           break;
         case 2:
           m_feeder.setSensorPosition(0);
+          m_hopper.setPercentOutput(0.1);
           if (m_feeder.checkForwardLimitSwitch() == true) {
             m_state = 5;
           }
@@ -109,12 +110,13 @@ public class FeederIndex extends CommandBase {
         case 4:
           m_feeder.setSensorPosition(0);
           m_feeder.setFeederPosition(0);
+          m_hopper.setPercentOutput(0);
           break;
 
       }
 
     }
-    if(m_Arm.getCurrentArmPosition() >= 10) {
+    if(m_arm.getCurrentArmPosition() > 10) {
       switch (m_state) {
         case 0:
           if (m_Sensors.hasBallAtMouth()) {
@@ -141,6 +143,7 @@ public class FeederIndex extends CommandBase {
           break;
         case 2:
           m_feeder.setSensorPosition(0);
+          m_hopper.setPercentOutput(0.1);
           if (m_feeder.checkForwardLimitSwitch() == true) {
             m_state = 5;
           }

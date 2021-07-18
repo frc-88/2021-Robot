@@ -246,14 +246,16 @@ public class RobotContainer {
       new DeployIntake(m_intake),
       new ParallelCommandGroup(
         new RunIntake(m_intake, 1.),
-        //new FeederIndex(m_feeder, m_sensors, m_arm)
+        new FeederIndex(m_feeder, m_sensors, m_arm, m_hopper)
       )
     );
 
   private final CommandBase m_activateIntakeSlow =
-    new SequentialCommandGroup(
-      new DeployIntake(m_intake),
+  new SequentialCommandGroup(
+    new DeployIntake(m_intake),
+    new ParallelCommandGroup(
       new RunIntake(m_intake, 0.1)
+    )
     );
 
   // deactivateIntake - retracts the intake, stops the rollers after a delay
