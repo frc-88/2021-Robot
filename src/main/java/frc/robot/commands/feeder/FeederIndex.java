@@ -53,7 +53,7 @@ public class FeederIndex extends CommandBase {
     m_state = 0;
     m_feeder.setZeroOnBallSensed(true);
     m_feeder.resetOnBallSensed(true);
-    m_feeder.setSensorPosition(Integer.MIN_VALUE + 1);
+    m_feeder.setSensorPosition(-Integer.MIN_VALUE + 1);
     m_feeder.configLimitSwitches(true);
   }
 
@@ -63,8 +63,8 @@ public class FeederIndex extends CommandBase {
     if (m_arm.getCurrentArmPosition() <= 10) {
       switch (m_state) {
         case 0:
-          m_hopper.setPercentOutput(0.1);
-          if (m_Sensors.hasBallAtMouth()) {
+          m_hopper.setPercentOutput(0.25);
+          if (m_Sensors.hasBallAtMouth() == true) {
             m_state = 1;
           }
           if (m_feeder.checkForwardLimitSwitch() == true) {
@@ -75,12 +75,16 @@ public class FeederIndex extends CommandBase {
           }
           break;
         case 1:
-          m_feeder.setFeederPosition(0);
+          m_feeder.setFeeder(0.5);
           m_hopper.setPercentOutput(0);
           if (m_feeder.checkForwardLimitSwitch() == true) {
-            m_state = 5;
+            m_state = 3;
           }
-          if (!m_Sensors.hasBallAtMouth()) {
+          if (m_Sensors.hasBallAtMouth() == true) {
+            m_feeder.setFeeder(.5);
+            m_state = 1;
+          }
+          if (m_Sensors.hasBallAtMouth() == false) {
             m_state = 2;
           }
           if (m_feeder.checkReverseLimitSwitch() == true) {
@@ -88,12 +92,11 @@ public class FeederIndex extends CommandBase {
           }
           break;
         case 2:
-          m_feeder.setSensorPosition(0);
           m_hopper.setPercentOutput(0.1);
           if (m_feeder.checkForwardLimitSwitch() == true) {
-            m_state = 5;
+            m_state = 3;
           }
-          if (m_Sensors.hasBallAtMouth()) {
+          if (m_Sensors.hasBallAtMouth() == true) {
             m_state = 1;
           }
           if (m_feeder.checkReverseLimitSwitch() == true) {
@@ -102,15 +105,32 @@ public class FeederIndex extends CommandBase {
           break;
         case 3:
           m_feeder.setSensorPosition(0);
-          m_feeder.setFeederPosition(0);
+          m_feeder.setFeeder(0);
+          m_hopper.setPercentOutput(0.1);
           if (m_feeder.checkReverseLimitSwitch() == true) {
             m_state = 4;
+          }
+          if (m_Sensors.hasBallAtMouth()) {
+            m_state = 5;
           }
           break;
         case 4:
           m_feeder.setSensorPosition(0);
-          m_feeder.setFeederPosition(0);
+          m_feeder.setFeeder(0);
+          if (m_Sensors.hasBallAtMouth() == true){
+            m_hopper.setPercentOutput(0);
+          }
+          else{
+            m_hopper.setPercentOutput(.1);
+          }
+          
+          break;
+        
+        case 5:
           m_hopper.setPercentOutput(0);
+          if (m_feeder.checkReverseLimitSwitch() == true) {
+            m_state = 4;
+          }
           break;
 
       }
@@ -119,7 +139,7 @@ public class FeederIndex extends CommandBase {
     if(m_arm.getCurrentArmPosition() > 10) {
       switch (m_state) {
         case 0:
-          if (m_Sensors.hasBallAtMouth()) {
+          if (m_Sensors.hasBallAtMouth() == true) {
             m_state = 1;
           }
           if (m_feeder.checkForwardLimitSwitch() == true) {
@@ -130,11 +150,11 @@ public class FeederIndex extends CommandBase {
           }
           break;
         case 1:
-          m_feeder.setFeederPosition(0);
+          m_feeder.setFeeder(1);
           if (m_feeder.checkForwardLimitSwitch() == true) {
-            m_state = 5;
+            m_state = 3;
           }
-          if (!m_Sensors.hasBallAtMouth()) {
+          if (!m_Sensors.hasBallAtMouth() == true) {
             m_state = 2;
           }
           if (m_feeder.checkReverseLimitSwitch() == true) {
@@ -142,12 +162,11 @@ public class FeederIndex extends CommandBase {
           }
           break;
         case 2:
-          m_feeder.setSensorPosition(0);
           m_hopper.setPercentOutput(0.1);
           if (m_feeder.checkForwardLimitSwitch() == true) {
-            m_state = 5;
+            m_state = 3;
           }
-          if (m_Sensors.hasBallAtMouth()) {
+          if (m_Sensors.hasBallAtMouth() == true) {
             m_state = 1;
           }
           if (m_feeder.checkReverseLimitSwitch() == true) {
@@ -156,17 +175,19 @@ public class FeederIndex extends CommandBase {
           break;
         case 3:
           m_feeder.setSensorPosition(0);
-          m_feeder.setFeederPosition(0);
+          //m_feeder.setFeederPosition(0);
+          m_feeder.setFeeder(0);
           if (m_feeder.checkReverseLimitSwitch() == true) {
             m_state = 4;
           }
-          if(m_Sensors.hasBallAtMouth()) {
+          if(m_Sensors.hasBallAtMouth() == true) {
             m_state = 1;
           }
           break;
         case 4:
           m_feeder.setSensorPosition(0);
-          m_feeder.setFeederPosition(0);
+          //m_feeder.setFeederPosition(0);
+          m_feeder.setFeeder(0);
           break;
       }
     }
@@ -175,6 +196,8 @@ public class FeederIndex extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_feeder.setSensorPosition(0);
+    //m_feeder.setFeederPosition(0);
     m_feeder.setFeeder(0);
   }
 
