@@ -87,6 +87,8 @@ public final class Constants {
 
 	// Hopper constants
 	public static final int HOPPER = 10;
+	public static final int WINDMILL = 5;
+	public static final double WINDMILL_PERCENT_OUTPUT = 0.25;
 	public static final double HOPPER_SHOOT_PERCENT_OUTPUT = .25;
 	public static final double HOPPER_EJECT_PERCENT_OUTPUT = -.3;
 	public static final int HOPPER_UNJAMMER_PCM = 1;
