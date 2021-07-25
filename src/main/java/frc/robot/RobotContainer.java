@@ -473,9 +473,9 @@ public class RobotContainer {
           new RunIntake(m_intake, 1)
         )
       ),
-        new AutoShoot(4, .3, 4, true)
-      /*new ParallelDeadlineGroup(
-        new BasicAutoDrive(m_drive, -5, 4, -4),
+        new AutoShoot(4, .3, 4, true),
+      new ParallelDeadlineGroup(
+        new BasicAutoDrive(m_drive, 3, -9, -4),
         new FeederStop(m_feeder),
         new HopperStop(m_hopper),
         new SequentialCommandGroup(
@@ -484,7 +484,23 @@ public class RobotContainer {
         )
       ),
       new BasicAutoDrive(m_drive, 5, -4, 4),
-      new AutoShoot(2, .3, 4, true)*/
+      new AutoShoot(2, .3, 4, true)
+
+      /*new ParallelDeadlineGroup(
+        new SequentialCommandGroup(
+          new BasicAutoDrive(m_drive, 0, -4, -4),
+          new BasicAutoDrive(m_drive, 3, -3, -4),
+          new BasicAutoDrive(m_drive, -3, 3, 4)
+        ),
+        new FeederStop(m_feeder),
+        new HopperStop(m_hopper),
+        new SequentialCommandGroup(
+          new DeployIntake(m_intake),
+          new RunIntake(m_intake, 1)
+        )
+      )*/
+
+
 
         
         //new ArmStow(m_arm, () -> false)
