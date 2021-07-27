@@ -256,7 +256,13 @@ public class Drive extends SubsystemBase {
   }
 
   public double getStraightSpeed() {
+    // Return forwards (X) velocity in feet per second
     return (getLeftSpeed() + getRightSpeed()) / 2;
+  }
+
+  public double getTurnSpeed() {
+    // Return rotational velocity in degrees per second
+    return Units.radiansToDegrees((getRightSpeed() - getLeftSpeed()) / Constants.WHEEL_BASE_WIDTH);
   }
 
   public void setBrakeMode() {
