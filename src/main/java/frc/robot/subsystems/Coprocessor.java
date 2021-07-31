@@ -25,7 +25,7 @@ public class Coprocessor extends SubsystemBase {
     private NetworkTable driverStationTable;
     private NetworkTable odomTable;
 
-    private final double clientConnectedTimeout = 1.0;  // seconds
+    private final long clientConnectedTimeout = 1_000_000;  // micro seconds
     private final String rootTableName = "coprocessor";
 
     public Coprocessor(Drive drive)
@@ -58,11 +58,12 @@ public class Coprocessor extends SubsystemBase {
     public void periodic()
     {
         hostTimestamp.setNumber(getTime());
-        if (!isConnected()) {
-            return;
-        }
+        // if (!isConnected()) {
+        //     return;
+        // }
         // Driver Station
         driverStationTable.getEntry("isFMSAttached").setBoolean(DriverStation.getInstance().isFMSAttached());
+        driverStationTable.getEntry("isAutonomous").setBoolean(DriverStation.getInstance().isAutonomous());
         driverStationTable.getEntry("getMatchTime").setDouble(DriverStation.getInstance().getMatchTime());
 
         // Robot odometry pose
