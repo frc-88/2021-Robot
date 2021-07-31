@@ -72,6 +72,7 @@ import frc.robot.commands.sensors.ZeroYaw;
 import frc.robot.driveutil.DriveUtils;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Coprocessor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hopper;
@@ -133,6 +134,7 @@ public class RobotContainer {
   private final Hopper m_hopper = new Hopper();
   private final Shooter m_shooter = new Shooter(m_sensors);
   private final Intake m_intake = new Intake();
+  private final Coprocessor m_coprocessor = new Coprocessor(m_drive);
   // private final ControlPanelManipulator m_cpm = new ControlPanelManipulator();
 
   /***
