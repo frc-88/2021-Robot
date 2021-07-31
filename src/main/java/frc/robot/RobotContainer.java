@@ -437,118 +437,74 @@ public class RobotContainer {
     new ArmStow(m_arm, () -> m_driverController.getRawButton(5))
     );
 
-  private final CommandBase m_auto3Ball = new ParallelCommandGroup(
-    new SequentialCommandGroup(
-//      new ParallelCommandGroup(
-//        new SequentialCommandGroup(
-          new BasicAutoDrive(m_drive, -2, -2, 3),
-          //new ArcadeDrive(m_drive, () -> 0, () -> 0, () -> false, () -> Constants.MAX_SPEED_HIGH),
-          new ParallelDeadlineGroup(
-            new WaitInitializeCommand(() -> SmartDashboard.getNumber("Auto Drive Wait", 6)),
-            new SequentialCommandGroup(
-              new AutoShoot(3, .3, 5, true),
-              new AutoDoNothing()
-              )
-//            )
-//        )
-      ),
-        new ShooterStop(m_shooter),
-        new FeederStop(m_feeder),
-        new HopperStop(m_hopper),
-        new StopIntake(m_intake),
-        new ArmStow(m_arm, () -> false)
-    ),
-    new AutoClimber()
-  );
-
-  private final CommandBase m_autoTrench7Ball = new ParallelCommandGroup(
-    new SequentialCommandGroup(
-      new ParallelDeadlineGroup(
-        new BasicAutoDrive(m_drive, -6, 6, -8),
-        new ShooterRunFromLimelight(m_shooter),
-        new FeederStop(m_feeder),
-        new HopperStop(m_hopper),
-        new SequentialCommandGroup(
-          new DeployIntake(m_intake),
-          new RunIntake(m_intake, 1)
-        )
-      ),
-        new AutoShoot(4, .3, 4, true),
-      new ParallelDeadlineGroup(
-        new BasicAutoDrive(m_drive, 3, -9, -4),
-        new FeederStop(m_feeder),
-        new HopperStop(m_hopper),
-        new SequentialCommandGroup(
-          new DeployIntake(m_intake),
-          new RunIntake(m_intake, 1)
-        )
-      ),
-      new BasicAutoDrive(m_drive, 5, -4, 4),
-      new AutoShoot(2, .3, 4, true)
-
-      /*new ParallelDeadlineGroup(
-        new SequentialCommandGroup(
-          new BasicAutoDrive(m_drive, 0, -4, -4),
-          new BasicAutoDrive(m_drive, 3, -3, -4),
-          new BasicAutoDrive(m_drive, -3, 3, 4)
-        ),
-        new FeederStop(m_feeder),
-        new HopperStop(m_hopper),
-        new SequentialCommandGroup(
-          new DeployIntake(m_intake),
-          new RunIntake(m_intake, 1)
-        )
-      )*/
-
-
-
-        
-        //new ArmStow(m_arm, () -> false)
-        /*
-      new ParallelDeadlineGroup(
-        new BasicAutoDrive(m_drive, 9.7, 10.2, 6),
-        new ShooterRunFromLimelight(m_shooter),
-        new FeederStop(m_feeder),
-        new HopperStop(m_hopper),
-        new SequentialCommandGroup(
-          new ParallelDeadlineGroup(
-            new WaitCommand(0.75),
-            new RetractIntake(m_intake)
-          ),
-          new StopIntake(m_intake)
-        ),
-        new ArmStow(m_arm, () -> m_driverController.getRawButton(5))
-      ),
-      new AutoShoot(100, 15, 15, true)*/
-    ),
-    new AutoClimber()
-  );
-
-  private CommandBase m_autoCommand = m_autoDoNothing;
-  // private CommandBase m_autoCommand = m_autoTrench7Ball;
-  private class ButtonAutoPair {
-    private Trigger button;
-    private CommandBase auto;
-
-    public ButtonAutoPair(Trigger button, CommandBase auto) {
-      this.button = button;
-      this.auto = auto;
-    }
-
-    public void check() {
-      if (this.button.get()) {
-        m_autoCommand = this.auto;
-      }
-    }
-  }
-  private final List<ButtonAutoPair> autoSelectors = Arrays.asList(
-    new ButtonAutoPair(m_buttonBox.button2, m_autoDoNothing),
-    new ButtonAutoPair(m_buttonBox.button3, m_autoJustDrive),
-    // new ButtonAutoPair(m_buttonBox.button4, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.barrelRun)),
-    // new ButtonAutoPair(m_buttonBox.button5, new AutoFollowTrajectory(m_drive, m_sensors, m_drive.trajectories.slalom))
-    new ButtonAutoPair(m_buttonBox.button4, m_auto3Ball),
-    new ButtonAutoPair(m_buttonBox.button5, m_autoTrench7Ball)
-  );
+          /* 440 */ this.m_auto3Ball = (CommandBase) new ParallelCommandGroup(
+            new Command[] { (Command) new SequentialCommandGroup(new Command[] {
+              (Command) new AutoFollowTrajectory(this.m_drive, this.m_sensors,
+                      this.m_drive.trajectories.auto3ball1),
+              (Command) new ParallelDeadlineGroup(
+                      (Command) new WaitInitializeCommand(
+                              () -> SmartDashboard.getNumber("Auto Drive Wait", 6.0D)),
+                      new Command[] { (Command) new SequentialCommandGroup(
+                              new Command[] { (Command) new AutoShoot(3, 0.3D, 5.0D, true),
+                                      (Command) new AutoDoNothing() }) }),
+              (Command) new ShooterStop(this.m_shooter), (Command) new FeederStop(this.m_feeder),
+              (Command) new HopperStop(this.m_hopper), (Command) new StopIntake(this.m_intake),
+              (Command) new ArmStow(this.m_arm, () -> false) }), (Command) new AutoClimber() });
+/*     */
+/* 465 */ this.m_autostealyoballs = (CommandBase) new ParallelCommandGroup(
+      new Command[] {
+              (Command) new SequentialCommandGroup(new Command[] {
+                      (Command) new ParallelDeadlineGroup(
+                              (Command) new SequentialCommandGroup(
+                                      new Command[] { (Command) new AutoFollowTrajectory(this.m_drive,
+                                              this.m_sensors, this.m_drive.trajectories.autostealyoballs1) }),
+                              new Command[] { (Command) new FeederStop(this.m_feeder),
+                                      (Command) new HopperStop(this.m_hopper),
+                                      (Command) new SequentialCommandGroup(
+                                              new Command[] { (Command) new DeployIntake(this.m_intake),
+                                                      (Command) new RunIntake(this.m_intake, 1.0D) }) }),
+                      (Command) new ParallelDeadlineGroup(
+                              (Command) new AutoFollowTrajectory(this.m_drive, this.m_sensors,
+                                      this.m_drive.trajectories.autostealyoballs2),
+                              new Command[] { (Command) new StopIntake(this.m_intake) }),
+                      (Command) new AutoShoot(3, 0.3D, 5.0D, true), (Command) new AutoDoNothing() }),
+              (Command) new AutoClimber() });
+/*     */
+/* 490 */ this.m_autoTrench7Ball = (CommandBase) new ParallelCommandGroup(
+      new Command[] {
+              (Command) new SequentialCommandGroup(
+                      new Command[] {
+                              (Command) new ParallelDeadlineGroup((Command) new AutoFollowTrajectory(
+                                      this.m_drive, this.m_sensors, this.m_drive.trajectories.autotrench1),
+                                      new Command[] { (Command) new ShooterRunFromLimelight(this.m_shooter),
+                                              (Command) new FeederStop(this.m_feeder),
+                                              (Command) new HopperStop(this.m_hopper),
+                                              (Command) new SequentialCommandGroup(new Command[] {
+                                                      (Command) new DeployIntake(this.m_intake),
+                                                      (Command) new RunIntake(this.m_intake, 1.0D) }) }),
+                              (Command) new AutoShoot(4, 0.3D, 3.0D, true),
+                              (Command) new ParallelDeadlineGroup(
+                                      (Command) new SequentialCommandGroup(new Command[] {
+                                              (Command) new AutoFollowTrajectory(this.m_drive, this.m_sensors,
+                                                      this.m_drive.trajectories.autotrench2),
+                                              (Command) new AutoFollowTrajectory(this.m_drive, this.m_sensors,
+                                                      this.m_drive.trajectories.autotrench3) }),
+                                      new Command[] { (Command) new FeederStop(this.m_feeder),
+                                              (Command) new HopperStop(this.m_hopper),
+                                              (Command) new SequentialCommandGroup(new Command[] {
+                                                      (Command) new DeployIntake(this.m_intake),
+                                                      (Command) new RunIntake(this.m_intake, 1.0D) }) }),
+                              (Command) new AutoShoot(2, 0.3D, 4.0D, true) }),
+              (Command) new AutoClimber() });
+/*     */
+/* 559 */ this.m_autoCommand = this.m_autoDoNothing;
+/*     */
+/* 576 */ this.autoSelectors = Arrays.asList(
+      new ButtonAutoPair[] { new ButtonAutoPair((Trigger) this.m_buttonBox.button2, this.m_autoDoNothing),
+              new ButtonAutoPair((Trigger) this.m_buttonBox.button3, this.m_autostealyoballs),
+              new ButtonAutoPair((Trigger) this.m_buttonBox.button4, this.m_auto3Ball),
+              new ButtonAutoPair((Trigger) this.m_buttonBox.button5, this.m_autoTrench7Ball) });
+/*     */
 
   /***
   *      ______   ______   .__   __.      _______.___________..______       __    __    ______ .___________.  ______   .______      
