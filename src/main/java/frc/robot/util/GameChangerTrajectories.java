@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Constants;
 
-/public class GameChangerTrajectories
+public class GameChangerTrajectories
 /*     */ {
 /*     */   public Trajectory barrelRun;
 /*     */   public Trajectory barrelRun2;

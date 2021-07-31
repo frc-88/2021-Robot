@@ -413,7 +413,7 @@ public class RobotContainer {
         new LimelightToggle(m_sensors, false)
       );
     }
-  }
+  };
   
   private final CommandBase m_autoDoNothing = new ParallelCommandGroup(
     new AutoDoNothing(),
@@ -436,22 +436,24 @@ public class RobotContainer {
     new StopIntake(m_intake),
     new ArmStow(m_arm, () -> m_driverController.getRawButton(5))
     );
+  
+    private final CommandBase m_auto3Ball = new ParallelCommandGroup(
+        new SequentialCommandGroup(
+          new AutoFollowTrajectory(this.m_drive, this.m_sensors, this.m_drive.trajectories.auto3ball1),
+          new ParallelDeadlineGroup(
+            new WaitInitializeCommand(() -> SmartDashboard.getNumber("Auto Drive Wait", 6.0D)),
+            new SequentialCommandGroup(
+              new AutoShoot(3, 0.3D, 5.0D, true),
+              new AutoDoNothing())
+            ),
+          new ShooterStop(this.m_shooter), (Command) new FeederStop(this.m_feeder),
+          new HopperStop(this.m_hopper), (Command) new StopIntake(this.m_intake),
+          new ArmStow(this.m_arm, () -> false)
+        ), 
+        new AutoClimber()
+      );
 
-          /* 440 */ this.m_auto3Ball = (CommandBase) new ParallelCommandGroup(
-            new Command[] { (Command) new SequentialCommandGroup(new Command[] {
-              (Command) new AutoFollowTrajectory(this.m_drive, this.m_sensors,
-                      this.m_drive.trajectories.auto3ball1),
-              (Command) new ParallelDeadlineGroup(
-                      (Command) new WaitInitializeCommand(
-                              () -> SmartDashboard.getNumber("Auto Drive Wait", 6.0D)),
-                      new Command[] { (Command) new SequentialCommandGroup(
-                              new Command[] { (Command) new AutoShoot(3, 0.3D, 5.0D, true),
-                                      (Command) new AutoDoNothing() }) }),
-              (Command) new ShooterStop(this.m_shooter), (Command) new FeederStop(this.m_feeder),
-              (Command) new HopperStop(this.m_hopper), (Command) new StopIntake(this.m_intake),
-              (Command) new ArmStow(this.m_arm, () -> false) }), (Command) new AutoClimber() });
-/*     */
-/* 465 */ this.m_autostealyoballs = (CommandBase) new ParallelCommandGroup(
+    private CommandBase m_autostealyoballs = (CommandBase) new ParallelCommandGroup(
       new Command[] {
               (Command) new SequentialCommandGroup(new Command[] {
                       (Command) new ParallelDeadlineGroup(
@@ -469,8 +471,8 @@ public class RobotContainer {
                               new Command[] { (Command) new StopIntake(this.m_intake) }),
                       (Command) new AutoShoot(3, 0.3D, 5.0D, true), (Command) new AutoDoNothing() }),
               (Command) new AutoClimber() });
-/*     */
-/* 490 */ this.m_autoTrench7Ball = (CommandBase) new ParallelCommandGroup(
+
+    private CommandBase m_autoTrench7Ball = (CommandBase) new ParallelCommandGroup(
       new Command[] {
               (Command) new SequentialCommandGroup(
                       new Command[] {
@@ -496,15 +498,30 @@ public class RobotContainer {
                                                       (Command) new RunIntake(this.m_intake, 1.0D) }) }),
                               (Command) new AutoShoot(2, 0.3D, 4.0D, true) }),
               (Command) new AutoClimber() });
-/*     */
-/* 559 */ this.m_autoCommand = this.m_autoDoNothing;
-/*     */
-/* 576 */ this.autoSelectors = Arrays.asList(
+
+  private CommandBase m_autoCommand = m_autoDoNothing;
+
+  private class ButtonAutoPair {
+    private Trigger button;
+    private CommandBase auto;
+
+    public ButtonAutoPair(Trigger button, CommandBase auto) {
+      this.button = button;
+      this.auto = auto;
+    }
+
+    public void check() {
+      if (this.button.get()) {
+        m_autoCommand = this.auto;
+      }
+    }
+  }
+  private final List<ButtonAutoPair> autoSelectors = Arrays.asList(
       new ButtonAutoPair[] { new ButtonAutoPair((Trigger) this.m_buttonBox.button2, this.m_autoDoNothing),
               new ButtonAutoPair((Trigger) this.m_buttonBox.button3, this.m_autostealyoballs),
               new ButtonAutoPair((Trigger) this.m_buttonBox.button4, this.m_auto3Ball),
               new ButtonAutoPair((Trigger) this.m_buttonBox.button5, this.m_autoTrench7Ball) });
-/*     */
+
 
   /***
   *      ______   ______   .__   __.      _______.___________..______       __    __    ______ .___________.  ______   .______      
