@@ -183,7 +183,7 @@ public class GameChangerTrajectories
   private Trajectory generateauto3ball1Trajectory() {
     ArrayList<Pose2d> waypoints = new ArrayList<>();
     waypoints.add(new Pose2d(Units.feetToMeters(0.0D), Units.feetToMeters(0.0D), new Rotation2d()));
-    waypoints.add(new Pose2d(Units.feetToMeters(-2.0D), Units.feetToMeters(0.0D), new Rotation2d()));
+    waypoints.add(new Pose2d(Units.feetToMeters(-3.0D), Units.feetToMeters(0.0D), new Rotation2d()));
 
     this.m_config.setReversed(true);
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, this.m_config);

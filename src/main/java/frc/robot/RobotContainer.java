@@ -443,8 +443,8 @@ public class RobotContainer {
   
     private final CommandBase m_auto3Ball = new ParallelCommandGroup(
         new SequentialCommandGroup(
-          new AutoFollowTrajectory(this.m_drive, this.m_sensors, this.m_drive.trajectories.auto3ball1),
-          new ParallelDeadlineGroup(
+          new AutoFollowTrajectory(this.m_drive, this.m_sensors, this.m_drive.trajectories.auto3ball1)//,
+          /*new ParallelDeadlineGroup(
             new WaitInitializeCommand(() -> SmartDashboard.getNumber("Auto Drive Wait", 6.0D)),
             new SequentialCommandGroup(
               new AutoShoot(3, 0.3D, 5.0D, true),
@@ -454,8 +454,8 @@ public class RobotContainer {
           new HopperStop(this.m_hopper), (Command) new StopIntake(this.m_intake),
           new ArmStow(this.m_arm, () -> false)
         ), 
-        new AutoClimber()
-      );
+        new AutoClimber()*/
+      ));
 
     private CommandBase m_autostealyoballs = (CommandBase) new ParallelCommandGroup(
       new Command[] {
