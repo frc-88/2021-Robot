@@ -62,6 +62,8 @@ public class Drive extends SubsystemBase {
   private DoublePreferenceConstant upshiftSpeed;
   private DoublePreferenceConstant commandDownshiftSpeed;
   private DoublePreferenceConstant commandDownshiftCommandValue;
+  private DoublePreferenceConstant highGearRatioValue;
+  private DoublePreferenceConstant lowGearRatioValue;
 
   private boolean isOnLimelightTarget = false;
 
@@ -84,6 +86,9 @@ public class Drive extends SubsystemBase {
     upshiftSpeed = new DoublePreferenceConstant("UpshiftSpeed", 6);
     commandDownshiftSpeed = new DoublePreferenceConstant("Command Downshift Speed", 5);
     commandDownshiftCommandValue = new DoublePreferenceConstant("Command Downshift Command Value", 0.1);
+    
+    highGearRatioValue = new DoublePreferenceConstant("High Gear Ratio", Constants.HIGH_DRIVE_RATIO);
+    lowGearRatioValue = new DoublePreferenceConstant("Low Gear Ratio", Constants.LOW_DRIVE_RATIO);
 
     m_leftTransmission = new ShiftingTransmission(new Falcon500(), Constants.NUM_DRIVE_MOTORS_PER_SIDE,
         new CTREMagEncoder(), Constants.LOW_DRIVE_RATIO, Constants.HIGH_DRIVE_RATIO, Constants.DRIVE_SENSOR_RATIO,
@@ -93,7 +98,7 @@ public class Drive extends SubsystemBase {
         new CTREMagEncoder(), Constants.LOW_DRIVE_RATIO, Constants.HIGH_DRIVE_RATIO, Constants.DRIVE_SENSOR_RATIO,
         Constants.DRIVE_LOW_STATIC_FRICTION_VOLTAGE, Constants.DRIVE_HIGH_STATIC_FRICTION_VOLTAGE,
         Constants.DRIVE_RIGHT_LOW_EFFICIENCY, Constants.DRIVE_RIGHT_HIGH_EFFICIENCY);
-
+    
     m_leftVelPID = new SyncPIDController(velPIDConstants);
     m_rightVelPID = new SyncPIDController(velPIDConstants);
     m_leftTransmission.setVelocityPID(m_leftVelPID);

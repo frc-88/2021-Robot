@@ -114,12 +114,12 @@ public final class Constants {
 	*/
 	
 	// Drive CAN IDs
-	public static final int LEFT_MASTER_DRIVE_ID = 0;
-	public static final int LEFT_FOLLOWER_DRIVE_ID = 1;
-	public static final int RIGHT_MASTER_DRIVE_ID = 15;
-	public static final int RIGHT_FOLLOWER_DRIVE_ID = 14;
-	public static final int LEFT_DRIVE_ENCODER_ID = 0;
-	public static final int RIGHT_DRIVE_ENCODER_ID = 15;
+	public static final int LEFT_MASTER_DRIVE_ID = 15;
+	public static final int LEFT_FOLLOWER_DRIVE_ID = 14;
+	public static final int RIGHT_MASTER_DRIVE_ID = 0;
+	public static final int RIGHT_FOLLOWER_DRIVE_ID = 1;
+	public static final int LEFT_DRIVE_ENCODER_ID = 15;
+	public static final int RIGHT_DRIVE_ENCODER_ID = 0;
 	public static final int SHIFTER_LEFT_PCM = 0;
 	public static final int SHIFTER_LEFT_OUT = 2;
 	public static final int SHIFTER_LEFT_IN = 5;
@@ -130,9 +130,9 @@ public final class Constants {
 	// Drive Configuration
 	public static final int NUM_DRIVE_MOTORS_PER_SIDE = 2;
 	public static final double WHEEL_DIAMETER = 5.84375;
-	public static final double LOW_DRIVE_RATIO = (1. / 18.38) * (WHEEL_DIAMETER/12.) * Math.PI;
-	public static final double HIGH_DRIVE_RATIO = (1. / 8.50) * (WHEEL_DIAMETER/12.) * Math.PI;
-	public static final double DRIVE_SENSOR_RATIO = (1. / ((WHEEL_DIAMETER/12.) * Math.PI)) * 7.5;
+	public static final double LOW_DRIVE_RATIO = (1. / 18.38) * (WHEEL_DIAMETER/12) * Math.PI;
+	public static final double HIGH_DRIVE_RATIO = (1. / 8.50) * (WHEEL_DIAMETER/12) * Math.PI;
+	public static final double DRIVE_SENSOR_RATIO = (1. / ((WHEEL_DIAMETER/12) * Math.PI));
 	public static final double DRIVE_LOW_STATIC_FRICTION_VOLTAGE = 0.2;
 	public static final double DRIVE_HIGH_STATIC_FRICTION_VOLTAGE = 0.24;
 	public static final double DRIVE_LEFT_LOW_EFFICIENCY = 1.025;
@@ -142,7 +142,7 @@ public final class Constants {
 	public static final double MAX_SPEED_LOW = 8.8;
 	public static final double MAX_SPEED_HIGH = 18;
 	public static final double WHEEL_BASE_WIDTH = (25. + 5./16.) / 12.; // feet
-	public static final double DRIVE_CURRENT_LIMIT = 300;
+	public static final double DRIVE_CURRENT_LIMIT = 30000;  // hack: normally is 300 amps  (theoretically should be 160)
 	public static final int DRIVE_SPEED_EXP = 2;
 	public static final int DRIVE_TURN_EXP = 2;
 	public static final double DRIVE_JOYSTICK_DEADBAND = 0.12;
