@@ -30,6 +30,7 @@ public class StopIntake extends CommandBase {
   @Override
   public void execute() {
     intake.setRoller(0);
+    intake.setRollerBrake();
   }
 
   // Called once the command ends or is interrupted.

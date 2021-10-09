@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -50,7 +51,9 @@ public class Intake extends SubsystemBase {
   public void setRoller(double speed) {
     rollerMotor.set(ControlMode.PercentOutput, speed);
 }
-
+  public void setRollerBrake() {
+    rollerMotor.setNeutralMode(NeutralMode.Brake);
+  }
 
   public void deploy() {
     deployPiston.set(Value.kForward);

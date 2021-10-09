@@ -324,10 +324,12 @@ public class RobotContainer {
   private class AutoClimber extends SequentialCommandGroup {
     public AutoClimber() {
       super (
-        new ConditionalCommand(
+        /*new ConditionalCommand(
           new EngageRatchets(m_climber),
           new DisengageRatchets(m_climber),
-          m_buttonBox.button14::get),
+          //m_buttonBox.button14::get),
+          */
+        new DisengageRatchets(m_climber),
         new ZeroClimber(m_climber),
         new StopClimber(m_climber)
       );
