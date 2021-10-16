@@ -271,14 +271,21 @@ public class RobotContainer {
   private final CommandBase m_intakePlayer =
     new ParallelCommandGroup(
       new ArmMotionMagic(m_arm, 45),
-      new DeployIntake(m_intake)
+      new FeederIndex(m_feeder, m_sensors, m_arm, m_hopper),
+      new SequentialCommandGroup(
+        new DeployIntake(m_intake),
+        new RunIntake(m_intake, 0)
+      )
     );
 
   //intakePlayerOff - closes intake and lowers arm
   private final CommandBase m_intakePlayerOff =
     new ParallelCommandGroup(
       new ArmStow(m_arm, () -> false),
-      new RetractIntake(m_intake)
+      new SequentialCommandGroup(
+        new RetractIntake(m_intake),
+        new StopIntake(m_intake)
+      )
     );
 
   // regurgitate - deploy the intake and run the intake, hopper, and feeder in reverse

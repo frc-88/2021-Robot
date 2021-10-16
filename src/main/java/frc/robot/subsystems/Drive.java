@@ -110,6 +110,9 @@ public class Drive extends SubsystemBase {
     m_leftEncoder.configFactoryDefault();
     m_rightEncoder.configFactoryDefault();
 
+    m_leftEncoder.configSensorDirection(true);
+    m_rightEncoder.configSensorDirection(true);
+
     m_leftDrive = new TJDriveModule(m_driveConfiguration.left, m_leftTransmission);
     m_rightDrive = new TJDriveModule(m_driveConfiguration.right, m_rightTransmission);
 

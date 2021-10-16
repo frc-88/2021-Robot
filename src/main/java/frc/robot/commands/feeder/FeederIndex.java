@@ -60,7 +60,7 @@ public class FeederIndex extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_arm.getCurrentArmPosition() <= 10) {
+    //if (m_arm.getCurrentArmPosition() <= 10) {
       switch (m_state) {
         case 0:
           m_hopper.setPercentOutput(0.25);
@@ -76,7 +76,6 @@ public class FeederIndex extends CommandBase {
           break;
         case 1:
           m_feeder.setFeeder(0.5);
-          m_hopper.setPercentOutput(0);
           if (m_feeder.checkForwardLimitSwitch() == true) {
             m_state = 3;
           }
@@ -92,7 +91,7 @@ public class FeederIndex extends CommandBase {
           }
           break;
         case 2:
-          m_hopper.setPercentOutput(0.1);
+          m_hopper.setPercentOutput(0.25);
           if (m_feeder.checkForwardLimitSwitch() == true) {
             m_state = 3;
           }
@@ -106,7 +105,7 @@ public class FeederIndex extends CommandBase {
         case 3:
           m_feeder.setSensorPosition(0);
           m_feeder.setFeeder(0);
-          m_hopper.setPercentOutput(0.1);
+          m_hopper.setPercentOutput(0.25);
           if (m_feeder.checkReverseLimitSwitch() == true) {
             m_state = 4;
           }
@@ -135,11 +134,12 @@ public class FeederIndex extends CommandBase {
 
       }
 
-    }
-    if(m_arm.getCurrentArmPosition() > 10) {
+    //}
+    /*if(m_arm.getCurrentArmPosition() > 10) {
       switch (m_state) {
         case 0:
-          if (m_Sensors.hasBallAtMouth() == true) {
+        m_hopper.setPercentOutput(0.25);
+        if (m_Sensors.hasBallAtMouth() == true) {
             m_state = 1;
           }
           if (m_feeder.checkForwardLimitSwitch() == true) {
@@ -190,7 +190,7 @@ public class FeederIndex extends CommandBase {
           m_feeder.setFeeder(0);
           break;
       }
-    }
+    }*/
   }
 
   // Called once the command ends or is interrupted.

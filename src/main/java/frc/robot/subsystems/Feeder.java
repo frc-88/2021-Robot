@@ -99,6 +99,8 @@ public class Feeder extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Feeder Position", m_feeder.getSelectedSensorPosition());
+    SmartDashboard.putBoolean("Middle Sensor", this.checkForwardLimitSwitch());
+    SmartDashboard.putBoolean("Shooter Mouth", this.checkReverseLimitSwitch());
     // This method will be called once per scheduler run
   }
 }
