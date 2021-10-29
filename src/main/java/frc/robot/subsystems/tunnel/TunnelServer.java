@@ -19,8 +19,7 @@ public class TunnelServer extends Thread {
         this.m_drive = drive;
     }
 
-    public void update()
-    {
+    public void update() {
         sendOdometry();
     }
 
@@ -41,7 +40,7 @@ public class TunnelServer extends Thread {
         {
             TunnelThread tunnel = tunnels.get(index);
             if (tunnel.isCommandActive()) {
-                // TODO: set command
+                m_drive.arcadeDrive(tunnel.getSpeedCommand(), tunnel.getTurnCommand());
                 return true;
             }
         }

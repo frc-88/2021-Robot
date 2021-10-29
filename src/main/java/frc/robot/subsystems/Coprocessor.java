@@ -6,8 +6,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.listeners.SetOdomListener;
 import frc.robot.subsystems.tunnel.TunnelDataRelayThread;
@@ -36,6 +34,8 @@ public class Coprocessor extends SubsystemBase {
     private TunnelServer tunnel;
     private TunnelDataRelayThread data_relay_thread;
 
+    private boolean isCommandSet = false;
+
     public Coprocessor(Drive drive)
     {
         m_drive = drive;
@@ -61,14 +61,16 @@ public class Coprocessor extends SubsystemBase {
         data_relay_thread.start();
     }
 
-    private long getTime()
-    {
+    private long getTime() {
         return RobotController.getFPGATime();
     }
 
-    public boolean isConnected()
-    {
+    public boolean isConnected() {
         return clientTimestamp.exists() && hostTimestamp.exists() && (getTime() - clientTimestamp.getLastChange() < clientConnectedTimeout);
+    }
+
+    public boolean getIsCommandSet() {
+        return isCommandSet;
     }
 
     @Override
@@ -80,5 +82,7 @@ public class Coprocessor extends SubsystemBase {
         driverStationTable.getEntry("isFMSAttached").setBoolean(DriverStation.getInstance().isFMSAttached());
         driverStationTable.getEntry("isAutonomous").setBoolean(DriverStation.getInstance().isAutonomous());
         driverStationTable.getEntry("getMatchTime").setDouble(DriverStation.getInstance().getMatchTime());
+
+        isCommandSet = tunnel.setCommandIfActive();
     }
 }
