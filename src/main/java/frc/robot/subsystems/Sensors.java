@@ -47,8 +47,8 @@ public class Sensors extends SubsystemBase {
   private final Limelight limelight;
   private BooleanSupplier ledOverride;
 
-  //private CameraServer cameraServer = CameraServer.getInstance();
-  // private UsbCamera intakeCamera, hopperCamera;
+  private CameraServer cameraServer = CameraServer.getInstance();
+  private UsbCamera intakeCamera, hopperCamera;
 
   private double m_totalYellow = 0.0;
   private double m_totalYellowChamber = 0.0;
@@ -77,25 +77,25 @@ public class Sensors extends SubsystemBase {
     shooterBallSensor = new DigitalInput(Constants.SHOOTER_BALL_SENSOR_ID);
     feederMouthSensor = new DigitalInput(Constants.FEEDER_MOUTH_SENSOR_ID);
 
-    //intakeCamera = cameraServer.startAutomaticCapture(0);
+    intakeCamera = cameraServer.startAutomaticCapture(0);
     //intakeCamera.setConfigJson("{'fps':15,'height':120,'pixel format':'MJPEG','width':160}");
     //intakeCamera.setFPS(15);
     //intakeCamera.setResolution(160, 120);
     //intakeCamera.setPixelFormat(PixelFormat.kMJPEG);
 
-    // hopperCamera = cameraServer.startAutomaticCapture(Constants.PCC_CAMERA_NAME, Constants.PCC_CAMERA_ID);
-    // hopperCamera.setFPS(15);
-    // hopperCamera.setResolution(320, 240);
-    // hopperCamera.setPixelFormat(PixelFormat.kMJPEG);
+    //hopperCamera = cameraServer.startAutomaticCapture(Constants.PCC_CAMERA_NAME, Constants.PCC_CAMERA_ID);
+    //hopperCamera.setFPS(15);
+    //hopperCamera.setResolution(320, 240);
+    //hopperCamera.setPixelFormat(PixelFormat.kMJPEG);
 
     
     // startCounter(hopperCamera);
 
-    // cameraServer.getServer().setSource(intakeCamera);
+     cameraServer.getServer().setSource(intakeCamera);
   }
  
 
-  /*public void startCounter(UsbCamera camera) {
+  public void startCounter(UsbCamera camera) {
     new Thread(() -> {
       camera.setResolution(Constants.PCC_IMAGE_WIDTH, Constants.PCC_IMAGE_HEIGHT);
 
@@ -143,7 +143,7 @@ public class Sensors extends SubsystemBase {
       }
     }).start();
   }
-*/
+
   public void zeroYaw() {
     m_yawOffset = m_navx.getYaw();
   }

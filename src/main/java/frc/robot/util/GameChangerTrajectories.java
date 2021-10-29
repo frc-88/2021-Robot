@@ -35,6 +35,10 @@ public class GameChangerTrajectories
   public Trajectory autotrench3;
   public Trajectory autostealyoballs1;
   public Trajectory autostealyoballs2;
+  public Trajectory autotenball1;
+  public Trajectory autotenball2;
+  public Trajectory autotenball3;
+  public Trajectory autotenball4;
   private static final double TRAJ_CONFIG_MAX_VEL = 16.0D;
   private static final double TRAJ_CONFIG_MAX_ACCEL = 8.0D;
   private static final double TRAJ_CONFIG_MAX_CENTRIP_ACCEL = 4.5D;
@@ -61,6 +65,10 @@ public class GameChangerTrajectories
     this.autostealyoballs1 = generateautostealyoballs1Trajectory();
     this.autostealyoballs2 = generateautostealyoballs2Trajectory();
     this.test = generateTestTrajectory();
+    this.autotenball1 = generateautotenball1Trajectory();
+    this.autotenball2 = generateautotenball2Trajectory();
+    this.autotenball3 = generateautotenball3Trajectory();
+    this.autotenball4 = generateautotenball4Trajectory();
   }
 
 
@@ -205,8 +213,8 @@ public class GameChangerTrajectories
   private Trajectory generateautotrench2Trajectory() {
     ArrayList<Pose2d> waypoints = new ArrayList<>();
     waypoints.add(new Pose2d(Units.feetToMeters(-7.0D), Units.feetToMeters(0.0D), new Rotation2d(Units.degreesToRadians(10.0D))));
-    waypoints.add(new Pose2d(Units.feetToMeters(-10.0D), Units.feetToMeters(0.875D), new Rotation2d(Units.degreesToRadians(0.0D))));
-    waypoints.add(new Pose2d(Units.feetToMeters(-14.0D), Units.feetToMeters(1.0D), new Rotation2d(Units.degreesToRadians(0.0D))));
+    waypoints.add(new Pose2d(Units.feetToMeters(-10.0D), Units.feetToMeters(0.0D), new Rotation2d(Units.degreesToRadians(0.0D))));
+    waypoints.add(new Pose2d(Units.feetToMeters(-14.0D), Units.feetToMeters(0.0D), new Rotation2d(Units.degreesToRadians(0.0D))));
 
     this.m_config.setReversed(true);
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, this.m_config);
@@ -217,7 +225,7 @@ public class GameChangerTrajectories
   private Trajectory generateautotrench3Trajectory() {
     ArrayList<Pose2d> waypoints = new ArrayList<>();
     waypoints.add(new Pose2d(Units.feetToMeters(-14.0D), Units.feetToMeters(0.0D), new Rotation2d(Units.degreesToRadians(0.0D))));
-    waypoints.add(new Pose2d(Units.feetToMeters(-5.0D), Units.feetToMeters(-3.0D), new Rotation2d(Units.degreesToRadians(7.0D))));
+    waypoints.add(new Pose2d(Units.feetToMeters(-5.0D), Units.feetToMeters(2.0D), new Rotation2d(Units.degreesToRadians(4.0D))));
 
 
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, this.m_config);
@@ -240,8 +248,54 @@ public class GameChangerTrajectories
     ArrayList<Pose2d> waypoints = new ArrayList<>();
     waypoints.add(new Pose2d(Units.feetToMeters(-8.0D), Units.feetToMeters(0.0D), new Rotation2d(0.0D)));
     waypoints.add(new Pose2d(Units.feetToMeters(-2.0D), Units.feetToMeters(-3.0D), new Rotation2d(Units.degreesToRadians(-90.0D))));
-    waypoints.add(new Pose2d(Units.feetToMeters(-3.0D), Units.feetToMeters(-10.0D), new Rotation2d(Units.degreesToRadians(-14.0D))));
+    waypoints.add(new Pose2d(Units.feetToMeters(-3.0D), Units.feetToMeters(-10.0D), new Rotation2d(Units.degreesToRadians(-23.0D))));
 
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, this.m_config);
+
+    return trajectory;
+  }
+
+  private Trajectory generateautotenball1Trajectory() {
+    ArrayList<Pose2d> waypoints = new ArrayList<>();
+    waypoints.add(new Pose2d(Units.feetToMeters(0.0D), Units.feetToMeters(0.0D), new Rotation2d(0.0D)));
+    waypoints.add(new Pose2d(Units.feetToMeters(-8.0D), Units.feetToMeters(0.0D), new Rotation2d(0.0D)));
+    waypoints.add(new Pose2d(Units.feetToMeters(-10.0D), Units.feetToMeters(0.0D), new Rotation2d(Units.degreesToRadians(15.0D))));
+
+    this.m_config.setReversed(true);
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, this.m_config);
+    this.m_config.setReversed(false);
+    return trajectory;
+  }
+
+  private Trajectory generateautotenball2Trajectory() {
+    ArrayList<Pose2d> waypoints = new ArrayList<>();
+    waypoints.add(new Pose2d(Units.feetToMeters(-10.0D), Units.feetToMeters(0.0D), new Rotation2d(0.0D)));
+    waypoints.add(new Pose2d(Units.feetToMeters(-5.0D), Units.feetToMeters(2.0D), new Rotation2d(Units.degreesToRadians(4.0D))));
+  
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, this.m_config);
+
+    return trajectory;
+  }
+
+  private Trajectory generateautotenball3Trajectory() {
+    ArrayList<Pose2d> waypoints = new ArrayList<>();
+    waypoints.add(new Pose2d(Units.feetToMeters(-10.0D), Units.feetToMeters(0.0D), new Rotation2d(Units.degreesToRadians(15.0))));
+    //waypoints.add(new Pose2d(Units.feetToMeters(-12.0D), Units.feetToMeters(9.0D), new Rotation2d(Units.degreesToRadians(-160.0D))));
+    waypoints.add(new Pose2d(Units.feetToMeters(-10.0D), Units.feetToMeters(8.0D), new Rotation2d(Units.degreesToRadians(-160.0D))));
+    waypoints.add(new Pose2d(Units.feetToMeters(-11.0D), Units.feetToMeters(11.0D), new Rotation2d(Units.degreesToRadians(15.0D))));
+
+
+    this.m_config.setReversed(true);
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, this.m_config);
+    this.m_config.setReversed(false);
+    return trajectory;
+  }
+
+  private Trajectory generateautotenball4Trajectory() {
+    ArrayList<Pose2d> waypoints = new ArrayList<>();
+    waypoints.add(new Pose2d(Units.feetToMeters(-10.0D), Units.feetToMeters(11.0D), new Rotation2d(Units.degreesToRadians(15.0D))));
+    waypoints.add(new Pose2d(Units.feetToMeters(-8.0D), Units.feetToMeters(10.0D), new Rotation2d(Units.degreesToRadians(4.0D))));
+  
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, this.m_config);
 
     return trajectory;
